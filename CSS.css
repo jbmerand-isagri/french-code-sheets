@@ -1,0 +1,589 @@
+/*
+
+.: DEFINITION :.
+
+Cascading Style Sheets (CSS) : langage de feuille de style pour décrire la présentation document HTML ou XML.
+
+.: ANATOMIE D'UNE REGLE :.
+
+p {
+  color: red;
+}
+
+p = le sélecteur
+color = la propriété (façon de mettre en forme un élément HTML)
+red = la valeur (choix d'une mise en forme par d'autres pour une propriété)
+color: red = la déclaration (détermine les propriétés de l'élément)
+
+
+.: ETAPES A SUIVRE ET INFORMATIONS:.
+
+Un sélecteur plus précis qu'un autre sera prioritaire. Dans l'ordre : du plus global au plus précis (sélecteur d'élément -> sélecteur de classe -> sélecteur d'ID)
+Les propriétés sont interprétées dans l’ordre dans lequel elles sont déclarées. La dernière valeur déclarée est retenue sauf si la première propriété contient le mot clé !important.
+
+0. travailler sur un .scss et utiliser le terminal pour minifiier le .css sauvegardé automatique : [dans répertoire où .scss situé] sass --watch style.scss:style.css --style compress
+1. mettre * { box-sizing: border-box; }
+2. mettre html { font-size: 62.5%; } -> pour passer en base 10 pour l'unité rem
+3. mettre pour chaque image insérée img { max-width: 100%; } -> pour ne pas faire afficher de scrollbar
+4. ajouter pour le responsive :
+
+
+
+*/
+
+/* ---------- SELECTEURS, SELECTIONS ---------- */
+
+* {}
+/* sélectionner tous les éléments */
+
+p, li, h1 {}
+/* sélectionner plusieurs éléments */
+
+#monID {}
+/* sélectionner un élément qui possède l'ID */
+
+.maClasse {}
+/* sélectionner les éléments qui sont de la classe */
+
+ul.important {}
+/* sélectionner tous les 'ul' qui ont la classe 'important' */
+
+img[src] {}
+/* sélecteur d'attribut : sélectionner les éléments qui possèdent l'attribut donné */
+
+a:hover {}
+/* sélecteur de pseudo-classe : sélectionner les éléments donnés uniquement dans un certain état */
+
+div > p {}
+/* sélectionner les fils direct 'p' imbriqué dans les 'div' */
+
+div p {}
+/* sélectionner les 'p' imbriqués dans les 'div' */
+
+div + p {}
+/* sélectionner tous les 'p' qui suivent directement (de manière adjacente) une 'div' */
+
+div ~ p {}
+/* sélectionner tous 'p' qui suivent une 'div' */
+
+p:first-child {}
+/* sélectionner le premier enfant de 'p' */
+
+p:nth-child(3) {}
+/* sélectionner le troisième enfant de 'p' */
+
+p:last-child {}
+/* sélectionner le dernier enfant de 'p' */
+
+p:only-child {}
+/* sélectionner les 'p' qui sont enfants uniques (seuls dans une autre balise) */
+
+p:nth-last-child(3) {}
+/* sélectionner les troisièmes 'p' à partir de la fin */
+
+p:first-of-type {}
+/* sélectionner chaque premier 'p' dans un parent */
+
+p:nth-of-type(2) {}  /* (odd) (even) */
+/* sélectionner chaque deuxième 'p' dans un parent */
+
+p:nth-of-type(2n+4) {}
+/* sélectionner chaque deuxième 'p' en partant de la 4e instance */
+
+p:only-of-type {}
+/* sélectionner le seul 'p' dans un parent */
+
+p:last-of-type {}
+/* sélectionner le dernier 'p' dans un parent */
+
+p:empty {}
+/* sélectionner tous les 'p' qui n'ont pas d'enfants */
+
+p:not(.big, :first-child) {}
+/* sélectionner tous les 'p' qui n'ont pas la classe 'big' et qui ne sont pas first-child */
+
+[href] {}
+/* sélectionner tous les éléments qui ont pour attribut 'href' */
+
+[for="saValeur"] {}
+/* sélectionner touts les éléments qui ont un un attribut 'for' avec la valeur 'valeur' */
+
+[for^="Ma"] {}
+/* sélectionner tous les éléments dont la valeur de l'attribut commence par les caractères 'Ma' */
+
+[for$=".jpg"] {}
+/* sélectionner tous les éléments dont la valeur de l'attribut se termine par les caractères '.jpg' */
+
+[for*="lot"] {}
+/* sélectionner tous les éléments dont la valeur de leur attribut contient les caractères 'lot' */
+
+/* ---------- PSEUDO-CLASSES ---------- */
+
+a:link {}
+/* état : lien non cliqué */
+
+a:visited {}
+/* état : lien déjà cliqué */
+
+a:hover {}
+/* état : lien survolé par la souris */
+
+
+p {
+
+
+
+/* ---------- AFFICHAGE ---------- */
+
+overflow: visible; /* hidden scroll auto */
+/* propriété raccourcie pour overflow-x et overflow-y. Définit comment rogner le contenu, afficher les barres de défilement, afficher le contenu sortant du cadre dans un élément de type bloc. */
+
+clear:left; /* right both */
+/*indique si élément peut être situé à côté d'éléments flottants qui le précèdent ou s'il doit être déplacé vers le bas pour être en dessous de ces éléments*/
+
+
+
+/* ---------- POSITIONS, TAILLES ---------- */
+
+display: block; /* inline-block inline flex none list-item ... */
+/* display définit le type de boîte utilisé pour le rendu d'un élément
+block =  génère une boîte de bloc, occupe toute la line
+inline = génère une ou plusieurs boîtes en ligne (prend la dimension du contenu)
+flex = l'élément se comporte comme un élément de bloc et dispose son contenu selon le modèle de boîte flexible
+inline-block = similaire à inline, mais avec la marge et le padding ajustable (il faut ajouter un commentaire HTML si espace vide) */
+
+float: left; /* right none */
+/* faire flotter l'élément à gauche de son conteneur et le retire du flux courant */
+
+height: 20px; /* 90% */
+/* modifier la hauteur */
+
+margin: valeurHaut valeurDroite valeurBas valeurGauche;
+margin: valeurHautBas valeurDroiteGauche;
+/* spécifier la distance de la marge (la marge est autour de la bordure */
+
+margin: valeurHautBas auto;
+/* centrer */
+
+max-height: : 2rem; /* 75% 10px 3em */
+/* définir la hauteur maximale */
+
+padding: valeurHaut valeurDroite valeurBas valeurGauche;
+/* définir le padding (espace entre la bordure et le contenu) */
+
+position: absolute; /* relative static fixed */
+top: 2px; /* préciser la position par rapport au dernier parent positionné (avec relative), left bottom right, si rien se positionne par rapport au frère */
+/* à utiliser pour faire de la superposition seulement
+static = par défaut, positionné dans le flux
+relative = positionné dans le flux normal (laisse un espace) puis décalé par rapport à la position de référence (body par défaut)
+absolute = positionner par rapport au premier élément ancêtre ou au html sinon, retiré du flux sans espace
+fixed = positionner par rapport à la fenêtre du navigateur, retiré du flux sans espace */
+
+resize: none; /* both horizontal vertical */
+/* contrôler le caractère redimensionnable d'un élément */
+
+vertical-align: top; /* baseline top middle bottom sub text-top */
+/* aligner verticalement des éléments inline et des cellules de tableaux
+baseline = aligne la ligne de base avec celle de son parent
+sub = aligne la ligne de base sur la ligne de base inférieure de l'élément parent
+super = aligne la ligne de base sur la ligne de base supérieure */
+line-height: 70px; /* pour aligner verticalement un texte sur un height de 70px (on fait apparaitre une seule ligne) */
+
+width: 20px; /* 90% */
+/* modifier la largeur */
+
+z-index: 1;
+/* (nécessite positionnement) indiquer le z-order pour mettre l'élément au-dessus des autres (valeur plus élevée = couvre les autres) */
+
+
+
+/* DISPLAY 'FLEX' */
+
+.section {
+
+display: flex;
+
+flex: 1 1 100px; /* 1 2 [1 30px] */
+/* propriété raccourcie pour définir la capacité d'un élément à modifier ses dimensions pour remplir l'espace du conteneur: flex-shrink flex-grow flex-basis */
+
+flex-shrink: 2;
+/* indique le facteur de rétrécissement d'un élément flexible (++ = + rétrécissement) */
+
+flex-grow: 2;
+/* indique le facteur de grossissement d'un élément flexible (++ = + grossissement) */
+
+flex-basis: auto; /* 0 200px content max-content fill fit-content*/
+/* détermine la base de flexibilité utilisée comme taille initiale principale */
+
+justify-content: flex-start; /* center start end left right flex-end center space-between space-around space-evenly stretch */
+/* [axe principal] aligne les éléments horizontalement */
+
+align-items: flex-start; /* flex-end center stretch baseline(= ligne de base du conteneur) */
+/* [axe secondaire] aligne les éléments verticalement */
+
+align-self
+/* accepte les mêmes valeurs que align-items, mais s'applique seulement à l'élément ciblé */
+
+justify-self
+
+flex-direction: row; /* row-reverse column column-reverse */
+/* définit la direction dans laquelle les éléments sont placés dans le conteneur */
+
+order: 1;
+/* 0 par défaut, définit l'ordre d'apparition des éléments (apparition dans l'ordre croissant des valeurs de order) */
+
+flex-wrap: nowrap; /* wrap wrap-reverse */
+/* indique si éléments contraints à être disposés sur une seule ligne ou sur plusieurs lignes avec retour automatique */
+
+flex-flow: row wrap; /* [row-reverse nowrap] [column wrap-reverse] [column wrap]
+/* raccourci combinant flex-direction et flex-wrap (deux propriétés séparées par un espace) */
+
+align-content: baseline; /* [first baseline] [last baseline] center start flex-start flex-end stretch... */
+/* [axe orthogonal au principal] définit la répartition de l'espace entre les lignes */
+
+}
+
+
+/* DISPLAY 'GRID' */
+
+.section {
+
+display: grid;
+
+grid-column-start: 3;
+/* commence à la 3ème ligne verticale de la grille */
+
+grid-column-end :-1;
+
+grid-column: 2 / span 4;
+/* propriété raccourcie de grid-column-start et grid-column-end à chaque fois peut devenir fatiguant. Heureusement,  est une propriété raccourcie qui peut accepter les deux valeurs à la fois, séparées par un slash.*/
+
+grid-row-start
+/* fonctionne de façon similaire à grid-column-start mais sur l'axe vertical */
+
+grid-row
+
+grid-area: 1 / 1 / 3 / 6;
+/* propriété raccourcie pour : grid-row-start, grid-column-start, grid-row-end, grid-column-end */
+
+}
+
+p {
+
+
+
+/* ---------- TEXTES, PARAGRAPHES, FONDS, COULEURS ---------- */
+
+color: purple; /* transparent #00ff00 rgb() rgba() currentColor */
+/* définir la couleur d'un texte */
+
+color: rgba(0,0,255,0.5);
+/* définir la couleur bleue à 50% de transparence */
+
+font-family: 'Arnold', cursive;
+/* définir une police de texte et ses alternatives si erreur */
+
+font-size: 24px;
+/* changer la taille du texte */
+
+font-style: normal /* italic oblique [oblique 40deg] */
+/* sélectionner une fonte italique (italic) ou (oblique) parmi celles listées */
+
+font-weight: bold; /* normal */
+/* mettre en gras ou pas */
+
+line-height: 2.5; /* 3em 150% 32px normal */
+/* indiquer la hauteur minimale des lignes au sein d'un élément bloc */
+
+list-style-type: space-counter; /* disc circle */
+/* définir l'apparence d'un élément de liste */
+
+text-decoration: none; /* underline dotted overline ... */
+/* propriété raccourcie par "décorer" le texte ou retirer sa décoration */
+
+text-decoration-color: currentcolor; /* red #21ff21 ... */
+text-decoration-style: solid; /* double dotted dashed wavy */
+text-decoration-line: none; /* underline overline line-through */
+/* définir la façon dont les décorations linéaires sont ajoutées à un élément et notamment leur position */
+
+text-shadow: 2px 2px 2px black;
+/* décalage de l'ombre vers la droite, vers le bas, valeur du flou */
+
+text-transform: uppercase; /* capitalize lowercase none full-width */
+
+
+
+/* ---------- EFFETS, TRANSFORMATIONS ---------- */
+
+animation: slidein 3s ease-in 1s infinite reverse both running;
+/* propriété raccourcie */
+
+animation-name: slide; /* bounce none */
+/*définit une liste d'animations. Chaque nom indique une règle @ @keyframes qui définit les valeurs des propriétés pour la séquence*/
+
+animation-duration: 3s;
+/* durée pour parcourir un cycle */
+
+animation-timing-function: ease; /* ease-in ease-out linear ease-in-out steps(5,end) cubic-bezier(0.1,-0.6,0.2,0) */
+/* indique la façon dont une animation CSS doit se dérouler au fur et à mesure de chaque cycle */
+
+animation-delay: 2s;
+/* durée d'attente avant de commencer l'animation */
+
+animation-iteration-count: infinite; /* 0 2 1.5 */
+/* indique le nombre de cycles utilisés pour répéter une animation avant que celle-ci s'arrête */
+
+animation-direction: alternate; /* normal reverse alternate-reverse */
+/* indique si les cycles de l'animation doivent être joués dans le sens inverse et/ou de façon alternée */
+
+animation-fill-mode: forwards; /* backwards both none */
+/* indique la façon dont une animation CSS doit appliquer les styles à sa cible avant et après son exécution */
+
+animation-play-state: paused; /* running */
+/* définit si une animation est en cours d'exécution ou si elle est en pause */
+
+cursor: pointer; /* help wait crosshair not-allowed zoom-in grab */
+/* définir la forme du curseur */
+
+transform: rotate(0.5turn) translate(-100%, -100%); /* matrix(1,2,3,4,5,6) translate(120px,50%) scale(2,0.5) skew(30deg,20deg) */
+/* scale pour zoomer, dans une div */
+
+transform-origin: center; /* [top left] [50px 50px] [bottom right 60px] */
+/* modifier l'origine du repère */
+
+transition: margin-right 2s; /* all */
+/* propriété raccourcie pour définir la transition entre deux états (avec :hover, :active...)
+positionner dans l'élément concerné par la transition */
+
+transition-delay: 250ms;
+transition-duration: 2s;
+transition-property: background-color;
+transition-timing-function: linear; /* ease-in steps(6, end) cubic-bezier(.29,1.01,1,-0.68) */
+
+
+
+/* ---------- BACKGROUND, BORDURES ---------- */
+
+background: linear-gradient(to bottom left, #cfb3e6, #6a59c3)
+/* créer un dégradé */
+
+background-color: yellow;
+background-image: url("cheminURL");
+                  url("cheminURL");
+/* définir une ou plusieurs images comme arrière-plan */
+
+background-origin: border-box; /* padding-box content-box */
+/* déterminer la zone de positionnement de l'arrière-plan */
+
+background-position: 25% 75%; /* center left ou bottom 50px right 100px */
+/* définir la position initiale, relative à l'origine définie par background-origin */
+
+background-repeat: repeat-x; /* repeat space round no-repeat */
+
+background-size : contain;  /* cover 30% [200px 100px] */
+/* définit la taille des images d'arrière-plan pour l'élément */
+
+
+border: 2px solid green;
+/* définir la présentation globale de la bordure
+
+border-top
+border-bottom
+border-left
+border-right
+
+border-collapse: collapse; /* separate */
+border-color: blue;
+border-style: none; /* hidden dotted dashed double ... */
+border-width: 2px; /* thin medium thick */
+
+border-radius: 5px 10px 0 5px; /* 2px tout court */
+/* arrondir les angles */
+
+box-shadow: inset; /* [2px 2px 2px 2px red] */
+/* créer une ombre */
+
+}
+
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media screen and (min-width: 200px) and (max-width: 640px) {
+  .bloc {
+    display:block;
+    clear:both;
+  }
+}
+/* associer un ensemble d'instructions imbriquées (délimité par des accolades) avec une condition définie par une requête média */
+
+PSEUDO-CLASSES
+
+input:focus {
+  outline: none;
+}
+/* faire disparaitre le cadre coloré de sélection */
+
+nav:hover a {
+  color: pink;
+}
+/* spécifier l'apparence d'un élément au moment où l'utilisateur le survole
+ici les liens s'affichent en rose lorsque le curseur survole la nav */
+
+PSEUDO-ELEMENTS
+
+a::after {
+	content: "aïe !";
+  	color: red;
+}
+/* crée un pseudo-élément qui sera le dernier enfant de a. Type inline. */
+
+a::before {
+	content: "Hello";
+	color: blue;
+}
+/* crée un pseudo-élément qui sera le premier enfant de a. Type inline. */
+
+input::placeholder {
+  color: blue;
+}
+/* représente le texte de substitution pour élément de formulaire */
+
+
+
+/* ---------- REGLES ---------- */
+
+@font-face {
+	font-family: "Ma Super Fonte";
+	font-weight: bold;
+	src: local("Helvetica Neue Bold"),
+      local("HelveticaNeue-Bold"),
+      url(MgOpenModernaBold.ttf);
+}
+/* ajouter une police d'écriture externe. Courant d'utiliser local() avant url() pour utiliser police locale si disponible */
+
+@charset "UTF-8";
+/* définit le jeu de caractères utilisé par la feuille de style, ici Unicode UTF-8 */
+
+@import url;
+@import url liste-requetes-media;
+/* importer des règles à partir d'autres feuilles de style. règles @ doivent être utilisées avant toutes les autres à l'exception de @charset */
+
+@namespace
+/* définit les espaces de noms XML utilisés dans une feuille de style CSS. Les espaces de noms définis sont alors utilisés pour restreindre les sélecteurs universels, de type, et d'attribut afin que ceux-ci ne sélectionnent que les éléments contenus dans cet espace de nom */
+
+/* REGLES @ IMBRIQUEES */
+
+@media {}
+/* applique son contenu si l'appareil utilisé respecte les critères définis dans la « requête média » (ou media query) */
+
+@supports {}
+/* applique son contenu si le navigateur respecte une condition donnée (par exemple, si le navigateur supporte tel élément de syntaxe) */
+
+@page {}
+/* décrit les modifications de disposition à appliquer lorsque le document doit être imprimé/paginé */
+
+@keyframes slidein {
+  from { margin-left: 100%; width: 300%; }
+  75% { font-size: 300%; margin-left: 25%; width: 150%; }
+  to { margin-left: 0%; width: 100%;  }
+  }
+/* décrit les états des différentes étapes intermédiaires qui composent une animation CSS */
+
+
+
+/* ---------- EFFETS DIVERS ---------- */
+
+/* BOUNCE */
+
+monElement {
+  animation: bounce 0.5s;
+/* ou :
+animation-name: bounce;
+animation-count: 0.5s;
+*/
+  animation-direction: alternate;
+  animation-timing-function: cubic-bezier(.5,0.05,1,.5);
+  animation-iteration-count: infinite;
+}
+@keyframes bounce {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 3px, 0); }
+}
+/* pas besoin de transition */
+
+
+/* IMAGE SPRITES */
+
+.spriteImg {
+    background: url(img/logo.png);
+    height: 55px;
+    width: 60px;
+    display: inline-block;
+    background-size: 60px;
+    background-position: left top;
+    overflow: hidden;
+}
+
+.spriteImg:hover {
+    background-position: left -55px;
+}
+
+
+
+/* ---------- LES UNITES ---------- */
+
+/* VH et VW */
+1vw -> 1% largeur fenêtre
+1vh -> 1% hauteur fenêtre
+1vmin -> 1vw ou 1vh valeur minimum
+1vmax
+
+
+
+/* ----------DIVERS ---------- */
+
+/*FONTAWESOME rotation : ajouter la classe fa-rotate-90 pour faire une rotation de 90° etc */
+
+/* titre avec des traits horizontaux */
+h2 {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+h2:before, h2:after {
+    position: absolute;
+    top: 60%;
+    overflow: hidden;
+    width: 50%;
+    height: 1px;
+    content: '\a0';
+    background-color: #e2ded2;
+}
+h2:before {
+    margin-left: -51%;
+    text-align: right;
+}
+h2:after {
+    margin-left: 1%;
+    width: 100%;
+}
+
+OU
+
+h2:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 10px;
+  background: grey;
+  margin-top: -10px;
+}
+/*h2 { text-align: center; }*/
+}
+h2 span {
+  background: white;
+  padding: 0 5px;
+  display: inline-block;
+  /*margin-left: 20px; pour décaler le span et trait à gauche*/
+}

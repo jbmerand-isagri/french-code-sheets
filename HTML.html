@@ -1,0 +1,305 @@
+<!--
+
+.: DEFINITION :.
+
+HTML (HyperText Markup Language) est le langage de balisage qui permet de décrire la structure et le contenu d'un document web. Le contenu est balisé par des éléments HTML. Ces éléments forment les blocs utilisés pour construire un site web.
+
+Les balises sont insensibles à la casse et peuvent aussi bien être écrites en minuscules, en majuscules voire avec un mélange des deux.
+
+
+.: ANATOMIE :.
+
+<p class="nom">monTexte</p>
+
+    <p> = balise ouvrante de l'élément HTML p
+    </p> = balise fermante
+    'class' = attribut de l'élément p
+    Les attributs contiennent des informations supplémentaires sur l'élément sans qu'elles n'apparaissent dans le contenu réel.
+
+
+.: ETAPES A SUIVRE ET INFORMATIONS :.
+
+1. faire le mockup de la version desktop
+2. créer le document HTML de la version desktop (donner une classe aux sections, donner une classe container)
+2.1 ajouter le lien au fichier normalize.css
+2.2 ajouter <meta name="viewport" content="width=device-width, initial-scale=1.0"> pour responsive
+3. valider le code avec http://validator.w3.org/#validate_by_uri
+4. passer au CSS
+- toujours faire du link vers notre feuille css le dernier à charger
+- classe .container pour donner le margin auto, le max-width et un width à 95% pour l'ensemble des parties concernées (créer une div de cette classe contenant le contenu si background doit faire toute la largeur possible d'une section)
+
+-->
+
+<!-- ********** STRUCTURE ********** -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="CheminStyle.css">
+    <title>titreDuDocument</title>
+</head>
+<body>
+    <header></header>
+    <main></main>
+    <footer></footer>
+    <script src="main.js"></script>
+</body>
+</html>
+<!-- DOCTYPE est le préambule requis, le lien vers le fichier normalize permet de rendre le document plus compatible avec les navigateurs -->
+
+<article></article>
+<!-- représente du contenu autonome dans un document, une page, une application, ou un site (message sur un forum, article de journal, parution sur un blog, commentaire d'utilisateur, widget ou gadget interactif, ou tout autre élément de contenu indépendant). Contenu prévu pour être distribué ou réutilisé indépendamment  -->
+
+<section></section>
+<!-- représente une section générique d'un document, par exemple un groupe de contenu thématique. Commence généralement avec un titre -->
+
+
+
+<!-- ********** TEXTES, TITRES, PARAGRAPHES ********** -->
+
+<b></b>
+<!-- déprécié, mettre en gras (état physique) -->
+
+<i></i>
+<!-- déprécié, mettre en italique (état physique) -->
+
+<em></em>
+<!-- mettre en emphase, en italique (état logique) -->
+
+<strong></strong>
+<!-- indiquer que texte a importance particulière, certain sérieux ou caractère urgent (état logique) -->
+
+<p></p>
+<p style="font-size:10px;color:green">texte</p>
+<!-- insérer un paragraphe
+insérer du paragraphe et appliquer du style, à ne pas faire -->
+
+<h1></h1>
+<!-- insérer un titre d'importance h1 -->
+<!-- h2, h3... -->
+
+<br>
+<!-- sauter une ligne -->
+
+<small></small>
+<!-- représenter un texte en petits caractères, pour copyright etc. -->
+
+<blockquote cite="URLindiquantSaSource">
+    <p>Citation longue.</p>
+</blockquote>
+<cite>Titre d'une oeuvre, nom auteur, URL de référence</cite>
+
+<q cite="URLindiquantSaSource">Citation courte.</q>
+<!-- insérer une citation incise courte qui ne nécessitent pas de sauts de paragraphe -->
+
+<!-- référence et écriture équivalente
+<	&lt;
+>	&gt;
+"	&quot;
+'	&apos;
+&	&amp;
+-->
+
+
+
+<!-- ********** LISTES, TABLEAUX ********** -->
+
+<ol>
+    <li>élément1</li>
+    <li>élément2</li>
+</ol>
+<!-- insérer une liste ordonnée -->
+
+<ul>
+    <li>élément1</li>
+    <li>élément2</li>
+</ul>
+<!-- insérer une liste non ordonnée -->
+
+<table>
+    <caption>légende(titre)DuTableau</caption>
+    <thead>
+        <tr>
+            <th colspan='2'>celulleEnTête</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td>cellulePied1</td>
+            <td>cellulePied2</td>
+        </tr>
+    </tfoot>
+    <tbody>
+        <tr>
+            <td>cellule1Colonne1</td>
+            <td>cellule2Colonne1</td>
+        </tr>
+        <tr>
+            <td>cellule1Colonne2</td>
+            <td>cellule2Colonne2</td>
+        </tr>
+    </tbody>
+</table>
+<!-- insérer un tableau (tfoot avant tbody) -->
+
+
+
+<!-- ********** DIVERS ********** -->
+
+<div></div>
+<!-- insérer un bloc -->
+
+<span></span>
+<!-- délimiter une portion sans en faire un bloc -->
+
+</main><!--
+--><aside>
+<!-- éviter la création d'une marge artificielle, bien aligner -->
+
+
+<address></address>
+<!-- indique des informations de contact pour une personne, un groupe de personnes ou une organisation -->
+
+<abbr>
+<!-- représente une abréviation ou un acronyme et permet, de façon optionnelle, d'en fournir une description complète. S'il est présent, l'attribut title doit contenir cette même description complète et rien d'autre. -->
+
+<a href="mailto:nullepart@mozilla.org">Envoyer l'email nulle part</a>
+<!-- écrire un nouvel e-mail -->
+
+<a href="tel:+1-303-499-7111">+1 (303) 499-7111</a>
+<!-- créer un lien vers un téléphone -->
+
+
+
+<!-- ********** DATES, TEMPS ********** -->
+
+<time datetime="2001-05-15T19:00">le15Mai</time>
+<time>19:00</time>
+<time>2h 30m</time>
+<!-- inséer une date, une heure, une durée -->
+
+
+
+<!-- ********** FORMULAIRES, BOITES DE TEXTE ********** -->
+
+<form action="uriProgrammeDeTraitement">
+    <fieldset>
+        <legend>titre</legend>
+        <input type="radio" id="kraken" name="monster">
+        <label for="kraken">Kraken</label>
+    </fieldset>
+</form>
+<!-- représente une section d'un document qui contient des contrôles interactifs permettant à un utilisateur d'envoyer des données à un serveur web
+'name' doit être unique parmi tous les formulaires d'un document et pas une chaîne de caractères vide en HTML5 -->
+
+<input type="">
+<!-- créer un contrôle interactif dans un formulaire web qui permet à l'utilisateur de saisir des données -->
+
+<input type="checkbox" id="" name="">
+<!-- boite à cocher -->
+
+<input type="radio" id="" name="">
+<!-- groupes d'options parmi lesquelles on ne peut choisir qu'une valeur (cercles) -->
+
+<select name="" id="">
+    <option value="valeur1">Valeur1</option>
+    <option value="valeur2" selected>Valeur2</option>
+    <option value="valeur3">Valeur3</option>
+</select>
+<!-- contrôle qui fournit une liste d'options parmi lesquelles l'utilisateur pourra choisir (boite à défilement)
+value représente la valeur qu'on souhaite envoyer au formulaire lorsque l'option est sélectionnée, si pas défini = contenu textuel de l'élément -->
+
+<textarea name="" id="" cols="30" rows="10" placeholder="texteDisparaissantAuClic">texteRestant</textarea>
+<!-- insérer un contrôle pour éditer du texte -->
+
+<button type="submit">Envoyer</button>
+<!-- Bouton pour envoyer les valeurs -->
+
+<button type="reset">Effacer</button>
+<!-- Bouton pour effacer les données entrées par l'utilisateur du fieldset -->
+
+
+
+<!-- ********** LIENS, IDENTIFICATEURS ********** -->
+
+<a href="URLcible">élémentAffiché</a>
+<!-- insérer un lien vers un site -->
+
+<a href="#monAncre">élémentAffiché</a>
+<!-- insérer un lien vers une ancre (balise avec id="monAncre") -->
+
+<a href="URLcible">
+    <img src="URLsourceImage" alt="">
+</a>
+<!-- insérer une image hypertexte -->
+
+<p class="classe1 classe2 classe3"></p>
+<!-- class indique une liste de classes associées à l'élément courant
+les classes doivent avoir un nom qui indique la sémantique -->
+
+<p id="nomID"></p>
+<!-- associer une id à p -->
+
+
+
+<!-- ********** MULTIMEDIA ********** -->
+
+<!-- AUDIO -->
+
+<!-- intégrer un contenu sonore dans un document. Il peut contenir une ou plusieurs sources audio représentées avec l'attribut src ou l'élément <source>. S'il y a plusieurs sources, l'agent utilisateur choisira celle qui convient le mieux. -->
+
+<audio src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg" autoplay>
+    Votre navigateur ne supporte pas l'élément <code>audio</code>.
+</audio>
+<!-- simple lecture audio -->
+
+<audio controls="controls">
+  <source src="toto.wav" type="audio/wav">
+  Votre navigateur ne prend pas en charge l'élément <code>audio</code>.
+</audio>
+<!-- attributs possibles : autoplay controls loop muted played preload src -->
+
+<!-- IMAGES -->
+
+<img src="sourceImage" alt="élémentAffiché">
+<!-- insérer une image, afficher quelque chose en cas de problème -->
+
+<figure>
+    <img src="image.jpg" alt="élémentAffiché" />
+    <figcaption>Légende associée</figcaption>
+</figure>
+<!-- insérer une image et sa légende -->
+
+<!-- VIDEO -->
+
+<video src="fichiervideo.webm" autoplay poster="vignette.jpg">
+  Votre navigateur ne permet pas de lire les vidéos.
+  Mais vous pouvez toujours
+  <a href="fichiervideo.webm">la télécharger</a> !
+</video>
+<!-- attributs possibles : autoPlay buffered controls crossorigin height loop muted played playsinline preload poster src width -->
+
+<video width="480" controls
+  poster="https://archive.org/download/WebmVp8Vorbis/webmvp8.gif" >
+  <source
+    src="https://archive.org/download/WebmVp8Vorbis/webmvp8.webm"
+    type="video/webm">
+  <source
+    src="https://archive.org/download/WebmVp8Vorbis/webmvp8_512kb.mp4"
+    type="video/mp4">
+  Votre navigateur ne permet pas de lire les vidéos HTML5.
+</video>
+<!-- utiliser plusieurs sources -->
+
+
+
+<!-- ********** RESPONSIVE ********** -->
+
+ <picture>
+    <source srcset="img/illu.jpg" media="(min-width: 1024px)" >
+    <source srcset="img/illu-tablette.jpg" media="(min-width: 728px)">
+    <img src="img/illu-mobile.jpg" alt="illustration fantaisiste" >
+</picture>
+<!-- choisir l'image selon la taille de l'écran -->
