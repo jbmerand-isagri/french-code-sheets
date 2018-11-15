@@ -1,21 +1,25 @@
+/******************************************************************************/
+/************** DEFINITIONS ***************************************************/
+/******************************************************************************/
+
 /*
+ * langage de script léger, orienté objet
+ * interprété, compilé à la volée (JIT, just-in-time compilation)
+ * utilise concept de prototype (objet à partir duquel crée de nouveaux objets)
+ * typage faible (peut affecter valeurs correspondant pas type variable déclaré)
+ * typage dynamique (laisse ordinateur réaliser opération typage « à la volée »)
+ * paradigmes programmation applicables: fonctionnelle,impérative,orientée objet
+ * standard = ECMAScript
+ */
 
-.: DEFINITION :.
+/* OBJET
+ * possède plusieurs propriétés qui lui sont associées
+ * propriété peut être vue comme variable attachée à l'objet
 
-Langage de script léger, orienté objet. Le code JavaScript est interprété ou compilé à la volée (JIT, just-in-time compilation). C'est un langage à objets utilisant le concept de prototype (un objet à partir duquel on crée de nouveaux objets), disposant d'un typage faible (autoriser l’affectation de variable avec des valeurs ne correspondant pas à son type déclaré) et dynamique (laisser l'ordinateur réaliser cette opération de typage « à la volée ») qui permet de programmer suivant plusieurs paradigmes de programmation : fonctionnelle, impérative et orientée objet.
-
-Le standard pour JavaScript est ECMAScript. En 2012, tous les navigateurs modernes supportent complètement ECMAScript 5.1.
-
-.Objet.
-
-Possède plusieurs propriétés qui lui sont associées.
-Une propriété peut être vue comme une variable attachée à l'objet.
-
-.Méthode.
-
-Une fonction (function) qui est une propriété d'un objet. Deux sortes de méthodes :
-- méthodes d'instance : fonctions fournissant une interface pour effectuer des actions dans le contexte de l'objet qu'elles composent
-- méthodes statiques : fonctions pouvant être exécutées sans nécessiter d'instanciation
+ * METHODE
+ * fonction qui est propriété d'un objet. Deux sortes :
+ * - méthodes d'instance : fonctions fournissant une interface pour effectuer des actions dans le contexte de l'objet qu'elles composent
+ * - méthodes statiques : fonctions pouvant être exécutées sans nécessiter d'instanciation
 
 Fonctions sont elles-mêmes des objets => méthode est plus précisément une référence vers un objet de type function.
 
@@ -48,13 +52,13 @@ Fonctions sont elles-mêmes des objets => méthode est plus précisément une r�
 /* ---------- VARIABLES ---------- */
 
 var maVariable = maValeur
-// déclarer une variable (peut être réassignée, fait du hoisting : se charge tout en haut du code au lancement mais assigne la valeur à l'endroit où est déclarée)
+// déclarer variable (peut être réassignée, fait du hoisting : se charge tout en haut du code au lancement mais assigne la valeur à l'endroit où est déclarée)
 
 var var1, var2, var3
 // déclarer plusieurs variables
 
 let maVariable
-// déclarer une variable locale (ne peut pas être re-déclarée, n'est pas accessible avant qu'elle apparaisse)
+// déclarer variable locale (ne peut pas être re-déclarée, n'est pas accessible avant qu'elle apparaisse)
 
 const MA_CONSTANTE
 // déclarer une constante (ne peut pas être réassignée et n'est pas accessible avant qu'elle apparaisse dans le code)
@@ -431,7 +435,9 @@ function maFonction(e) { var x = e.keyCode; switch (x) {case 39: code break; }
 this
 // pour un événement : vaut l'élément HTML sur lequel on a cliqué avant la fonction callback
 
-
+event.preventDefault()
+//  indique à agent utilisateur que si l'événement n'est pas traité explicitement
+//  son action par défaut ne doit pas être prise en compte comme elle le serait normalement
 
 /* ---------- VARIABLE GLOBALE WINDOW ---------- */
 
@@ -467,7 +473,7 @@ clearTimeout(IDdeTimeout)
 // peut le détourner pour utiliser dans notre code
 
 Object.getPrototypeOf(obj)
-// renvoie le prototype d'un objet donné (i.e. la valeur de la propriété [[Prototype]] interne)
+// renvoie prototype d'un objet donné (i.e. la valeur de la propriété [[Prototype]] interne)
 
 var lol Object.create(proto[, objetPropriétés])
 // crée un nouvel objet avec un prototype donné et des propriétés données
@@ -485,13 +491,15 @@ Eleve.prototype.moyenne = function() {} // création de la méthode moyenne
 
 var jean = new Eleve('jean')
 var marc = new Eleve('marc')
-// jean et marc sont des instances de l'objet Eleve (héritent des méthodes d'Eleve et peuvent avoir leurs propres propriétés). On utilise des méthodes avec prototype pour agir dans les instances
+// jean, marc = instances de l'objet Eleve
+// (héritent des méthodes d'Eleve et peuvent avoir leurs propres propriétés)
+// utilise méthodes avec prototype pour agir dans les instances
 
 
 /* ---------- TRY CATCH ---------- */
 
-// regroupe des instructions à exécuter et définit une réponse si l'une de ces instructions provoque une exception
-// évite que toute l'application s'arrête à cause d'une erreur
+// regroupe instructions exécuter, définit réponse si provoque exception
+// évite toute l'application s'arrête à cause une erreur
 
 try {
   // instruction qu'on souhaite exécuter
@@ -505,8 +513,6 @@ try {
 
 throw new Error(['message'[, fileName[, lineNumber]]])
 // renvoie une erreur
-
-
 
 
 /******************************************************************************/
@@ -531,15 +537,54 @@ storage.removeItem('key');
 storage.clear();
 // vide toutes les clés stockées
 
-storage.key(cleN);
+storage.key(cléN);
 // prend nombre n en argument et retourne n-ième clé contenue
 // ordre clés définie par navigateur => pas s'y référer
 
 
+/******************************************************************************/
+/************** AJAX **********************************************************/
+/******************************************************************************/
 
-The @param tag provides the name, type, and description of a function parameter.
+/* Asynchronous JavaScript and XML.
+ * permet échange données avec serveur, maj parties page sans rafraichissement
+ * appelle une page et récupère quelque chose en retour
+ * emploie objet non standard XMLHttpRequest
+ * communication asynchrone langage côté client avec langage côté serveur
+ * assurer suivi dans partie network inspecteur ,navigateur
+*/
 
-The @param tag requires you to specify the name of the parameter you are documenting. You can also include the parameter's type, enclosed in curly brackets, and a description of the parameter.
+ var xhr = null;
+
+ if(window.XMLHttpRequest || window.ActiveXObject){
+ 	if(window.ActiveXObject){
+ 		try{
+ 			xhr = new ActiveXObject("Msxml2.XMLHTTP");
+ 		}catch(e){
+ 			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+ 		}
+ 	}else{
+ 		xhr = new XMLHttpRequest();
+ 	}
+ }else{
+ 	alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
+ 	return;
+ }
+// code de compatibilité (ActiveX, XHR), crée instance (objet XHR)
+
+// Pour continuer : https://www.w3schools.com/jquery/jquery_ajax_load.asp
+// https://developer.mozilla.org/fr/docs/Web/Guide/AJAX/Premiers_pas
+
+
+/******************************************************************************/
+/************** Documentation JS **********************************************/
+/******************************************************************************/
+
+@param
+// indique nom, type et description d'une fonction
+// nécessite spécifier nom du paramètre à documenter
+
+// @returns [{type}] [description] @type {typeName} @typedef [<type>] <namepath>
 
 /**
  * @param {string} somebody - Somebody's name.
@@ -548,10 +593,64 @@ function sayHello(somebody) {
     alert('Hello ' + somebody);
 }
 
+/**
+ * Assign the project to an employee.
+ * @param {Object} employee - The employee who is responsible for the project.
+ * @param {string} employee.name - The name of the employee.
+ * @param {string} employee.department - The employee's department.
+ */
+Project.prototype.assign = function(employee) {
+    // ...
+};
 
-$(function() { ... });
-is just jQuery short-hand for
+/**
+ * This callback type is called `requestCallback` and is displayed as a global symbol.
+ *
+ * @callback requestCallback
+ * @param {number} responseCode
+ * @param {string} responseMessage
+ */
 
-$(document).ready(function() { ... });
+/**
+ * Does something asynchronously and executes the callback on completion.
+ * @param {requestCallback} cb - The callback that handles the response.
+ */
+function doSomethingAsynchronously(cb) {
+    // code
+};
 
-JSON stringify
+/******************************************************************************/
+/************** JSON : JavaScript Object Notation *****************************/
+/******************************************************************************/
+
+/* format de données textuelles dérivé de la notation objets JS
+ * format d'échange données (data interchange format) (commentaires impossibles)
+ * utilisé comme langage transport données par AJAX et services Web
+ * pour sérialisation,désérialisation objets,encodage documents,fichiers config
+ * permet représenter info structurée (comme xml) :
+ * - ensembles de paires ('clé' / 'valeur')
+ * - listes ordonnées valeurs
+ * 6 types possibles : string, number, boolean, null, array, object
+*/
+
+{
+   "menu": {
+       "id": "file",
+       "value": "File",
+       "popup": {
+           "menuitem": [
+               { "value": "New", "onclick": "CreateNewDoc()" },
+               { "value": "Open", "onclick": "OpenDoc()" },
+               { "value": "Close", "onclick": "CloseDoc()" }
+           ]
+       }
+   }
+}
+// format
+
+JSON.stringify(valeurAConvertir[,remplaçant[,string/number espace]])
+// convertit valeur JS en chaîne JSON
+// peut remplacer valeurs/spécifier propriétés à inclure si tableau fourni
+// remplaçant : fonction qui modifie processus transformation ou tableau
+JSON.parse(texte[,reviver])
+// parse chaîne de caractères JSON et construit équivalent valeur ou objet JS

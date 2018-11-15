@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 
 -- SQL : Structured Query Language (langage de requête structurée)
--- Langage informatique normalisé pour exploiter BD relationnelles
--- pour demander opérations d'algèbre relationnelle (intersection, sélection, jointure...)
+-- langage informatique normalisé pour exploiter BD relationnelles
+-- pour opérations d'algèbre relationnelle (intersection,sélection,jointure...)
 -- langage interprété par un SGBD (système gestion base de données)
 
 .: SYNTAXE :.

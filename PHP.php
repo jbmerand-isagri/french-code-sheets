@@ -37,6 +37,7 @@ define("SON_NOM", "Sa valeur");
 const SON_NOM = 'Sa valeur'; // à utiliser à l'intérieur d'une classe
 // définir une constante
 
+NOM_CONSTANTE // pas de $ devant
 
 /******************************************************************************/
 /************** AFFICHAGE, TEXTES *********************************************/
@@ -436,3 +437,12 @@ PDOStatement::fetchAll ([int $fetch_style])
 // public array, retourne tableau contenant lignes du jeu d'enregistrements
 
 $customers = $q->fetchAll(); // retourne tableau associatif clients répertoriés
+
+
+son_encode
+(PHP 5 >= 5.2.0, PHP 7, PECL json >= 1.2.0)
+
+json_encode — Retourne la représentation JSON d'une valeur
+
+Description ¶
+string json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] )
