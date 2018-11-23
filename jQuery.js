@@ -24,6 +24,8 @@ $(sélecteur).action()
 // sélecteur pour éléments html (sélecteurs CSS entre "")
 // action à faire sur éléments html (méthode jQuery)
 
+$('input[type=radio]:checked')
+
 $(document).ready(function(){
    // code jQuery
 });
@@ -122,6 +124,9 @@ $('<p>')
 $('ul').append(contenu[,contenu] ou fonction)
 // insère contenu à fin chaque <ul>
 
+.appendTo('cible')
+// insère contenu à fin chaque élément (cible)
+
 .prepend(contenu[,contenu] ou fonction)
 // insère contenu au début éléments sélectionnés
 
@@ -195,6 +200,38 @@ $('ul').append(contenu[,contenu] ou fonction)
 
 
 /******************************************************************************/
+/************** FORMULAIRES ***************************************************/
+/******************************************************************************/
+
+$('form').data('mode', 'edit')
+// sélectionne formulaire, modifie attribut data-mode="add" en data-mode="edit"
+
+.trigger(event ou 'eventType'[,paramètresSupplémentaires])
+// exécute gestionnaires/comportements attachés à élément pour événement donné
+
+jQuery.param(objet[,traditional])
+// crée représentation sérialisée d'un tableau, plain object ou object $
+// pour l'utiliser dans requête string ou Ajax
+// traditional : bool, indique si sérialisation traditionnelle peu profonde
+
+.select([[donnéesPourGestionnaireEvénement],fnChaqueDéclenchementEvénement])
+// lie gestionnaire d'événement à événement js "select" ou déclenche cet
+// événement sur un élément
+
+.serialize()
+// encode série d'éléments form en string pour envoie
+
+.serializeArray()
+// encode série d'éléments comme tableau de noms et valeurs
+
+.submit([[donnéesPourGestionnaireEvénement],fnChaqueDéclenchementEvénement])
+// lie gestionnaire d'événement à événement js "submit" ou déclenche événement
+// sur cet élément
+
+.val([valeur ou fonction])
+// récupère/définit valeur actuelle du premier élément
+
+/******************************************************************************/
 /************** AJAX **********************************************************/
 /******************************************************************************/
 
@@ -237,14 +274,14 @@ $.getScript('urlCibleDeRequête'[,cbackfnSiSuccèsRequête])
 .load('urlCibleDeRequête'[,data][,cbackfnSiSuccèsRequête])
 // charge données serveur et met HTML retourné dans élément sélectionné
 
-$.ajaxPrefilter()
-// Handle custom Ajax options or modify existing options before each request is sent and before they are processed by $.ajax()
+$.ajaxPrefilter(['dataTypes'],handler)
+// crée/modifie options Ajax personnalisées avant envoie,traitement par $.ajax()
+// handler :
+
 $.ajaxSetup()
 // Sets the default values for future AJAX requests
 $.ajaxTransport()
 // Creates an object that handles the actual transmission of Ajax data
-$.param()
-// Creates a serialized representation of an array or object (can be used as URL query string for AJAX requests)
 ajaxComplete()
 // Specifies a function to run when the AJAX request completes
 ajaxError()
@@ -258,71 +295,17 @@ ajaxStop()
 ajaxSuccess()
 // Specifies a function to run when an AJAX request completes successfully
 
-serialize()
-// Encodes a set of form elements as a string for submission
-serializeArray()
-// Encodes a set of form elements as an array of names and values
+/******************************************************************************/
+/************** DIVERS ********************************************************/
+/******************************************************************************/
 
+.data([['clé'[,valeur] ou objetAMettreAJour])
+// stocke, retourne données associés aux éléments correspondants
 
-
-
-$( "form:first" ).trigger( "submit" );
-// To submit the first form without using the submit() function, try:
-
-.data( key, value )
-.data( key, value )
-.data( obj )
-.data( key )
-.data( key )
-.data()
-!! ne permet pas de changer un data, faut utiliser .attr à ce moment-là
-
-.append( content [, content ] )Returns: jQuery
-Description: Insert content, specified by the parameter, to the end of each element in the set of matched elements.
-
-version added: 1.0.append( content [, content ] )
-content
-Type: htmlString or Element or Text or Array or jQuery
-DOM element, text node, array of elements and text nodes, HTML string, or jQuery object to insert at the end of each element in the set of matched elements.
-content
-Type: htmlString or Element or Text or Array or jQuery
-One or more additional DOM elements, text nodes, arrays of elements and text nodes, HTML strings, or jQuery objects to insert at the end of each element in the set of matched elements.
-
-.each(function)
-// itère sur objet jQuery, exécute fonction sur chaque élément
+.each(fonction)
+// itère sur objet jQuery, exécute fonction pour chaque élément
 
 $.each(data, (key, contact) => {
     console.log(key);
     console.log(contact.maClé);}
-// affiche le contenu d'un tableau associatif (data issu d'ajax)
-
-.each()
-Categories: Miscellaneous > Collection Manipulation | Traversing
-.each( function )Returns: jQuery
-Description: Iterate over a jQuery object, executing a function for each matched element.
-
-version added: 1.0.each( function )
-function
-Type: Function( Integer index, Element element )
-A function to execute for each matched element.
-
-The .append() and .appendTo() methods perform the same task. The major difference is in the syntax-specifically, in the placement of the content and target. With .append(), the selector expression preceding the method is the container into which the content is inserted. With .appendTo(), on the other hand, the content precedes the method, either as a selector expression or as markup created on the fly, and it is inserted into the target container.
-
-.contents()
-
-Get the value of an attribute for the first element in the set of matched elements or set one or more attributes for every matched element.
-Contents:
-.attr( attributeName )
-.attr( attributeName )
-.attr( attributeName, value )
-.attr( attributeName, value )
-.attr( attributes )
-.attr( attributeName, function )
-
-$(document).on('click', 'a.contact', onClickShowContactDetails)
-// écouteur qui suppose le chargement de la page ?
-
-$('form').data('mode', 'edit')
-// sélectionner le formulaire, modifier l'attribut data-mode="add" en data-mode="edit"
-
-$('input[type=radio]:checked')
+// affiche contenu tableau associatif (ici data issu d'ajax)

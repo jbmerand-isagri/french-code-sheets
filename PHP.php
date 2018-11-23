@@ -373,6 +373,18 @@ fwrite($fh, "sep=\t" . "\r\n");
 /************** SOLLICITER DES BASES DE DONNEES *******************************/
 /******************************************************************************/
 
+// request
+$query = $pdo->query(
+    'SELECT po.Id, Title, Contents, CreationTimestamp, au.FirstName, au.LastName, ca.Name
+    FROM Post po
+    INNER JOIN Author au ON au.Id = po.Author_Id
+    INNER JOIN Category ca ON ca.Id = po.Id
+    ORDER BY CreationTimestamp DESC'
+);
+
+// get result
+$posts = $query->fetchAll(); // OU fetch() que pour une ligne
+
 /********* 1. RECUPERER ELEMENT BDD *******************************************/
 
 PDO::__construct(string $dsn[,string $username[,string $passwd[,array $options])
@@ -419,6 +431,13 @@ PDOStatement::execute([array $input_parameters])
 
 $q->execute(['id' => 103]);
 
+// autre exemple (pour ajouter à la BD)
+$q = $pdo->prepare("INSERT INTO Post (Author_Id, Category_Id, Contents, Title, CreationTimestamp)
+    VALUES (:auth, :cate, :con, :tit, NOW())");
+$q->execute(['auth' => $authorNewPost, 'cate' => $categoryNewPost, 'con' => $contentsNewPost, 'tit' => $titleNewPost]);
+}
+
+
 /********* 4. RECUPERATION DE LA LIGNE RETOURNEE ******************************/
 
 PDOStatement::fetch([int $fetch_style])
@@ -438,11 +457,162 @@ PDOStatement::fetchAll ([int $fetch_style])
 
 $customers = $q->fetchAll(); // retourne tableau associatif clients répertoriés
 
+// A VOIR :
 
 son_encode
 (PHP 5 >= 5.2.0, PHP 7, PECL json >= 1.2.0)
 
-json_encode — Retourne la représentation JSON d'une valeur
-
-Description ¶
+json_encode
+// Retourne la représentation JSON d'une valeur
 string json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] )
+
+intval()
+&nbsp;[...]
+
+
+substr($string, int $start [,int $length])
+// string, retourne un segment de chaîne
+
+
+htmlspecialchars($string)
+// [,int $flags = ENT_COMPAT | ENT_HTML401
+// [,string $encoding = ini_get("default_charset")[,bool $double_encode = true ]]]
+// string, convertit les caractères spéciaux en entités HTML
+// à utiliser lorsque qu'on echo des données dans le HTML (pas vers BD)
+// évite failles XSS (cross-site scripting : injection contenu dans page)
+
+strpos — Cherche la position de la première occurrence dans une chaîne
+strrpos
+
+htmlentities($string)
+// [, int $flags = ENT_COMPAT | ENT_HTML401 [, string $encoding = ini_get("default_charset")
+// [, bool $double_encode = TRUE ]]]
+// string, convertit tous les caractères éligibles en entités HTML
+
+include_once()
+// bool, comportement = include, mais si code déjà inclus, ne le sera pas
+
+
+/* FONCTIONS SUR CHAINES DE CARACTERES */
+
+stripcslashes(string $str)
+// string, décode chaîne encodée avec addcslashes(), supprime les antislashs
+
+ctype_digit(string $text)
+// bool, vérifie si tous caractères chaîne text sont chiffres
+
+nl2br(string $string[, bool $is_xhtml = TRUE ])
+// retourne string après avoir inséré <br/> ou <br> devant nouvelles lignes
+// (\r\n, \n\r, \n et \r)
+
+date( string $format [, int $timestamp = time() ] )
+// string, formate une date/heure locale
+// format : 'l jS \de F Y h:i:s A'
+
+date_default_timezone_set('UTC');
+// définit fuseau horaire par défaut à utiliser
+
+// convertir date :
+$originalDate = "2010-03-21";
+$newDate = date("d-m-Y", strtotime($originalDate));
+
+/* CHEMINS ET ACCES AUX FICHIERS */
+
+dirname ( string $path [, int $levels = 1 ] )
+// string, renvoie le chemin parent d'un chemin représentant un fichier ou un dossier, qui correspond à levels niveau(x) plus haut que le dossier courant.
+// levels = nombre de dossiers parents
+
+realpath ( string $path )
+// string, retourne le chemin canonique absolu, résout tous les liens symboliques, et remplace toutes les références /./, /../ et / de path puis retourne le chemin canonique absolu ainsi trouvé.
+
+file_exists ( string $filename )
+// bool, vérifie si un fichier ou un dossier existe.
+
+/* CONTANTES MAGIQUES */
+
+__FILE__
+// Le chemin complet et le nom du fichier courant avec les liens symboliques résolus. Si utilisé pour une inclusion, le nom du fichier inclus est retourné.
+__DIR__
+// Le dossier du fichier. Si utilisé dans une inclusion, le dossier du fichier inclus sera retourné. C'est l'équivalent de dirname(__FILE__). Ce nom de dossier ne contiendra pas de slash final, sauf si c'est le dossier racine.
+
+
+// ternaire (if/else)
+<?php $cssPath =
+  // est-ce que template vaut la chaine de caractère index ?
+  $template === 'index' ? 'css/style.css' :
+// condition if        |     = ça        | sinon
+  '../css/style.css' ?>
+<link href="<?= $cssPath ?>"
+
+/* VARIABLES SUPERGLOBALES */
+// générées automatiquement par PHP
+
+$_SERVER
+// tableau contenant informations comme en-têtes, dossiers et chemins du script
+// entrées ce tableau créées par le serveur web
+// index ++ : SERVER_ADDR,SERVER_NAME,DOCUMENT_ROOT,HTTP_REFER,HTTP_USER_AGENT,
+// REMOTE_ADDR,REMOTE_HOST,REMOTE_PORT,SCRIPT_FILENAME,SERVER_PORT,REQUEST_URI
+
+$_SESSION
+$_COOKIE
+
+/* LES SESSIONS */
+
+/*
+* utilise variable superglobale $_SESSION
+* session générée maintenue jusqu'à deconnexion ou timeout
+*/
+
+$_SESSION
+// tableau associatif valeurs stockées dans sessions
+// $_SESSION['prenom'] = 'Jean' pour créer variable
+
+session_start([array $options = array()])
+// bool, crée ou restaure session trouvée sur serveur (via identifiant session)
+// appeler fonction tout début pages où besoin variables de session (avant html)
+
+session_destroy()
+// bool, détruit données associées à session courante
+// ne détruit pas variables globales associées à la session
+
+session_name ([string $nouveauNomSession])
+// string, retourne nom session courante
+// $name fourni, modifie nom session et retourne ancien nom session
+
+session_status()
+// int, affiche état session courante (0: désactivée, 1: aucune, 2: active)
+
+password_verify(string $passwordUtilisateur,string $passwordHaché)
+// bool, vérifie que le hachage fourni correspond bien au mot de passe fourni
+
+
+/* Destruction d'une session avec $_SESSION (pas le cookie) */
+  session_start(); // session_name("autrenom")
+  $_SESSION = array(); // session_unset() pour ancien code
+  session_destroy();
+
+
+/* LES COOKIES */
+setcookie('pseudo', 'M@teo21', time() + 365*24*3600, null, null, false, true)
+// créé/modifie cookie avec option httpOnly (contre XSS) qui expire dans un an
+// appeler avant tout code html
+
+$_COOKIE['pseudo']
+// affichage contenu pseudo avec variable superglobale
+
+/* CREER ESPACE UTILISATEUR */
+
+/* 1.créer les tables dans la database, pages login, signin, logout
+* dans la base de donnée :
+* table membres :
+** id (int, primary, auto_increment) ;
+** pseudo (varchar 255) ;
+** pass (varchar 255) ; [doit être haché !]
+** email (varchar 255) ;
+** date_inscription (date)
+** id_group [pour relier à la table groupes]
+* table groupes : membres, administrateur, modérateurs
+* 2. à l'inscription et à la connexion, et comparaison
+* 3. inscription : hachage du mot de passe, vérifications à effectuer :
+** pseudo libre ? les deux mots de passe identiques ? adresse mail valide ?
+/

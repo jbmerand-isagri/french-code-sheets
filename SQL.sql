@@ -285,3 +285,6 @@ ORDER BY contactLastName, contactFirstName
 -- 4. tester si requête fonctionne dans BD avant de l'utiliser en PHP
 
 -- voir schéma MCD : logo phpMyAdmin > nomBD > en haut à droite 'concepteur'
+
+
+FONCTIONS : NOW()
