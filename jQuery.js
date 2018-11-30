@@ -4,7 +4,7 @@
 
 /* framework (bibliothèque) Javascript sous licence libre
 * permet faciliter fonctionnalités communes JS, gagner du temps
-* avantage être utilisable sur plusieurs navigateurs web
+* avantage très bonne compatibilité
 * fonctionnalités :
   ** manipulation DOM (HTML/CSS)
   ** gestion évènements (clic, survol, soumettre formulaire ...)
@@ -67,8 +67,55 @@ $(function(){
 /************** EFFETS ********************************************************/
 /******************************************************************************/
 
-Continuer sur : https://www.w3schools.com/jquery/jquery_slide.asp
+/*---------- sliding (glissement) --------------------------------------------*/
 
+.slideDown([duration][,easing][,fn]) // montrer éléments
+.slideToggle([duration][,easing][,complete]) // montrer ou cacher éléments
+.slideUp([duration][,easing][,complete]) // cacher éléments
+
+// duration (défaut: 400): Type Number ou String
+// easing (default: swing): Type String // linear: effet de transition
+// complete: Type Function(): fonction à appeler chaque fois animation complète
+
+.animate()
+Perform a custom animation of a set of CSS properties.
+
+Also in: Effects > Custom | Data | Utilities
+.clearQueue()
+Remove from the queue all items that have not yet been run.
+
+.delay() // Set a timer to delay execution of subsequent items in the queue.
+
+.dequeue() // Execute the next function on the queue for the matched elements.
+
+.fadeIn() // Display the matched elements by fading them to opaque.
+
+.fadeOut() // Hide the matched elements by fading them to transparent.
+
+.fadeTo() // Adjust the opacity of the matched elements.
+
+.fadeToggle() // Display or hide the matched elements by animating their opacity
+
+.finish() // Stop the currently-running animation, remove all queued animations,
+//  and complete all animations for the matched elements.
+
+.hide() // Hide the matched elements.
+
+jQuery.fx.interval // The rate (in milliseconds) at which animations fire.
+
+jQuery.fx.off // Globally disable all animations.
+
+jQuery.speed // Creates an object containing a set of properties ready to be
+// used in the definition of custom animations.
+
+.queue() // Show or manipulate the queue of functions to be executed on the
+// matched elements.
+
+.show() // Display the matched elements.
+
+.stop() // Stop the currently-running animation on the matched elements.
+
+.toggle() // Display or hide the matched elements.
 
 /******************************************************************************/
 /************** EVENEMENTS ****************************************************/
@@ -208,6 +255,12 @@ $('form').data('mode', 'edit')
 
 .trigger(event ou 'eventType'[,paramètresSupplémentaires])
 // exécute gestionnaires/comportements attachés à élément pour événement donné
+
+// exemple :
+$.event.trigger('magical-slate:pick-color');
+// créé événement nommé 'magical-slate:pick-color'
+$(document).on('magical-slate:pick-color', this.onPickColor.bind(this));
+// exécute une fonction lorsque événement 'magical-slate:pick-color' lancé
 
 jQuery.param(objet[,traditional])
 // crée représentation sérialisée d'un tableau, plain object ou object $
