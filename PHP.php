@@ -3,11 +3,10 @@
 
 /*
 * [Référence du langage](http://php.net/manual/fr/langref.php)
-	// types : voir entiers, booléens, décimaux, tableaux, chaines de caractère (itérables, objets, valeur nul)
-	//
+	// types : entiers, booléens, décimaux, tableaux, chaines de caractère
+  // (itérables, objets, valeur nul)
 * [Essentiel](http://php.net/manual/fr/language.variables.basics.php)
 	// écrire variable, affecter, nom à donner
-* [Syntaxe alternative](http://php.net/manual/fr/control-structures.alternative-syntax.php)
 
 .: DEFINITIONS :.
 
@@ -170,7 +169,6 @@ sort_flags
 // paramètre optionnel pour modifier comportement de tri avec ces valeurs :
 // SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_LOCALE_STRING, SORT_NATURAL
 
-
 /********* rassembler, exploser, convertir un tableau *************************/
 
 implode([string $séparateur,] array $pieces) // ou join()
@@ -196,6 +194,171 @@ $book->amazon_link = "http://www.amazon.com/dp/0439136369/";
 
 $book->title
 // accéder au contenu
+
+// nom classe (en PascalCase) = nom fichier le contenant
+class Database // dans le fichier Database.php
+{
+  public static $_instance; // propriété de l'objet. public = accès en dehors, static = syntaxe spacifique
+  public function__construct() // fonction appelée implicitement dès appelée
+  {
+    try {
+      self::$_instance = new PDO( // self pour accéder propriétés et méthodes statiques déclarées dans la classe
+        ...
+        [
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+        self::$_instance->exec(...)
+        if(self::$_instance === null) {
+          throw new PDOException("La connexion a echouée", 1);
+        }
+    } catch (PDOException $e) {
+      ...
+    }
+  }
+}
+new Database() // créé une instance de la classe
+
+
+/******************************************************************************/
+/************** OBJETS ET CLASSES **********************************************/
+/******************************************************************************/
+
+// classe peut contenir propres constantes, variables (= propriétés/attributs)
+// et fonctions (= méthodes)
+// $this = objet appelant
+
+/** visibilité (public / protected / private)**/
+// objets mêmes types ont accès membres privés et protégés les uns des autres
+// même si pas de la même instance (détails spécifiques de implémentation déjà
+// connus en interne par ces objets)
+
+/** définition classes avec méthodes différentes visibilités **/
+
+// sans extension
+class MyClass
+{
+    public $public = 'Public'; // utilisable par tout le programme
+    protected $protected = 'Protected'; // accès limité classe + celles héritent
+    private $private = 'Private'; // accès réservé à classe qui l'a défini
+
+    function printHello()
+    {
+        echo $this->public;
+        echo $this->protected;
+        echo $this->private;
+    }
+}
+
+$obj = new MyClass(); // instanciation
+echo $obj->public; // Fonctionne
+echo $obj->protected; // Erreur fatale
+echo $obj->private; // Erreur fatale
+$obj->printHello(); // Affiche Public, Protected et Private
+
+
+// avec extension (MyClass2 hérite méthodes et membres de MyClass)
+class MyClass2 extends MyClass
+{
+    // On peut redéclarer les éléments publics ou protégés, mais pas ceux privés
+    protected $protected = 'Protected2';
+
+    function printHello() // redéfinition possible de la méthode parente
+    {
+      echo $this->public;
+      echo $this->protected;
+      echo $this->private;
+   }
+}
+
+$obj2 = new MyClass2(); // instanciation
+echo $obj2->public; // Fonctionne
+echo $obj2->protected; // Erreur fatale
+echo $obj2->private; // Indéfini
+$obj2->printHello(); // Affiche Public, Protected2 et Indéfini
+
+/** visibilité méthodes **/
+// méthodes classes peuvent être définies comme publiques, privées ou protégées
+// (par défaut: publiques)
+
+/** création d'une instance d'une classe **/
+
+$instance = new SimpleClass();
+// ou
+$className = 'SimpleClass';
+$instance = new $className(); // new SimpleClass()
+
+// Résolution de nom de classe
+// récupérer une chaîne contenant le nom qualifié complet de la classe ClassName
+
+namespace NS {
+    class ClassName {
+    }
+
+    echo ClassName::class;
+}
+
+// Déclare constructeur public
+public function __construct() { }
+
+// Déclare méthode publique
+public function MyPublic() { }
+
+// Déclare méthode protégée
+protected function MyProtected() { }
+
+// Déclare méthode privée
+private function MyPrivate() { }
+
+/** constructeur **/
+
+// méthode constructeur classe appellée à chaque nouvelle instanciation
+// intéressant pour initialiations dont objet a besoin
+// constructeurs parents pas appelés si classe enfant définit constructeur
+// pour utiliser un constructeur parent: parent::__construct()
+
+class BaseClass {
+    function __construct() {
+        print "In BaseClass constructor\n";
+    }
+}
+
+class SubClass extends BaseClass {
+    function __construct() {
+        parent::__construct();
+        print "In SubClass constructor\n";
+    }
+}
+
+/** classe abstraite **/
+
+// peut pas être instanciée, méthode abstraite existe que si classe l'est
+// déclare signature de la méthode (peut pas définir son implémentation)
+// méthodes abstraites doivent être définies par enfant avec même visibilité
+
+abstract class AbstractClass
+{
+    // Force les classes filles à définir cette méthode
+    abstract protected function getValue();
+    abstract protected function prefixValue($prefix);
+
+    // méthode commune
+    public function printOut() {
+        print $this->getValue() . "\n";
+   }
+}
+
+class ConcreteClass1 extends AbstractClass
+{
+     protected function getValue() {
+       return "ConcreteClass1";
+     }
+
+     public function prefixValue($prefix) {
+       return "{$prefix}ConcreteClass1";
+    }
+}
+
 
 /******************************************************************************/
 /************** BLOCS (if, switch, while...) **********************************/
@@ -252,8 +415,6 @@ $_GET["name"]
 
 $_GET['order_n'] // pour récupérer dans bdc.php
 
-// http://fr.wikipedia.org/wiki/Post-Redirect-Get
-
 /******************************************************************************/
 /************** SYNTAXE ALTERNATIVE (dans .PHTML) *****************************/
 /******************************************************************************/
@@ -263,10 +424,10 @@ $_GET['order_n'] // pour récupérer dans bdc.php
 <?= $result // version contractée d'echo $result ?>
 <?php endif; ?>
 
-<?php switch ($foo): ?>
+<?php switch($foo): ?>
 <?php case 1: ?>
     ...
-<?php endswitch ?>
+<?php endswitch; ?>
 
 <?php foreach($numberArray as $key): ?>
     <?php echo $key . '<br>'; ?>
@@ -283,6 +444,9 @@ $_GET['order_n'] // pour récupérer dans bdc.php
 .
 // concaténer
 
+$variable .= 'valeurAAjouter'
+// concétaner directement dans la variable
+
 /******************************************************************************/
 /************** AGIR SUR DES FICHIERS / INTERACTIONS **************************/
 /******************************************************************************/
@@ -294,6 +458,9 @@ include 'index.phtml'
 // variables disponibles à la ligne d'inclusion du fichier appelant
 // disponibles dans fichier appelé, à partir de ce point
 // fonctions et classes définies dans fichier inclus ont portée globale
+
+include_once('index.phtml')
+// bool, comportement = include, mais si code déjà inclus, ne le sera pas
 
 require 'fichier.php'
 // identique à include, mais si erreur survient : erreur fatale stoppe script
@@ -373,19 +540,7 @@ fwrite($fh, "sep=\t" . "\r\n");
 /************** SOLLICITER DES BASES DE DONNEES *******************************/
 /******************************************************************************/
 
-// request
-$query = $pdo->query(
-    'SELECT po.Id, Title, Contents, CreationTimestamp, au.FirstName, au.LastName, ca.Name
-    FROM Post po
-    INNER JOIN Author au ON au.Id = po.Author_Id
-    INNER JOIN Category ca ON ca.Id = po.Id
-    ORDER BY CreationTimestamp DESC'
-);
-
-// get result
-$posts = $query->fetchAll(); // OU fetch() que pour une ligne
-
-/********* 1. RECUPERER ELEMENT BDD *******************************************/
+/********* RECUPERER ELEMENT BDD **********************************************/
 
 PDO::__construct(string $dsn[,string $username[,string $passwd[,array $options])
 // public, crée un objet PDO (instance) qui représente une connexion à la base
@@ -404,7 +559,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=classicmodels;charset=UTF8',
 );
 var_dump($pdo); // pour vérifier retourne bien object(PDO)[1]
 
-/********* 2. PREPARER REQUETE SQL prepare() **********************************/
+/********* Méthode 1 : REQUETE SQL prepare() puis execute() *******************/
 
 PDO::prepare(string $statement)
 // [array $driver_o[bool $use_include_path = FALSE
@@ -414,31 +569,30 @@ PDO::prepare(string $statement)
 // lesquels valeurs réelles seront substituées lorsque requête sera exécutée
 // impossible utiliser marqueurs nommés+marqueurs interrogatifs
 // choisissez l'un ou l'autre (éviter ? et préférer :nom)
-// doit inclure marqueur avec nom unique pour chaque valeur dans requête
-// lorsque appelle PDOStatement::execute()
-// impossible utiliser marqueur avec deux noms identiques dans requête préparée
-
-$q = $pdo->prepare('SELECT * FROM customers WHERE customerNUMBER = :id');
-// :id fait référence info qui sera donnée au moment exécution dans la bdd
-// trouver nom assez éloigné du nom réel bdd pour éviter injection SQL
-
-/********* 3. EXECUTER REQUETE execute() **************************************/
 
 PDOStatement::execute([array $input_parameters])
 // public bool, exécute requête préparée.
 // input_parameters : tableau de valeurs avec autant éléments qu'il y a
 // paramètres à associer dans requête SQL qui sera exécutée
 
+// EXEMPLES //
+
+$q = $pdo->prepare("SELECT * FROM customers WHERE customerNUMBER = :id");
+// :id fait référence info qui sera donnée au moment exécution dans la bdd
+// trouver nom assez éloigné du nom réel bdd pour éviter injection SQL
 $q->execute(['id' => 103]);
 
-// autre exemple (pour ajouter à la BD)
-$q = $pdo->prepare("INSERT INTO Post (Author_Id, Category_Id, Contents, Title, CreationTimestamp)
-    VALUES (:auth, :cate, :con, :tit, NOW())");
-$q->execute(['auth' => $authorNewPost, 'cate' => $categoryNewPost, 'con' => $contentsNewPost, 'tit' => $titleNewPost]);
-}
+$q = $pdo->prepare(
+  "INSERT INTO Post (Author_Id, Category_Id, CreationTimestamp)
+  VALUES (:auth, :cate, NOW())"
+);
+$q->execute(['auth' => $authorNewPost, 'cate' => $categoryNewPost]);
 
 
-/********* 4. RECUPERATION DE LA LIGNE RETOURNEE ******************************/
+/********* Méthode 2 : REQUETE query() puis fetch() ***************************/
+
+PDO::query()
+// exécute requête SQL, retourne jeu de résultats en tant qu'objet PDOStatement
 
 PDOStatement::fetch([int $fetch_style])
 // [int $cursor_orientation = PDO::FETCH_ORI_NEXT] [int $cursor_offset = 0]
@@ -449,26 +603,38 @@ PDOStatement::fetch([int $fetch_style])
 // et aussi par les numéros de colonnes, commençant à l'index 0,
 // comme retournés dans le jeu de résultats
 
-$customer = $q->fetch(); // fetch pour récupérer un seul résultat
-
 PDOStatement::fetchAll ([int $fetch_style])
 // [mixed $fetch_argument] [array $ctor_args = array()]
 // public array, retourne tableau contenant lignes du jeu d'enregistrements
 
-$customers = $q->fetchAll(); // retourne tableau associatif clients répertoriés
+// EXEMPLE //
 
-// A VOIR :
+$query = $pdo->query(
+    'SELECT po.Id, Title, Contents, CreationTimestamp, au.FirstName, ca.Name
+    FROM Post po
+    INNER JOIN Author au ON au.Id = po.Author_Id
+    INNER JOIN Category ca ON ca.Id = po.Id
+    ORDER BY CreationTimestamp DESC'
+);
+
+$posts = $query->fetchAll(); // OU fetch() que pour une ligne
+
+
+/******************************************************************************/
+/************** ENCODER, DECODER, AGIR SUR CHAINES DE CARACTERES **************/
+/******************************************************************************/
 
 son_encode
 (PHP 5 >= 5.2.0, PHP 7, PECL json >= 1.2.0)
 
-json_encode
+json_encode su pas déjà fait
 // Retourne la représentation JSON d'une valeur
 string json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] )
 
 intval()
 &nbsp;[...]
 
+ucfirst()
 
 substr($string, int $start [,int $length])
 // string, retourne un segment de chaîne
@@ -488,9 +654,6 @@ htmlentities($string)
 // [, int $flags = ENT_COMPAT | ENT_HTML401 [, string $encoding = ini_get("default_charset")
 // [, bool $double_encode = TRUE ]]]
 // string, convertit tous les caractères éligibles en entités HTML
-
-include_once()
-// bool, comportement = include, mais si code déjà inclus, ne le sera pas
 
 
 /* FONCTIONS SUR CHAINES DE CARACTERES */
@@ -566,6 +729,11 @@ $_COOKIE
 $_SESSION
 // tableau associatif valeurs stockées dans sessions
 // $_SESSION['prenom'] = 'Jean' pour créer variable
+
+if(session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+// initialise session
 
 session_start([array $options = array()])
 // bool, crée ou restaure session trouvée sur serveur (via identifiant session)

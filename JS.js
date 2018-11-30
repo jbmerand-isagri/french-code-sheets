@@ -3,74 +3,70 @@
 /******************************************************************************/
 
 /*
- * langage de script léger, orienté objet
- * interprété, compilé à la volée (JIT, just-in-time compilation)
- * utilise concept de prototype (objet à partir duquel crée de nouveaux objets)
- * typage faible (peut affecter valeurs correspondant pas type variable déclaré)
- * typage dynamique (laisse ordinateur réaliser opération typage « à la volée »)
- * paradigmes programmation applicables: fonctionnelle,impérative,orientée objet
- * standard = ECMAScript
- */
+- langage de script léger, orienté objet interprété
+- compilé à la volée (JIT, just-in-time compilation)
+- utilise concept de prototype (objet à partir duquel crée de nouveaux objets)
+- typage faible (peut affecter valeurs correspondant pas type variable déclaré)
+- typage dynamique (laisse ordinateur réaliser opération typage « à la volée »)
+- paradigmes programmation applicables: fonctionnelle,impérative,orientée objet
+- standard = ECMAScript
 
-/* OBJET
- * possède plusieurs propriétés qui lui sont associées
- * propriété peut être vue comme variable attachée à l'objet
+# OBJET
+- possède plusieurs propriétés qui lui sont associées
+- propriété peut être vue comme variable attachée à l'objet
 
- * METHODE
- * fonction qui est propriété d'un objet. Deux sortes :
- * - méthodes d'instance : fonctions fournissant une interface pour effectuer des actions dans le contexte de l'objet qu'elles composent
- * - méthodes statiques : fonctions pouvant être exécutées sans nécessiter d'instanciation
+# METHODE
+fonction qui est propriété d'un objet. Deux sortes :
+- méthode d'instance : fournit interface pour actions dans contexte objet
+- méthode statique : exécutable sans nécessiter instanciation
+*/
 
-Fonctions sont elles-mêmes des objets => méthode est plus précisément une référence vers un objet de type function.
+/******************************************************************************/
+/************** ETAPES A SUIVRE, INFOS ****************************************/
+/******************************************************************************/
 
-
-.: ETAPES A SUIVRE ET INFORMATIONS :.
-
-- utiliser le Camel Case pour les noms des variables (nomDeFamille)
-- variable définie par trois paramètres : son type, son nom, sa valeur/son contenu
-- types de variable : 'string' (caractères), 'number' (numérique), 'boolean' (booléenne : état 'true' ou 'false'), 'undefined' (indéfinie : non déclarée, sans valeur, valeur 'undefined' affectée)
-- condition : test qui vérifie si une expression est vérifiée ('true' ou 1) ou pas ('false' ou 0). Utilise trois concepts : boléens, opérateurs de comparaison, opérateurs logiques
-- objet possède trois éléments : un constructeur (initialise l'object associé), des propriétés, des méthodes (fonctions natives de JS)
+/*
+- condition: test qui vérifie si expression vérifiée ('true' / 1 ou 'false' / 0)
+-- utilise trois concepts : boléens, opérateurs comparaison, opérateurs logiques
 - utiliser la syntaxe littérale de préférence ( var objet = [];)
-- utiliser les points-virgules
-- on divise en plusieurs parties : on appelle des scripts JS d'autres fichiers (externalisés, qui ne concernent pas spécifiquement le programme)
-- on organise son document dans cet ordre : part1 'variables' part2 'functions' part3 'programs'
-
+- diviser: appelle scripts JS d'autres fichiers (externalisés)
+- organiser son document: part1 'variables' part2 'functions' part3 'programs'
 */
 
 
+/******************************************************************************/
+/************** VARIABLES *****************************************************/
+/******************************************************************************/
 
-/* ----- CONVENTIONS ----- */
-
-// lorsque sauvegarde une référence à this, utilisez _this
-// nommer les fonctions
-// fonction moyenne : moins de 20 lignes
-// une ligne : moins de 80 caractères
-
-
-
-/* ---------- VARIABLES ---------- */
+// variable définie par trois paramètres: type, nom, valeur/contenu
+// types: 'string', 'number', 'boolean' (état 'true'/'false'),
+// 'undefined' (non déclarée, sans valeur, valeur 'undefined' affectée)
+// noms en camelCase
 
 var maVariable = maValeur
-// déclarer variable (peut être réassignée, fait du hoisting : se charge tout en haut du code au lancement mais assigne la valeur à l'endroit où est déclarée)
+// peut être réassignée, fait du hoisting : se charge tout en haut du code au
+// lancement mais assigne la valeur à l'endroit où est déclarée
 
 var var1, var2, var3
 // déclarer plusieurs variables
 
 let maVariable
-// déclarer variable locale (ne peut pas être re-déclarée, n'est pas accessible avant qu'elle apparaisse)
+// déclarer variable locale (peut pas être re-déclarée,
+// pas accessible avant qu'elle apparaisse)
 
 const MA_CONSTANTE
-// déclarer une constante (ne peut pas être réassignée et n'est pas accessible avant qu'elle apparaisse dans le code)
+// déclarer constante (peut pas être réassignée,
+// pas accessible avant qu'elle apparaisse dans le code)
 
 this
 // prend la valeur de l'objet global dans lequel il est (objet, fonction)
 // utilise en général var self = this pour être sûr de garder le bon this
 
+/******************************************************************************/
+/************** OBJETS ********************************************************/
+/******************************************************************************/
 
-/* ---------- OBJET ---------- */
-
-var person = {firstName:"John", lastName:"Doe"}
+var person = {firstName:"John", lastName:"Doe"} // objet 'court'
 //ou
 var maVoiture = new Object();
 	maVoiture.fabricant = "Ford";
@@ -84,28 +80,100 @@ nomObjet.nomPropriete
 this
 // dans un objet, représente l'objet
 
-/* ---------- OBJET DE TYPE ARRAY ---------- */
+/******************************************************************************/
+/************** CLASSES ET FONCTION CONSTRUCTOR *******************************/
+/******************************************************************************/
 
-// objet global Array utilisé pour créer des tableaux (objets de haut-niveau (en termes de complexité homme-machine) semblables à des listes)
-// tableau permet de stocker une liste de valeurs (texte, nombre, boléen, tableau)
+// noms classes en PascalCase / code classe dans fichier séparé portant son nom
+
+let Disk = function() { // création de l'objet (nom avec majuscule convention)
+	this.color = 'black';
+	thois.radius = 10;
+}
+Disk.prototype.setRadius = function(radius) { // création méthode cet objet
+	this.radius = radius;
+}
+
+/*---------- créer un blueprint ----------------------------------------------*/
+
+function Person(name, eyeColor, age) {
+	this.name = name;
+	this.eyeColor = eyeColor;
+	this.age = age;
+	this.updateAge = function() {
+		return ++this.age;
+	}
+}
+let person01 = new Person("Daniel", "Blue", 27);
+// instancie objet à partir blueprint
+
+/*---------- CREER UNE CLASSE ------------------------------------------------*/
+
+class Pen {
+	constructor(color, size) {
+		this.color = color;
+		this.size = size;
+	}
+	fonction(slate) {
+		// code de ma fonction
+	}
+}
+let crayon = new Pen('blue', 3)
+crayon.color // pour appeler méthode de la classe (output = blue)
+
+
+/*---------- PROTOTYPES (DETOURNEMENT) -------------------------------------- */
+// objets héritent propriétés et méthodes d'un prototype
+
+Object.getPrototypeOf(obj)
+// renvoie prototype d'un objet donné
+
+var objet = Object.create(proto[, objetPropriétés])
+// crée un nouvel objet avec un prototype donné et des propriétés données
+// objet.proto permet d'accéder au prototype
+
+/*---------- CREER UN CONSTRUCTEUR -------------------------------------------*/
+// constructeur en général déclaré lors instance d'une classe
+// initialise objet et peut fournir accès ses informations privées
+
+var Eleve = function (nom) {
+  this.nom = nom // création d'une propriété d'instance
+}
+// Eleve est une classe
+
+Eleve.prototype.moyenne = function() {} // création de la méthode moyenne
+// fonction qui sera dans le prototype d'élève
+
+var jean = new Eleve('jean')
+var marc = new Eleve('marc')
+// jean, marc = instances de l'objet Eleve
+// (héritent des méthodes d'Eleve et peuvent avoir leurs propres propriétés)
+// utilise méthodes avec prototype pour agir dans les instances
+
+/******************************************************************************/
+/************** TABLEAUX ******************************************************/
+/******************************************************************************/
+
+// objet global Array pour créer tableaux
+// tableau permet stocker liste valeurs (texte, nombre, boléen, tableau)
 
 var maVariable = ["fruits", "légumes", 5]
-// déclarer un tableau
+// déclare tableau
 
 var maVariable = new Array("fruits", "légumes", 5)
-// déclarer un tableau
+// déclare tableau
 
 monTableau[indice]
-// récupérer une valeur d'un tableau
+// récupère valeur tableau
 
 var tableau1 = [
                 ['lol', 'lol2']
                 ['ananas', 'fraise', 'kiwi']
                 ]
-// déclarer un tableau qui contient d'autres tableaux
+// déclarer tableau contenant autres tableaux
 
 tableau1[1][2]
-// accéder à l'index 2 du tableau qui est à l'index 1 de tableau1 ('kiwi')
+// accéder à index 2 du tableau qui est à index 1 de tableau1 ('kiwi')
 
 monTableau.push('élément')
 // ajouter un élément à la fin du tableau
@@ -119,31 +187,24 @@ monTableau.pop()
 monTableau.shift()
 // supprimer le premier élément du tableau
 
-array1.forEach(callbackfn, thisArg)
-// exécute l'action spécifiée pour chaque élément d'un tableau
-// callbackfn : nom de la fonction acceptant jusqu'à trois arguments
-// thisArg : optionnel, objet auquel le mot clé this peut faire référence dans la fonction callbackfn. Si thisArg est omis, undefined est utilisé en tant que valeur this.
+array1.forEach(callbackfn[,thisArg])
+// exécute action spécifiée pour chaque élément tableau
+// callbackfn: nom de la fonction acceptant jusqu'à trois arguments
+// thisArg:objet auquel this peut faire référence dans callbackfn
 
-var pos = monTableau.indexOf('élément'); // ('élément', 2) pour commencer dès index 2
-// renvoie le premier indice pour lequel on trouve un élément donné dans un tableau (sinon renvoie -1)
+var pos = monTableau.indexOf('élément'); // ('élément', 2) cherche dès index 2
+// renvoie premier indice correspondant élément donné dans tableau / -1
 
 var removedItem = monTableau.splice(pos, 1);
 // supprimer un élément en utilisant son index (pos)
 // 1 est remplaçable pour supprimer les suivants
 
 
+/******************************************************************************/
+/************** OPERATEURS ****************************************************/
+/******************************************************************************/
 
-typeof(maVariable)
-// afficher le type de la variable
-
-element.length
-// retourner le nombre de la longueur (d'une chaine, d'un tableau...)
-
-
-
-/* ---------- OPERATEURS ---------- */
-
-/* opérateurs basics */
+/*---------- opérateurs basiques ---------------------------------------------*/
 
 + // addition (/concaténation)
 - // soustraction
@@ -158,13 +219,13 @@ maVariable++ // incrémentation après de +1
 maVariable-- // décrémentation après de -1
 --maVariable // décrémentation avant de -1
 
-/* opérateurs de comparaison faibles : qui effectuent des conversions */
+/*---------- opérateurs de comparaison faibles (effectuent conversions) ------*/
 
 == // équivalence
 >= // supérieur ou égal
 != // différent
 
-/* opérateurs de comparaison stricts, typés */
+/*---------- opérateurs de comparaison stricts, typés ------------------------*/
 
 === // équivalence en valeur et en type
 <== // inférieur ou égal en valeur ou en type
@@ -173,66 +234,81 @@ maVariable-- // décrémentation après de -1
 ? // opérateur ternaire
 
 
-
-/* ---------- FONCTIONS ---------- */
+/******************************************************************************/
+/************** FONCTIONS *****************************************************/
+/******************************************************************************/
 
 // c'est un objet (nouveau type de variable)
 // a accès au contexte extérieur (closure si l'utilise)
-// une fonction callback est placée en paramètre
-// quand on déclare une fonction à l'intérieur (même si même nom que contexte extérieur), n'a pour portée que l'intérieur de la fonction
+// fonction callback placée en paramètre quand déclare fonction à intérieur
+// n'a pour portée que intérieur fonction
+// convention : getNom (récupérer quelque chose) setNom (définir propriété)
+// isNom (vérifier booléen)
 
 function maFonction(arg1,arg2,arg3) {
   if (typeof texte == 'string') {
       return "texte";
   }
   else {
-      return false;
+      return false; // renvoie valeur 'false' en sortie
   }
 }
-// déclarer une fonction (avec hoisting : sera entièrement définie tout en haut de la page) et renvoyer une valeur en sortie
-// peut rajouter if arg2 === undefined pour définir une valeur par défaut si argument non renseigné
+// déclarer fonction (avec hoisting: sera définie tout en haut de la page)
+// if arg2 === undefined pour définir valeur par défaut si argument manquant
 
 var maFonction = function (arg1) {
   // mon code
 }
-// 2e façon de définir une fonction, sans hoisting
+// déclaration sans hoisting
 
 maFonction(arg1,arg2,arg3)
-// exécuter la fonction en choisissant les arguments
-// tous les arguments doivent être renseignés, sinon l'argument est undefined
+// exécute fonction avec choix arguments
+// tous arguments doivent être renseignés, sinon argument = undefined
 
 var maVariable = {
-  nomDeMaMethode: function () {
-      console.log('texte')
+  nomDeMaMethode: function() {
+      // code
   }
 }
-// on fera maVariable.methode pour exécuter la fonction
-// on parle de méthode car c'est une fonction utilisée sur un objet
+// maVariable.methode pour exécuter fonction
 
-([param] [, param]) => { instructions }
+([param][,param]) => { instructions }
 // fonction fléchée (n'a pas de nom) (remplace function())
+
+/** fonctions diverses **/
 
 console.log("élémentAffiché")
 // affiche l'information dans la console
 
+fonction.bind(thisArg[,arg1[, arg2[, ...]]])
+// crée nouvelle fonction: lorsque appelée, a pour contexte this valeur passée
+// en paramètre (car callback crée un nouveau contexte)
+// s'utilise essentiellement avec callback (quand callback fait appel à "this")
+// = remplace le this dans fonction par celui donné en paramètre
+
 isFinite(valeurTestée)
-// retourne false si la valeur passée en argument vaut Infinity ou NaN, sinon true
+// retourne false si valeur passée en argument vaut Infinity ou NaN / true
 
 isNaN(valeurTestée)
 // retourne true si la valeur est bien NaN
 
 parseInt("élément")
-// retourne le premier nombre entier dans une chaine de caractères, NaN si insatisfait
+// retourne premier nombre entier dans chaine de caractères / NaN
 
 parseFloat("élément")
-// retourne le premier nombre décimal (avec un .) dans une chaine de caractères, NaN si insatisfait
+// retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
 
 tableau.join('-')
-// crée et renvoie chaîne de caractères en concaténant éléments (ici - pour séparateur)
+// crée,renvoie chaîne caractères en concaténant éléments ('-'' pour séparateur)
+
+typeof(maVariable)
+// afficher le type de la variable
+
+element.length
+// retourner le nombre de la longueur (d'une chaine, d'un tableau...)
 
 
-
-/* ---------- IF - ELSE ---------- */
+/*----------- IF - ELSE ------------------------------------------------------*/
 
 if (condition) {
   // instruction si condition vérifiée
@@ -240,9 +316,7 @@ if (condition) {
   // instruction sinon
 }
 
-
-
-/* ---------- BOUCLES ---------- */
+/*----------- BOUCLES --------------------------------------------------------*/
 
 var expr = 'Papayas';
 switch (expr) {
@@ -255,32 +329,31 @@ switch (expr) {
   default:
     console.log('Sorry, we are out of ' + expr + '.');
 }
-// switch : évalue une expression et, selon le résultat obtenu et le cas associé, exécute les instructions correspondantes
+// switch: évalue expression, exécute instructions correspondantes selon cas
 
 for ([expressionInitiale]; [condition]; [expressionIncrémentALaFinDuCycle]) {
   // instruction
 }
-// for : répète des instructions jusqu'à ce qu'une condition donnée ne soit plus vérifiée
+// for: répète instructions jusqu'à condition donnée plus vérifiée
 
 do {
   // instruction
 }
 while (condition);
-// do...while : comme while, mais exécute au moins une fois
+// do...while: comme while, mais exécute au moins une fois
 
 while (condition) {
   // instruction
 }
-// while permet d'exécuter une instruction tant qu'une condition donnée est vérifiée
+// while permet exécuter instruction tant que condition vérifiée
 
 break // arrête la boucle
 continue // ne termine pas la boucle complètement:
 // dans boucle while: repart à la phase de la condition
-// dans boucle for : repart à l'expression de mise à jour de la boucle
+// dans boucle for: repart à l'expression de mise à jour de la boucle
 
 
-
-/* ---------- L'OBJET MATH ---------- */
+/*----------- L'OBJET MATH ---------------------------------------------------*/
 
 Math.round(5.95); // output: 6
 // retourne la valeur d'un nombre arrondi à l'entier le plus proche
@@ -296,68 +369,72 @@ Math.random()
 
 
 
-/* ---------- LE DOM (Document Object Model) ---------- */
+/******************************************************************************/
+/************** DOM (Document Object Model) ***********************************/
+/******************************************************************************/
 
 // interface de programmation pour documents HTML, XML et SVG
-// fournit représentation structurée du document sous forme d'un arbre dont la racine est html
-// définit la façon dont la structure peut être manipulée par les programmes, en termes de style et de contenu
-// au fur et à mesure de la lecture du fichier HTML le navigateur web construit sa structure dans la mémoire
-// représente le document comme un ensemble de nœuds et d'objets possédant des propriétés et des méthodes
-// les nœuds peuvent également avoir des gestionnaires d'événements qui se déclenchent lorsqu'un événement se produit. Cela permet de manipuler des pages web grâce à des scripts et/ou des langages de programmation. Les nœuds peuvent être associés à des gestionnaires d'événements. Une fois qu'un événement est déclenché, les gestionnaires d'événements sont exécutés.
+// représentation structurée document sous forme arbre dont racine = html
+// définit façon dont structure manipulable par programmes (style et contenu)
+// lors lecture fichier HTML, navigateur web construit sa structure dans mémoire
+// représente document comme ensemble nœuds,objets possédant propriétés,méthodes
+// nœud peut avoir gestionnaire événement (exécuté lorsque événement déclanché)
 
-/* API SELECTORS */
+/*---------- API SELECTORS ---------------------------------------------------*/
 
 document.querySelector('sélecteursCSS');
-// retourne le premier élément dans le document correspondant aux sélecteurs spécifié (null sinon)
+// retourne premier élément document correspondant sélecteurs spécifiés / null
 
-document.querySelector("div.panneau-utilisateur.principal input[name='identifiant']");
-// le premier élément <input name="identifiant"/> dans un <div class="panneau-utilisateur principal"> dans le document est retourné
+document.querySelector("div.panneau-utilisateur input[name='identifiant']");
+// premier élément input name="identifiant" dans div class="panneau-utilisateur"
 
 document.querySelectorAll(selecteurs);
-// renvoie NodeList (collections de nœuds, pas vraiment un tableau (Array)) statique représentant liste éléments
+// renvoie NodeList (collections nœuds (~= Array)) statique de liste éléments
 
 document.getElementById('monId');
-// renvoie l'élément HTML dont l'id correspond
+// renvoie élément HTML dont id correspond
 
 document.getElementsByClassName('maClasse');
-// renvoie les éléments HTML dont la classe correspond
+// renvoie éléments HTML dont classe correspond
 
 document.createElement('nomDuTag'[, options]);
-// crée un élément HTML du type spécifié
+// crée élément HTML du type spécifié
 
 element.getElementsByTagName('tagName')
-// retourne liste live des éléments portant nom de balise donné dans le sous-arbre de l'élément spécifié (non inclus) (argument converti en minuscule)
+// retourne liste live éléments portant nom balise donné
 
 element.getElementsByTagNameNS()
 // argument non converti en minuscule (pour .svg ...)
 
-/* CREER, INSERER ET MODIFIER DES ELEMENTS */
+/*----------CREER, INSERER ET MODIFIER DES ELEMENTS --------------------------*/
 
 document.write(`Bonjour ${maVariable}<br>`)
 // écrire directement dans le HTML
 
 document.createTextNode(données);
-// Crée un nouveau nœud de texte. (donnees est une chaîne contenant les données à placer dans le nœud de texte.)
+// crée nouveau nœud de texte (donnees = chaîne contenant données à placer)
 
 element.appendChild(enfant);
-// ajoute un nœud à la fin de la liste des enfants d'un nœud parent spécifié. Si l'enfant donné est une référence à un nœud existant dans le document, appendChild() le déplace  de sa position actuelle vers une nouvelle position (il n'est pas nécessaire de supprimer le noeud sur son noeud parent avant de l'ajouter à un autre).
+// ajoute nœud à fin liste des enfants d'un nœud parent spécifié
+// si enfant donné référence à nœud existant, le déplace
 
 parentNode.insertBefore(newNode, referenceNode);
-// Node.insertBefore() insère un nœud juste avant le noeud de référence en tant qu'enfant du nœud parent spécifié. Si l'enfant donné est une référence à un noeud existant dans le document, insertBefore() le déplace vers sa nouvelle position (il n'est pas nécessaire de supprimer le noeud de son parent avant son ajout à un autre noeud).
+// insère nœud juste avant noeud de référence en tant qu'enfant nœud parent
+// si enfant donné référence à noeud existant, le déplace
 
 Element.setAttribute('name', 'value')
-// Ajoute un nouvel attribut ou change la valeur d'un attribut existant pour l'élément spécifié. Si l'attribut existe déjà, la valeur est mise à jour ; sinon, un nouvel attribut est ajouté avec le nom et la valeur spécifiés.
+// ajoute nouvel attribut ou change valeur attribut existant pour élément
 
 element.getAttribute('')
-// obtenir la valeur actuelle d'un attribut
+// obtient valeur actuelle attribut
 
 element.removeAttribute('')
-// supprimer un attribut
+// supprime attribut
 
 Node.cloneNode()
 // une copie de noeud avant de l'ajouter à son nouveau parent
 
-/* API CLASSLIST : manipuler les classes des éléments */
+/*---------- API CLASSLIST : manipuler les classes des éléments --------------*/
 
 p.classList.add('classe1, classe2')
 // ajouter la classe 'red' à l'élement p
@@ -382,7 +459,7 @@ p.classList.toString()
 
 p.classList.replace('ancienneClasse', 'nouvelleClasse')
 
-/* Agir sur les éléments du DOM */
+/*---------- AGIR SUR ELEMENTS DU DOM ----------------------------------------*/
 
 p.style.fontSize = 'valeur'
 // modifier le style CSS de p (utiliser le camel case)
@@ -396,7 +473,7 @@ p.innerText = 'contenu' // attention, pas partout défini sur IE
 p.textContent = 'texte'
 // représente le contenu textuel d'un nœud et de ses descendants
 
-/* Ajouter une image, un texte et améliorer le style */
+/*---------- AJOUTER IMAGE, TEXTE, AMELIORER STYLE ---------------------------*/
 
 var imgElement = document.createElement('img');
 imgElement.setAttribute('src', 'img/dragon_wins.jpg');
@@ -409,102 +486,96 @@ viTxtDragon.style.fontWeight = 'bold';
 viTxtDragon.innerText = "Le Dragon a gagné !"
 document.body.appendChild(viTxtDragon);
 
+/*---------- AUTRE -----------------------------------------------------------*/
+
+element.getBoundingClientRect();
+// renvoie taille élément, position par rapport zone affichage (viewport)
+// object DOMRect, propriétés : left, top, right, bottom, width, height
 
 
-/* ---------- GESTIONNAIRE D'EVENEMENTS ---------- */
+/******************************************************************************/
+/************** EVENEMENTS ****************************************************/
+/******************************************************************************/
 
-// 1. phase de capture de l'événement (event capturing) : navigateur visite l'arbre DOM (racine -> enfants) et exécute les gestionnaires rencontrés (addEventListener() à true)
-// 2. phase de bouillennement de l'événement (event bubbling) : une fois arrivé au bout, le navigateur repart dans l'autre sens (addEventListener() à false)
+// 1. phase capture événement (event capturing): navigateur visite arbre DOM
+// (racine -> enfants) et exécute gestionnaires rencontrés (addEL() à true)
+// 2. phase bouillennement événement (event bubbling): quand arrivé au bout,
+// navigateur repart dans autre sens (addEventListener() à false)
 
 cible.addEventListener('click', fnCallBack)
-// met en place une fonction à appeler chaque fois que l'événement spécifié est remis à la cible
+// met en place fonction à appeler chaque fois événement spécifié remis à cible
 
 cible.removeEventListener('type', listener[, options])
-// supprime écouteur d'évènements identifié
+// supprime écouteur évènements identifié
 
 event.currentTarget
-// identifie la cible actuelle de l'évènement, lorsque l'évènement traverse le DOM
+// identifie cible actuelle évènement, lorsque évènement traverse le DOM
 
 object.onkeydown = function(){monScript};
 object.addEventListener("keydown", maFonction, true);
-// définit et renvoie le gestionnaire d'évènement keydown de l'élément courant.
+// définit et renvoie gestionnaire d'évènement keydown de l'élément courant
 
 function maFonction(e) { var x = e.keyCode; switch (x) {case 39: code break; }
-// exécuter une instruction en fonction de la touche appuyée
+// exécuter instruction en fonction touche appuyée
 
 this
-// pour un événement : vaut l'élément HTML sur lequel on a cliqué avant la fonction callback
+// pour événement: vaut élément HTML où a cliqué avant fonction callback
 
-event.preventDefault()
-//  indique à agent utilisateur que si l'événement n'est pas traité explicitement
-//  son action par défaut ne doit pas être prise en compte comme elle le serait normalement
+event.preventDefault() // par ex: pour annuler effet d'un input submit
+//  indique à agent utilisateur que si événement pas traité explicitement
+//  son action par défaut doit pas être prise en compte comme elle le devrait
 
-/* ---------- VARIABLE GLOBALE WINDOW ---------- */
+var x = instanceOfMouseEvent.clientX
+var x = instanceOfMouseEvent.clientY
+// fournit coordonnées dans zone application où événement se produit
 
-// toutes les variables créées sont des propriétés de window => attention à ne pas écraser du code avec plusieurs fichiers .js
-// si veut éviter : déclarer la variable et l'exécuter dans une fonction
-// peut enlever le window car on se situe dans le contexte global donc dans l'objet window
+var pageX = MouseEvent.pageX; // part de la gauche
+var pageY = MouseEvent.pageY; // part du haut
+// retourne coordonnées en pixel endroit où événement se produit
+
+
+/******************************************************************************/
+/************** WINDOW, VARIABLE GLOBALE **************************************/
+/******************************************************************************/
+
+// toutes variables créées sont propriétés de window
+// => attention ne pas écraser du code avec plusieurs fichiers .js
+// si veut éviter : déclarer variable et exécuter dans une fonction
+// peut enlever window. car se situe dans contexte global donc dans objet window
 
 window.alert('message')
-// crée une boite de dialogue avec message, bloque l'exécution du script tant que l'utilisateur n'a pas cliqué sur ok
+// crée boite dialogue avec message, bloque exécution script (jusqu'à clic 'ok')
 
 window.prompt("texteAffiché", "texteParDéfaut")
-// crée une boite de dialogue avec un champ de texte et retourne ce que l'utilisateur y a écrit (string)
+// string, crée boite dialogue avec champ texte et retourne texte utilisateur
 
 window.confirm('message')
-// crée boite de dialogue avec bouton ok et annuler (si ok = true, si annuler = false)
+// crée boite dialogue avec boutons ok, annuler (ok = true, annuler = false)
 
 setInterval(nomFonction, entierMilliseconds[, param1, param2])
-// lance fonction à intervalle régulier défini par delai (! pas de () pour fonction)
+// lance fonction intervalle régulier défini par delai (! sans () pour fonction)
 
 setTimeout(nomFonction, entierMilliseconds[, param1, param2])
 // lance fonction ou évalue expression après temps spécifié
 
 clearInterval(varContenantSetInterval)
-// arrête l'exécution d'un traitement à intervalle régulier
+// arrête exécution traitement à intervalle régulier
 
 clearTimeout(IDdeTimeout)
-// supprime un délai spécifié par un appel antérieur à setTimeout()
+// supprime délai spécifié par appel antérieur à setTimeout()
 
 
-
-/* ---------- LES PROTOTYPES ---------- */
-
-// peut le détourner pour utiliser dans notre code
-
-Object.getPrototypeOf(obj)
-// renvoie prototype d'un objet donné (i.e. la valeur de la propriété [[Prototype]] interne)
-
-var lol Object.create(proto[, objetPropriétés])
-// crée un nouvel objet avec un prototype donné et des propriétés données
-// lol.proto permet d'accéder au prototype
-
-/* création d'un constructeur */
-
-var Eleve = function (nom) {
-  this.nom = nom // création d'une propriété d'instance
-}
-// Eleve est une classe
-
-Eleve.prototype.moyenne = function() {} // création de la méthode moyenne
-// fonction qui sera dans le prototype d'élève
-
-var jean = new Eleve('jean')
-var marc = new Eleve('marc')
-// jean, marc = instances de l'objet Eleve
-// (héritent des méthodes d'Eleve et peuvent avoir leurs propres propriétés)
-// utilise méthodes avec prototype pour agir dans les instances
-
-
-/* ---------- TRY CATCH ---------- */
+/******************************************************************************/
+/************** TRY / CATCH ***************************************************/
+/******************************************************************************/
 
 // regroupe instructions exécuter, définit réponse si provoque exception
-// évite toute l'application s'arrête à cause une erreur
+// évite arrêt complet application pour erreur
 
 try {
   // instruction qu'on souhaite exécuter
 }
-[catch (variableErreur) { // prend en paramètre variable qui sera l'erreur qui sera envoyée
+[catch (variableErreur) { // paramètre = variable de l'erreur qui sera envoyée
   // instruction à exécuter si exception est levée dans bloc try
 }]
 [finally {
@@ -577,47 +648,78 @@ storage.key(cléN);
 
 
 /******************************************************************************/
-/************** Documentation JS **********************************************/
+/************** Documentation JS (ES2015) *************************************/
 /******************************************************************************/
 
-@param
-// indique nom, type et description d'une fonction
-// nécessite spécifier nom du paramètre à documenter
-
-// @returns [{type}] [description] @type {typeName} @typedef [<type>] <namepath>
-
 /**
- * @param {string} somebody - Somebody's name.
+ * Represents a book.
+ * @constructor
  */
-function sayHello(somebody) {
-    alert('Hello ' + somebody);
+function Book(title, author) {
 }
 
 /**
- * Assign the project to an employee.
- * @param {Object} employee - The employee who is responsible for the project.
- * @param {string} employee.name - The name of the employee.
- * @param {string} employee.department - The employee's department.
+ * Represents a book.
+ * @constructor
+ * @param {string} title - The title of the book.
+ * @param {string} author - The author of the book.
  */
-Project.prototype.assign = function(employee) {
-    // ...
-};
+function Book(title, author) {
+}
+
+Person#say  // the instance method named "say"
+Person.say  // the static method named "say"
+Person~say  // the inner method named "say"
+
+/** Class representing a point. */
+class Point {
+    /**
+     * Create a point.
+     * @param {number} x - The x value.
+     * @param {number} y - The y value.
+     */
+    constructor(x, y) {
+        // ...
+    }
+
+    /**
+     * Get the x value.
+     * @return {number} The x value.
+     */
+    getX() {
+        // ...
+    }
+}
 
 /**
- * This callback type is called `requestCallback` and is displayed as a global symbol.
- *
- * @callback requestCallback
- * @param {number} responseCode
- * @param {string} responseMessage
+ * Class representing a dot.
+ * @extends Point
  */
+class Dot extends Point {
+    /**
+     * Create a dot.
+     * @param {number} x - The x value.
+     * @param {number} y - The y value.
+     * @param {number} width - The width of the dot, in pixels.
+     */
+    constructor(x, y, width) {
+        // ...
+    }
+
+    /**
+     * Get the dot's width.
+     * @return {number} The dot's width, in pixels.
+     */
+    getWidth() {
+        // ...
+    }
+}
 
 /**
- * Does something asynchronously and executes the callback on completion.
- * @param {requestCallback} cb - The callback that handles the response.
+ * Pants module.
+ * @module my/pants
+ * @see module:my/shirt
  */
-function doSomethingAsynchronously(cb) {
-    // code
-};
 
 /******************************************************************************/
 /************** JSON : JavaScript Object Notation *****************************/
@@ -654,3 +756,108 @@ JSON.stringify(valeurAConvertir[,remplaçant[,string/number espace]])
 // remplaçant : fonction qui modifie processus transformation ou tableau
 JSON.parse(texte[,reviver])
 // parse chaîne de caractères JSON et construit équivalent valeur ou objet JS
+
+
+/******************************************************************************/
+/************** CANVAS API ****************************************************/
+/******************************************************************************/
+
+// initialiser en 2D
+const CANVAS = document.querySelector('#principalCanvas');
+let ctx = CANVAS.getContext("2d");
+
+function exempleTracé() {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext('2d');
+	context.beginPath(); // commence un nouveau dessin
+	context.moveTo(100,50); // position début
+	context.lineTo(200,100); // vers position de fin
+	context.fill(); // trace
+}
+
+/** Obtenir positionnement souris sur canvas
+*/
+function getMouseLocation(event) {
+    var offset;
+    var location;
+    var styles;
+    offset = canvas.getBoundingClientRect();
+    styles = window.getComputedStyle(canvas);
+    location = {
+        x: event.clientX - offset.left - parseInt(styles.borderLeftWidth),
+        y: event.clientY - offset.top - parseInt(styles.borderTopWidth)
+			}
+    return location;
+}
+
+context.fillStyle = 'color' // (gradient, pattern)
+// spécifie couleur ou style à utiliser intérieur formes(par défaut #000 (noir))
+
+context.save()
+// sauvegarde l'état du canvas
+
+.position
+// représente la position d'un élément à un moment donné
+
+.position.x
+
+context.beginPath()
+// commence nouveau chemin (vide liste sous-chemins) (pour créer nouveau chemin)
+
+context.arc(x, y, rayon, angleDépart, angleFin, sensAntiHoraire)
+// ajoute arc cercle au tracé (le centre aux positions (x,y)), rayon r
+
+context.restore()
+// restaure plus récente sauvegarde de l'état du canvas
+
+context.fill([path[,fillRule]])
+// remplit chemin courant ou donné avec couleur de fond en cours
+
+context.stroke([path])
+// dessine chemin actuel ou donné avec style trait actuel
+
+context.strokeStyle = 'color' //(gradient, pattern)
+// spécifie couleur ou style à utiliser pour dessiner lignes autour formes
+
+context.lineWidth = 'valeur'
+// nombre spécifiant largeur de ligne
+
+.clearRect()
+// supprime tout contenu précédemment dessiné
+
+.getContext('2d') // sélection contexte 2d
+// retourne contexte dessin sur canevas
+
+.getBoundingClientRect()
+// renvoie taille élément et sa position par rapport zone affichage (viewport)
+// retourne objet avec 6 propriétés : // left, top, right, bottom, width, height
+
+context.moveTo(x, y)
+// déplace point départ nouveau sous-chemin vers coordonnées (x, y)
+
+context.lineTo(x, y)
+// connecte dernier point sous-chemin en cours aux coordonnées x, y
+// avec ligne droite (sans tracer réellement chemin)
+
+context.closePath()
+// provoque retour stylo point départ sous-traçé courant
+// (ajoute ligne droite entre point courant et point rejoint)
+
+context.getImageData(sx, sy, sw, sh);
+// ImageData, représente pixels pour zone canevas désignée par rectangle
+// qui commence positions (sx, sy)  et de largeur (sw) et hauteur (sh)
+
+
+/******************************************************************************/
+/************** SCRIPTS UTILES ************************************************/
+/******************************************************************************/
+
+/**
+ * renvoie nombre entier aléatoire entre deux nombres inclus
+ * @Integer
+ * @param {float} min - valeur minimale
+ * @param {float} max - valeur maximale
+ */
+function getRandomInteger(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
