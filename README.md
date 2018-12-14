@@ -1,2 +1,2 @@
 # french-code-sheets
-Useful informations about coding languages
+Useful informations about web coding languages
