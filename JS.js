@@ -114,7 +114,7 @@ class Pen {
 		this.color = color;
 		this.size = size;
 	}
-	fonction(slate) {
+	nomFonction(slate) {
 		// code de ma fonction
 	}
 }
@@ -191,6 +191,9 @@ array1.forEach(callbackfn[,thisArg])
 // exécute action spécifiée pour chaque élément tableau
 // callbackfn: nom de la fonction acceptant jusqu'à trois arguments
 // thisArg:objet auquel this peut faire référence dans callbackfn
+
+tableau.join('-')
+// crée,renvoie chaîne caractères en concaténant éléments ('-' pour séparateur)
 
 var pos = monTableau.indexOf('élément'); // ('élément', 2) cherche dès index 2
 // renvoie premier indice correspondant élément donné dans tableau / -1
@@ -297,9 +300,6 @@ parseInt("élément")
 
 parseFloat("élément")
 // retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
-
-tableau.join('-')
-// crée,renvoie chaîne caractères en concaténant éléments ('-'' pour séparateur)
 
 typeof(maVariable)
 // afficher le type de la variable
@@ -861,3 +861,19 @@ context.getImageData(sx, sy, sw, sh);
 function getRandomInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+
+///////// A AJOUTER ///////////////
+
+// window.location.replace(...) is better than using window.location.href, because replace() does not keep the originating page in the session history, meaning the user won't get stuck in a never-ending back-button fiasco.
+// window.location.href = link;
+// or
+//
+// window.location.assign(link);
+//
+// import xxxx from 'urlFichier';
+// import * as Préfixe from 'url';
+// export
+
+// numObj.toFixed([nbChiffres])
+// permet de formater un nombre en notation à point-fixe (nombre arrondi si nécessaire)

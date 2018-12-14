@@ -194,14 +194,32 @@ insérer du paragraphe et appliquer du style, à ne pas faire -->
 <!-- représente une section d'un document qui contient des contrôles interactifs permettant à un utilisateur d'envoyer des données à un serveur web
 'name' doit être unique parmi tous les formulaires d'un document et pas une chaîne de caractères vide en HTML5 -->
 
+<form method="post">
+    <input name="a[]" value="foo"/>
+    <input name="a[]" value="bar"/>
+    <input name="a[]" value="baz"/>
+    <input type="submit" />
+</form>
+<!-- $_POST['a'] va contenir tableau avec les valeurs (foo, ...)-->
+
 <input type="">
 <!-- créer un contrôle interactif dans un formulaire web qui permet à l'utilisateur de saisir des données -->
+
+readonly
+<!-- paramètre possible -->
 
 <input type="checkbox" id="" name="">
 <!-- boite à cocher -->
 
 <input type="radio" id="" name="">
 <!-- groupes d'options parmi lesquelles on ne peut choisir qu'une valeur (cercles) -->
+
+<input type="number" step="0.01">
+<!-- nombre à écrire avec deux chiffres après la virgule -->
+
+<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+<!-- nécessite ajout d'attribut enctype="multipart/form-data" à <form> -->
+<!-- attribut value contient chaîne caractères = chemin fichier(s) -->
 
 <select name="" id="">
     <option value="valeur1">Valeur1</option>

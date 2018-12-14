@@ -305,16 +305,54 @@ $.get(url[donnéesEnvoyées][,cbackfnSiRéussite][,typeDeDonnées] ou [paramètr
 // url : string, vers où requête envoyée
 // type : type attendu par serveur (Intelligent Guess par défaut (xml, json...))
 
+$("button").click(function(){
+  $.get("demo_test.asp", function(data, status){
+    alert("Data: " + data + "\nStatus: " + status);
+  });
+});
+
 function getHTMLContent() {
     $.get("php/html.php", function(data) {
         $("#divResults").html(data)});
 }
 // ajoute contenu html.php dans #divResults présent dans autre page html liée
 
-$.post(url[donnéesEnvoyées][,cbackfnSiRéussite][,typeDeDonnées] ou [paramètres])
+$.post(url[,donnéesEnvoyées][,cbackfnSiRéussite][,typeDeDonnées] ou [paramètres])
 // charge données à partir serveur utilisant requête ajax HTTP POST
 // url : string, vers où requête envoyée
 // type : type attendu par serveur (Intelligent Guess par défaut (xml, json...))
+
+$("button").click(function(){
+  $.post("demo_test_post.asp",
+  {
+    name: "Donald Duck",
+    city: "Duckburg"
+  },
+  function(data, status){
+    alert("Data: " + data + "\nStatus: " + status);
+  });
+});
+
+$(document).ready(function() {
+    $('#submitButton').on('click', function(event) {
+        event.preventDefault();
+        console.log('fonction lancée')
+        $.post('index.php', $('#form').serialize())
+            .done(function () {
+                $('#modalFormContent').html(`<div id="modalFormCloseBtn">
+                    <button> <i class="far fa-times-circle"></i></button>
+                    </div>
+                    <div id="hrModalForm"></div>
+                    <p><i class="fas fa-check"></i> Formulaire transmis !</p>`);
+                let modalFormCloseBtn = document.querySelector("#modalFormCloseBtn");
+                modalFormCloseBtn.addEventListener("click", hideModal);
+            })
+            .fail(function () { // if fail then getting message
+                alert("L'envoi du formulaire a échoué. Merci de retenter ou d'envoyer un email");
+
+            });
+    });
+});
 
 $.getJSON('urlCibleDeRequête'[,data][,cbackfnSiSuccèsRequête])
 // retourne jqXHR, charge données encodées JSON à partir serveur

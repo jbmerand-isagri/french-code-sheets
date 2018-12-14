@@ -182,8 +182,9 @@ explode(string $séparateur , string $string [, int $limit = PHP_INT_MAX ] )
 /************** OBJETS ********************************************************/
 /******************************************************************************/
 
-$variable = {} // fortement déprécié
+$variable = {}
 $variable = new nomObjet()
+$variable = new class{} // classe anonyme
 $obj1 = new \stdClass; // PHP7
 
 $book = new stdClass;
@@ -415,6 +416,11 @@ $_GET["name"]
 
 $_GET['order_n'] // pour récupérer dans bdc.php
 
+
+/** vérifier qu'un formulaire a été soumis **/
+
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+
 /******************************************************************************/
 /************** SYNTAXE ALTERNATIVE (dans .PHTML) *****************************/
 /******************************************************************************/
@@ -586,7 +592,7 @@ $q = $pdo->prepare(
   "INSERT INTO Post (Author_Id, Category_Id, CreationTimestamp)
   VALUES (:auth, :cate, NOW())"
 );
-$q->execute(['auth' => $authorNewPost, 'cate' => $categoryNewPost]);
+$q->execute([':auth' => $authorNewPost, ':cate' => $categoryNewPost]);
 
 
 /********* Méthode 2 : REQUETE query() puis fetch() ***************************/
@@ -631,14 +637,15 @@ json_encode su pas déjà fait
 // Retourne la représentation JSON d'une valeur
 string json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] )
 
-intval()
+intval(mixed $var [,int $base = 10])
+// int, retourne valeur numérique entière équivalente
+
 &nbsp;[...]
 
 ucfirst()
 
 substr($string, int $start [,int $length])
 // string, retourne un segment de chaîne
-
 
 htmlspecialchars($string)
 // [,int $flags = ENT_COMPAT | ENT_HTML401
@@ -671,6 +678,7 @@ nl2br(string $string[, bool $is_xhtml = TRUE ])
 date( string $format [, int $timestamp = time() ] )
 // string, formate une date/heure locale
 // format : 'l jS \de F Y h:i:s A'
+// pour datetime (pour mysql...) : ("Y-m-d H:i:s");
 
 date_default_timezone_set('UTC');
 // définit fuseau horaire par défaut à utiliser
@@ -752,6 +760,10 @@ session_status()
 
 password_verify(string $passwordUtilisateur,string $passwordHaché)
 // bool, vérifie que le hachage fourni correspond bien au mot de passe fourni
+
+password_hash(string $password,int $algo[,array $options])
+// string, crée clé de hachage pour mot de passe
+// $algo : PASSWORD_DEFAULT / PASSWORD_BCRYPT / PASSWORD_ARGON2I
 
 
 /* Destruction d'une session avec $_SESSION (pas le cookie) */
