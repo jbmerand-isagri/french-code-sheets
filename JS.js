@@ -877,3 +877,7 @@ function getRandomInteger(min, max) {
 
 // numObj.toFixed([nbChiffres])
 // permet de formater un nombre en notation à point-fixe (nombre arrondi si nécessaire)
+
+// element.value
+
+// .dataset

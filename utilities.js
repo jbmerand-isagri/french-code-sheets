@@ -56,3 +56,10 @@ function saveToLocalStorage(key, data) {
 }
 
 export {selectListenEventManyElements,isInPage,isElementInViewport,loadFromLocalStorage,saveToLocalStorage}
+
+
+
+
+
+
+// A VOIR POUR PEUT-ETRE AJOUTER

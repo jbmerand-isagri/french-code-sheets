@@ -203,10 +203,10 @@ insérer du paragraphe et appliquer du style, à ne pas faire -->
 <!-- $_POST['a'] va contenir tableau avec les valeurs (foo, ...)-->
 
 <input type="">
-<!-- créer un contrôle interactif dans un formulaire web qui permet à l'utilisateur de saisir des données -->
+<!-- créer un contrôle interactif dans un formulaire web qui permet à l'utilisateur de saisir des données (radio, checkbox, date, text, email, submit, reset...)-->
 
-readonly
-<!-- paramètre possible -->
+readonly, max, min, required, step...
+<!-- paramètres possibles -->
 
 <input type="checkbox" id="" name="">
 <!-- boite à cocher -->
@@ -222,12 +222,13 @@ readonly
 <!-- attribut value contient chaîne caractères = chemin fichier(s) -->
 
 <select name="" id="">
-    <option value="valeur1">Valeur1</option>
-    <option value="valeur2" selected>Valeur2</option>
-    <option value="valeur3">Valeur3</option>
+    <option value="valeur1">Nom1</option>
+    <option value="valeur2" selected>Nom2</option>
+    <option value="valeur3">Nom3</option>
 </select>
 <!-- contrôle qui fournit une liste d'options parmi lesquelles l'utilisateur pourra choisir (boite à défilement)
-value représente la valeur qu'on souhaite envoyer au formulaire lorsque l'option est sélectionnée, si pas défini = contenu textuel de l'élément -->
+value représente la valeur qu'on souhaite envoyer au formulaire lorsque l'option est sélectionnée, si pas défini = contenu textuel de l'élément
+attributs : multiple...-->
 
 <textarea name="" id="" cols="30" rows="10" placeholder="texteDisparaissantAuClic">texteRestant</textarea>
 <!-- insérer un contrôle pour éditer du texte -->

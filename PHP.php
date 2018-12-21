@@ -796,3 +796,9 @@ $_COOKIE['pseudo']
 * 3. inscription : hachage du mot de passe, vérifications à effectuer :
 ** pseudo libre ? les deux mots de passe identiques ? adresse mail valide ?
 /
+
+
+
+A AJOUTER : mixed filter_var ( mixed $variable [, int $filter = FILTER_DEFAULT [, mixed $options ]] )
+Les règles de bonne pratique PHP :
+https://www.php-fig.org/psr/
