@@ -3,10 +3,8 @@
 
 /*
 * [Référence du langage](http://php.net/manual/fr/langref.php)
-	// types : entiers, booléens, décimaux, tableaux, chaines de caractère
-  // (itérables, objets, valeur nul)
 * [Essentiel](http://php.net/manual/fr/language.variables.basics.php)
-	// écrire variable, affecter, nom à donner
+* [Règles de bonnes pratiques](https://www.php-fig.org/psr/)
 
 .: DEFINITIONS :.
 
@@ -15,20 +13,26 @@ Peut être intégré facilement au HTML.
 Code exécuté sur serveur, générant HTML/CSS qui sera envoyé au client.
 Client ne reçoit que résultat du script, sans accès code.
 
-
 .: INFORMATIONS :.
 
 - installer MAMP (inclut serveur Apache et Mysql) pour PC puisse interpréter PHP
-- 80% des sites dans le monde faits avec (Wordpress...)
+- ~80% des sites dans le monde faits avec (Wordpress...)
 - permet consulter bases de données, faire sites dynamiques :
 -> formulaire se soumet en post ou via méthode ajax (pas besoin rafraichir page)
+- phpinfo(); ensemble des infos relatives PHP utilisé par serveur
+-- cf. Loaded Configuration File pour connaitre chemin fichier config
+-- peut y modifier affichage erreurs (; en début ligne = commentaire)
+-- pour afficher erreurs : error_reporting E_ALL , display_errors on)
 
 
 /******************************************************************************/
 /************** VARIABLES *****************************************************/
 /******************************************************************************/
 
-$variable = 'Hello'
+// stockées en mémoire et conservées tant que page en cours de génération
+// types : string,integer,float,boolean,array,object,resource,iterable,NULL...
+
+$variable = 'Hello';
 // déclaration variable
 // remettre le $ pour appeler la variable
 
@@ -38,37 +42,108 @@ const SON_NOM = 'Sa valeur'; // à utiliser à l'intérieur d'une classe
 
 NOM_CONSTANTE // pas de $ devant
 
+/** VARIABLES SUPERGLOBALES **/
+// variables internes, toujours disponibles quel que soit contexte
+$GLOBALS,$_SERVER,$_GET,$_POST,$_FILES,$_COOKIE,$_SESSION,$_REQUEST,$_ENV
+
 /******************************************************************************/
 /************** AFFICHAGE, TEXTES *********************************************/
 /******************************************************************************/
 
-echo ( string $arg1 [, string $... ] )
+echo(string $arg1 [,string $... ])
 // void, affiche une chaîne de caractères
 
-system.out.println("some")
-// afficher dans la console
+
+/******************************************************************************/
+/************** OPERATEURS ****************************************************/
+/******************************************************************************/
+
+->
+// accéder aux méthodes et propriétés d'un objet
+
+.
+// concaténer
+
+$variable .= 'valeurAAjouter';
+// concétaner directement dans la variable
+
+/*---------- opérateurs basiques ---------------------------------------------*/
+
++ // addition
+- // soustraction
+/ // division
+* // multiplication
+= // égal (/affectation)
+% // modulo (reste entier division)
+
+/*---------- opérateurs de comparaison ---------------------------------------*/
+
+== // est égal à
+> // est supérieur à
+< // est inférieur à
+>= // est supérieur ou égal à
+<= // est inférieur ou égal à
+!= // est différent de
+
+/*---------- opérateurs logiques ---------------------------------------------*/
+
+&&, AND // et
+||, OR // ou
+! // n'est pas
 
 
 /******************************************************************************/
 /************** FONCTIONS *****************************************************/
 /******************************************************************************/
 
+/** ACTIONS SUR CHAINES DE CARACTERES (STRING) **/
+
+&nbsp;
+// Non Breakable SPace, entité html de l'espace
+
+ucfirst(string $str)
+// string, retourne chaine avec premier caractère remplacé par sa majuscule
+
+substr($string, int $start [,int $length])
+// string, retourne un segment de chaîne
+
+strlen(string $string)
+// int, retourne taille de la chaine string
+
+str_replace(mixed $search, mixed $replace, mixed $subject [,int &$count])
+// mixed, retourne chaîne ou tableau, occurrences de search dans subject
+// remplacées par replace
+
 strtolower($string)
 // string, conversion caractères alphabétiques en minuscules
 
-var_dump($unset_var)
-// void,  affiche informations structurées d'une variable (type, valeur...)
+strpos(string $haystack , mixed $needle [,int $offset = 0])
+// int, cherche position numérique première occurence de needle dans haystack
 
-empty (mixed $var)
+strrpos(string $haystack , mixed $needle [,int $offset = 0])
+// int, cherche position numérique dernière occurence de needle dans haystack
+
+nl2br(string $string[, bool $is_xhtml = TRUE ])
+// retourne string après avoir inséré <br/> ou <br> devant nouvelles lignes
+// (\r\n, \n\r, \n et \r)
+
+/** TESTS ET INFOS SUR VARIABLES **/
+
+var_dump($unset_var)
+// void, affiche informations structurées d'une variable (type, valeur...)
+
+empty(mixed $var)
 // bool, détermine si variable vide (= n'existe pas ou valeur équivaut à false)
 
-is_null (mixed $var)
+is_null(mixed $var)
 // bool, indique si variable vaut NULL
 
-isset(mixed $var [, mixed $... ])
+isset(mixed $var [,mixed $...])
 // bool, détermine si variable est définie et différente de NULL
 
-count(mixed $array_or_countable [, int $mode = COUNT_NORMAL ])
+/** NOMBRES, DENOMBREMENT **/
+
+count(mixed $array_or_countable [,int $mode = COUNT_NORMAL])
 // int, compte tous les éléments
 
 rand(void)
@@ -77,10 +152,10 @@ rand(void)
 rand(int $min, int $max)
 // int, retourne nombre aléatoire entre deux nombres inclus
 
-round(float $val [, int $precision = 0 [, int $mode = PHP_ROUND_HALF_UP ]] )
+round(float $val [,int $precision = 0 [,int $mode = PHP_ROUND_HALF_UP]])
 // float, retourne valeur arrondie (précision = nombre chiffres après virgule)
 
-number_format(float $number [, int $decimals = 0 ])
+number_format(float $number [,int $decimals = 0])
 // [string $dec_point = "." , string $thousands_sep = ","]
 // string, formate nombre pour affichage (n'accepte pas 3 paramètres)
 // decimals:leur nbre,dec_point:point décimal,thousands_sep:séparateur milliers
@@ -88,20 +163,55 @@ number_format(float $number [, int $decimals = 0 ])
 floatval(mixed $var)
 // float, retourne valeur de type float (nombre à virgule flottante)
 
+intval(mixed $var [,int $base = 10])
+// int, retourne valeur numérique entière équivalente
+
+/** DATES, HEURES **/
+
 date_create([string $time = "now" [, DateTimeZone $timezone = NULL ]])
 // DateTime, style procédure, alias de DateTime::__construct
 //$time définit format, ('Y-m-d H:i:s') ...
 
-DateTime::__construct([string $time = "now" [, DateTimeZone $timezone = NULL ]])
+DateTime::__construct([string $time = "now" [,DateTimeZone $timezone = NULL]])
 // public, style orienté objet
+
+date(string $format [,int $timestamp = time()])
+// string, formate une date/heure locale
+// format : 'l jS \de F Y h:i:s A'
+// pour datetime (pour mysql...) : ("Y-m-d H:i:s");
+
+date_default_timezone_set('UTC');
+// définit fuseau horaire par défaut à utiliser
+
+/** CHEMINS ET ACCES AUX FICHIERS (constantes magiques incluses) **/
+
+dirname(string $path [,int $levels = 1])
+// string, renvoie chemin parent d'un chemin représentant fichier ou dossier
+// qui correspond à levels niveau(x) plus haut que le dossier courant
+// levels = nombre de dossiers parents
+
+realpath(string $path)
+// string, retourne chemin canonique absolu, résout tous les liens symboliques
+// remplace toutes les références /./, /../ et / de path
+
+file_exists(string $filename)
+// bool, vérifie si un fichier ou un dossier existe.
+
+__FILE__
+// chemin complet et nom fichier courant avec liens symboliques résolus
+// si utilisé pour inclusion, nom fichier inclus retourné
+__DIR__
+// dossier du fichier. Si utilisé dans inclusion, dossier du fichier retourné
+// équivalent de dirname(__FILE__). Nom dossier sans slash final
+
 
 /******************************************************************************/
 /************** TABLEAUX ******************************************************/
 /******************************************************************************/
 
-$variable = array()
-$variable = new Array()
-$variable = []
+$variable = array();
+$variable = new Array();
+$variable = [];
 
 define('NOM', array(
     'valeur1',
@@ -120,7 +230,7 @@ $monTableau = [
 $monTableau['cléX']
 // afficher valeur correspondante
 
-array_push (array $array, mixed valeur1, mixed valeur2 ] )
+array_push (array $array, mixed valeur1, mixed valeur2])
 // int, considère array comme une pile et empile variables var à fin de array
 
 $array[] = $var;
@@ -128,44 +238,44 @@ $array[] = $var;
 
 /********* rechercher, retourner clés, valeurs ********************************/
 
-array_key_exists (mixed $valeurCherchée, array $leTableau)
+array_key_exists(mixed $valeurCherchée, array $leTableau)
 // bool, vérifie si clé existe
 
-in_array (mixed $valeurCherchée, array $leTableau [, bool $strict = FALSE ] )
+in_array(mixed $valeurCherchée, array $leTableau [,bool $strict = FALSE])
 // bool, indique si valeur présente. Strict pour comparaison typée
 
-array_search (mixed $valeurCherchée, array $leTableau [, bool $strict = FALSE ])
+array_search(mixed $valeurCherchée, array $leTableau [,bool $strict = FALSE])
 // mixed, recherche première clé associée à la première valeur
 // (retourne FALSE sinon, NULL si paramètres invalides)
 
-array_values (array $leTableau)
+array_values(array $leTableau)
 // array, retourne valeurs du tableau et l'indexe de façon numérique
 
-array_keys (array $leTableau [, mixed $search_value [, bool $strict = FALSE ]] )
+array_keys(array $leTableau [,mixed $search_value [,bool $strict = FALSE]])
 // array, retourne les clés numériques et littérales du tableau
 
 /********* comparer des tableaux **********************************************/
 
-array_intersect(array $array1 , array $array2 [, array $... ] )
+array_intersect(array $array1 , array $array2 [,array $...])
 // array, retourne tableau contenant valeurs de array1 présentes
 // dans tous arguments array2, ... (clés préservées)
 
-array_diff(array $array1 , array $array2 [, array $... ] )
+array_diff(array $array1 , array $array2 [,array $...])
 // array, compare tableau array1 avec autre(s)
 // retourne valeurs de array1 non présentes dans autres tableaux
 
 /********* trier de tableaux **************************************************/
 
-sort(array &$array [, int $sort_flags = SORT_REGULAR ] )
+sort(array &$array [,int $sort_flags = SORT_REGULAR])
 // bool, trie éléments array plus petit au plus grand
 
-asort(array &$array [, int $sort_flags = SORT_REGULAR ] )
+asort(array &$array [,int $sort_flags = SORT_REGULAR])
 // bool, trie valeurs ordre alphabétique (corrélation index/valeurs conservée)
 
-arsort(array &$array [, int $sort_flags = SORT_REGULAR ] )
+arsort(array &$array [,int $sort_flags = SORT_REGULAR])
 // comme asort, mais ordre alphabétique inverse
 
-sort_flags
+$sort_flags
 // paramètre optionnel pour modifier comportement de tri avec ces valeurs :
 // SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_LOCALE_STRING, SORT_NATURAL
 
@@ -174,7 +284,7 @@ sort_flags
 implode([string $séparateur,] array $pieces) // ou join()
 // string, rassemble éléments en une chaîne ($glue par défaut chaine vide ' ')
 
-explode(string $séparateur , string $string [, int $limit = PHP_INT_MAX ] )
+explode(string $séparateur , string $string [,int $limit = PHP_INT_MAX])
 // array, retourne tableau de chaînes
 
 
@@ -182,12 +292,12 @@ explode(string $séparateur , string $string [, int $limit = PHP_INT_MAX ] )
 /************** OBJETS ********************************************************/
 /******************************************************************************/
 
-$variable = {}
-$variable = new nomObjet()
-$variable = new class{} // classe anonyme
-$obj1 = new \stdClass; // PHP7
+$variable = {};
+$variable = new nomObjet();
+$variable = new class{}; // classe anonyme
+$obj1 = new \stdClass; // ou new stdClass() , PHP7
 
-$book = new stdClass;
+$book = new \stdClass;
 $book->title = "Harry Potter and the Prisoner of Azkaban";
 $book->author = "J. K. Rowling";
 $book->publisher = "Arthur A. Levine Books";
@@ -199,11 +309,15 @@ $book->title
 // nom classe (en PascalCase) = nom fichier le contenant
 class Database // dans le fichier Database.php
 {
-  public static $_instance; // propriété de l'objet. public = accès en dehors, static = syntaxe spacifique
-  public function__construct() // fonction appelée implicitement dès appelée
+  public static $_instance;
+  // propriété de l'objet. public = accès en dehors, static = syntaxe spécifique
+  // méthode static permet son exécution sans avoir à instancier class
+  public function__construct()
+  // fonction appelée implicitement dès appelée
   {
     try {
-      self::$_instance = new PDO( // self pour accéder propriétés et méthodes statiques déclarées dans la classe
+      self::$_instance = new PDO(
+        // self pour accéder propriétés/méthodes statiques déclarées dans classe
         ...
         [
           PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -218,18 +332,18 @@ class Database // dans le fichier Database.php
     }
   }
 }
-new Database() // créé une instance de la classe
+new Database(); // créé une instance de la classe
 
 
 /******************************************************************************/
-/************** OBJETS ET CLASSES **********************************************/
+/************** OBJETS ET CLASSES *********************************************/
 /******************************************************************************/
 
 // classe peut contenir propres constantes, variables (= propriétés/attributs)
 // et fonctions (= méthodes)
 // $this = objet appelant
 
-/** visibilité (public / protected / private)**/
+/** visibilité (public / protected / private) **/
 // objets mêmes types ont accès membres privés et protégés les uns des autres
 // même si pas de la même instance (détails spécifiques de implémentation déjà
 // connus en interne par ces objets)
@@ -243,7 +357,7 @@ class MyClass
     protected $protected = 'Protected'; // accès limité classe + celles héritent
     private $private = 'Private'; // accès réservé à classe qui l'a défini
 
-    function printHello()
+    function printHello() // encapsulation
     {
         echo $this->public;
         echo $this->protected;
@@ -252,16 +366,16 @@ class MyClass
 }
 
 $obj = new MyClass(); // instanciation
-echo $obj->public; // Fonctionne
-echo $obj->protected; // Erreur fatale
-echo $obj->private; // Erreur fatale
-$obj->printHello(); // Affiche Public, Protected et Private
+echo $obj->public; // fonctionne
+echo $obj->protected; // erreur fatale
+echo $obj->private; // erreur fatale
+$obj->printHello(); // affiche Public, Protected et Private
 
 
 // avec extension (MyClass2 hérite méthodes et membres de MyClass)
 class MyClass2 extends MyClass
 {
-    // On peut redéclarer les éléments publics ou protégés, mais pas ceux privés
+    // on peut redéclarer les éléments publics ou protégés, mais pas ceux privés
     protected $protected = 'Protected2';
 
     function printHello() // redéfinition possible de la méthode parente
@@ -273,21 +387,18 @@ class MyClass2 extends MyClass
 }
 
 $obj2 = new MyClass2(); // instanciation
-echo $obj2->public; // Fonctionne
-echo $obj2->protected; // Erreur fatale
-echo $obj2->private; // Indéfini
-$obj2->printHello(); // Affiche Public, Protected2 et Indéfini
+echo $obj2->public; // fonctionne
+echo $obj2->protected; // erreur fatale
+echo $obj2->private; // indéfini
+$obj2->printHello(); // affiche Public, Protected2 et Indéfini
 
-/** visibilité méthodes **/
-// méthodes classes peuvent être définies comme publiques, privées ou protégées
-// (par défaut: publiques)
 
 /** création d'une instance d'une classe **/
 
 $instance = new SimpleClass();
 // ou
 $className = 'SimpleClass';
-$instance = new $className(); // new SimpleClass()
+$instance = new $className();
 
 // Résolution de nom de classe
 // récupérer une chaîne contenant le nom qualifié complet de la classe ClassName
@@ -299,19 +410,21 @@ namespace NS {
     echo ClassName::class;
 }
 
-// Déclare constructeur public
-public function __construct() { }
+/** METHODES **/
 
-// Déclare méthode publique
+// déclare méthode publique
 public function MyPublic() { }
 
-// Déclare méthode protégée
+// déclare méthode protégée
 protected function MyProtected() { }
 
-// Déclare méthode privée
+// déclare méthode privée
 private function MyPrivate() { }
 
-/** constructeur **/
+/** CONSTRUCTEUR **/
+
+// déclare constructeur public
+public function __construct() { }
 
 // méthode constructeur classe appellée à chaque nouvelle instanciation
 // intéressant pour initialiations dont objet a besoin
@@ -331,7 +444,7 @@ class SubClass extends BaseClass {
     }
 }
 
-/** classe abstraite **/
+/** CLASSE ABSTRAITE **/
 
 // peut pas être instanciée, méthode abstraite existe que si classe l'est
 // déclare signature de la méthode (peut pas définir son implémentation)
@@ -339,7 +452,7 @@ class SubClass extends BaseClass {
 
 abstract class AbstractClass
 {
-    // Force les classes filles à définir cette méthode
+    // force classes filles à définir cette méthode
     abstract protected function getValue();
     abstract protected function prefixValue($prefix);
 
@@ -362,18 +475,51 @@ class ConcreteClass1 extends AbstractClass
 
 
 /******************************************************************************/
-/************** BLOCS (if, switch, while...) **********************************/
+/************** STRUCTURES DE CONTROLE (if, switch, while...) *****************/
 /******************************************************************************/
 
-// similaire à JS
+/********* ALTERNATIVES *******************************************************/
 
-continue Int;
-// dans boucle pour faire directement commencer prochaine itération
-// Int : optionnel, indique combien structures emboîtées doivent être éludées
+// IF - ELSE
+if (condition) {
+  // code...
+} elseif (condition) {
+  // code...
+} else {
+  // code...
+}
 
-/********* FOREACH ************************************************************/
-// pour parcourir tableaux et objets
+// structure ternaire
+condition ? expr1 : expr2
+// si condition vaut true, l'opérateur renverra valeur d'expr1, sinon expr2
+var elvisLives = Math.PI > 4 ? "Yep" : "Nope";
+"Le prix est : " + (estMembre ? "15 €" : "30 €")
 
+// SWTICH : évalue expression, exécute instructions correspondantes selon cas
+switch ($note) {
+  case 'value':
+    // code...
+    break;
+
+  default:
+    // code...
+    break;
+}
+
+/********* BOUCLES ************************************************************/
+
+// WHILE : boucle à pré-condition (tant que)
+while($a <= 10) {
+  // code...
+}
+
+// FOR : boucle itérative
+for($i=0; $i < ; $i++) {
+// initialisation ; condition ; incrémentation
+  // code...
+}
+
+// FOREACH : boucle de parcours (tableaux et objets)
 foreach($variable as $key => $value) {
 	# code...
 }
@@ -385,10 +531,16 @@ foreach ($arr as &$value) {
 }
 unset($value); // détruit référence sur dernier élément
 
+continue Int;
+// dans boucle pour faire directement commencer prochaine itération
+// Int : optionnel, indique combien structures emboîtées doivent être éludées
+
 
 /******************************************************************************/
 /************** FORMULAIRES, REQUETES, BASES DE DONNEES ***********************/
 /******************************************************************************/
+
+// « Never trust user input » : SECURISER! (htmlspecialchars...)
 
 /********* requête de type POST : /fichier.php (plus sécurisée) ***************/
 
@@ -399,14 +551,27 @@ unset($value); // détruit référence sur dernier élément
 </form> */
 
 // pour récupérer et afficher données formulaire :
-if(isset($_POST['envoi'])){ // si formulaire soumis
-echo $_POST['pseudo']; // affiche contenu
+if($_SERVER['REQUEST_METHOD'] == 'POST') { // si formulaire soumis
+  echo $_POST['pseudo']; // affiche contenu
 }
 
-/********* requête GET : /fichier.php?nameDuChamps=sun&direction=maFonction ***/
+/** traitement de l'envoi d'un fichier **/
+
+$_FILES['nom_du_champ']
+$_FILES['nom_du-champ']['name'] // nom fichier envoyé
+$_FILES['nom_du-champ']['type'] // "image/gif"
+$_FILES['nom_du-champ']['size'] // en octets (1M = 1Mo)
+$_FILES['nom_du-champ']['tmp_name'] // répertoire temporaire stockage
+$_FILES['nom_du-champ']['error'] // "0" si pas d'erreur
+
+
+/********* requête GET ********************************************************/
+
+// page.php?param1=valeur1&param2=valeur2&param3=valeur3&param4=valeur4…
+// & doit être écrit &amp; dans le code html
 
 $_GET["name"]
-// méthode pour récupérer valeurs du form 'name' (+ hackable, à éviter)
+// méthode pour récupérer valeurs non sensibles du form 'name'
 // envoie toutes les saisies de chacun des champs dans l'url
 
 /* code html correspondant vers page bdc.php :
@@ -416,10 +581,6 @@ $_GET["name"]
 
 $_GET['order_n'] // pour récupérer dans bdc.php
 
-
-/** vérifier qu'un formulaire a été soumis **/
-
-if($_SERVER['REQUEST_METHOD'] == 'POST')
 
 /******************************************************************************/
 /************** SYNTAXE ALTERNATIVE (dans .PHTML) *****************************/
@@ -440,19 +601,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 <?php endforeach; ?>
 
 <?php
-/******************************************************************************/
-/************** OPERATEURS ****************************************************/
-/******************************************************************************/
-
-->
-// accéder aux méthodes et propriétés d'un objet
-
-.
-// concaténer
-
-$variable .= 'valeurAAjouter'
-// concétaner directement dans la variable
-
 /******************************************************************************/
 /************** AGIR SUR DES FICHIERS / INTERACTIONS **************************/
 /******************************************************************************/
@@ -510,6 +658,9 @@ fopen(string $filename, string $mode)
 'c+' :	lecture+écriture, comportement = 'c'
 'e'	: défini indicateur close-on-exec sur descripteur fichier ouvert */
 
+fgets(resource $handle [,int $length])
+// string, récupère la ligne courante sur laquelle se trouve le pointeur du fichier.
+
 fgetcsv(resource $handle)
 //[$length = 0] [$delimiter = ","] [$enclosure = '"'] [$escape = "\"]
 // array, analyse ligne qu'il lit, recherche et retourne champs CSV
@@ -518,16 +669,16 @@ fgetcsv(resource $handle)
 // escape : un seul caractère échappement
 // retourne : NULL si handle invalide, FALSE si autres erreurs
 
-fputcsv (resource $handle, array $fields)
+fputcsv(resource $handle, array $fields)
 // [$delimiter = ","] [$enclosure = '"'] [$escape_char = "\\" ]
 // int, formate ligne passée sous forme tableau fields
 // écrit résultat dans fichier handle
 
-fclose (resource $handle)
+fclose(resource $handle)
 // bool, ferme fichier représenté par pointeur handle
 
-fwrite($fh, "sep=\t" . "\r\n");
-
+fwrite(resource $handle, string $string [,int $length]) // alias de fputs
+// int, écrit contenu de la chaîne string dans fichier pointé par handle
 
 /******************************************************************************/
 /************** SEQUENCES D'ECHAPPEMENT ***************************************/
@@ -554,16 +705,16 @@ PDO::__construct(string $dsn[,string $username[,string $passwd[,array $options])
 
 // exemple, $pdo représente la base de données
 $pdo = new PDO('mysql:host=localhost;dbname=classicmodels;charset=UTF8',
-    'root', // identifiant[,bool $use_include_path = FALSE [,resource $context]]
-    'troiswa', // mdp
-    [ // tableau d'arguments, paramètres de configuration
-	    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+  'root', // identifiant[,bool $use_include_path = FALSE [,resource $context]]
+  'troiswa', // mdp
+  [ // tableau d'arguments, paramètres de configuration
+	   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 // lorsque détecte erreur dans requête lance exception et y définit propriétés
-      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 // récupère informations en mode tableau associatif [clés = noms colonnes bdd]
-	]
+  ]
 );
-var_dump($pdo); // pour vérifier retourne bien object(PDO)[1]
+var_dump($pdo); // pour vérifier retourne bien objet PDO
 
 /********* Méthode 1 : REQUETE SQL prepare() puis execute() *******************/
 
@@ -586,7 +737,7 @@ PDOStatement::execute([array $input_parameters])
 $q = $pdo->prepare("SELECT * FROM customers WHERE customerNUMBER = :id");
 // :id fait référence info qui sera donnée au moment exécution dans la bdd
 // trouver nom assez éloigné du nom réel bdd pour éviter injection SQL
-$q->execute(['id' => 103]);
+$q->execute([':id' => 103]);
 
 $q = $pdo->prepare(
   "INSERT INTO Post (Author_Id, Category_Id, CreationTimestamp)
@@ -616,107 +767,58 @@ PDOStatement::fetchAll ([int $fetch_style])
 // EXEMPLE //
 
 $query = $pdo->query(
-    'SELECT po.Id, Title, Contents, CreationTimestamp, au.FirstName, ca.Name
-    FROM Post po
-    INNER JOIN Author au ON au.Id = po.Author_Id
-    INNER JOIN Category ca ON ca.Id = po.Id
-    ORDER BY CreationTimestamp DESC'
+  'SELECT po.Id, Title, Contents, CreationTimestamp, au.FirstName, ca.Name
+  FROM Post po
+  INNER JOIN Author au ON au.Id = po.Author_Id
+  INNER JOIN Category ca ON ca.Id = po.Id
+  ORDER BY CreationTimestamp DESC'
 );
 
 $posts = $query->fetchAll(); // OU fetch() que pour une ligne
 
 
 /******************************************************************************/
-/************** ENCODER, DECODER, AGIR SUR CHAINES DE CARACTERES **************/
+/************** ENCODER, DECODER, FILTRER, SECURISER **************************/
 /******************************************************************************/
 
-son_encode
-(PHP 5 >= 5.2.0, PHP 7, PECL json >= 1.2.0)
+json_encode(mixed $value [,int $options = 0 [,int $depth = 512]])
+// string, retourne chaine caractères contenant la représentation JSON de value
+// encodage affecté par options fournies (JSON_UNESCAPED_UNICODE...)
 
-json_encode su pas déjà fait
-// Retourne la représentation JSON d'une valeur
-string json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] )
-
-intval(mixed $var [,int $base = 10])
-// int, retourne valeur numérique entière équivalente
-
-&nbsp;[...]
-
-ucfirst()
-
-substr($string, int $start [,int $length])
-// string, retourne un segment de chaîne
+htmlentities($string)
+// [,int $flags = ENT_COMPAT | ENT_HTML401]
+// [,string $encoding = ini_get("default_charset")][,bool $double_encode = TRUE]
+// string, convertit tous les caractères éligibles en entités HTML
 
 htmlspecialchars($string)
-// [,int $flags = ENT_COMPAT | ENT_HTML401
-// [,string $encoding = ini_get("default_charset")[,bool $double_encode = true ]]]
+// [,int $flags = ENT_COMPAT | ENT_HTML401]
+// [,string $encoding = ini_get("default_charset")][,bool $double_encode = true]
 // string, convertit les caractères spéciaux en entités HTML
 // à utiliser lorsque qu'on echo des données dans le HTML (pas vers BD)
 // évite failles XSS (cross-site scripting : injection contenu dans page)
-
-strpos — Cherche la position de la première occurrence dans une chaîne
-strrpos
-
-htmlentities($string)
-// [, int $flags = ENT_COMPAT | ENT_HTML401 [, string $encoding = ini_get("default_charset")
-// [, bool $double_encode = TRUE ]]]
-// string, convertit tous les caractères éligibles en entités HTML
-
-
-/* FONCTIONS SUR CHAINES DE CARACTERES */
 
 stripcslashes(string $str)
 // string, décode chaîne encodée avec addcslashes(), supprime les antislashs
 
 ctype_digit(string $text)
-// bool, vérifie si tous caractères chaîne text sont chiffres
+// bool, vérifie si tous caractères chaîne texte sont chiffrés
 
-nl2br(string $string[, bool $is_xhtml = TRUE ])
-// retourne string après avoir inséré <br/> ou <br> devant nouvelles lignes
-// (\r\n, \n\r, \n et \r)
+password_hash(string $password,int $algo[,array $options])
+// string, crée clé de hachage pour mot de passe
+// $algo : PASSWORD_DEFAULT / PASSWORD_BCRYPT / PASSWORD_ARGON2I
 
-date( string $format [, int $timestamp = time() ] )
-// string, formate une date/heure locale
-// format : 'l jS \de F Y h:i:s A'
-// pour datetime (pour mysql...) : ("Y-m-d H:i:s");
+password_verify(string $passwordUtilisateur,string $passwordHaché)
+// bool, vérifie que le hachage fourni correspond bien au mot de passe fourni
 
-date_default_timezone_set('UTC');
-// définit fuseau horaire par défaut à utiliser
-
-// convertir date :
-$originalDate = "2010-03-21";
-$newDate = date("d-m-Y", strtotime($originalDate));
-
-/* CHEMINS ET ACCES AUX FICHIERS */
-
-dirname ( string $path [, int $levels = 1 ] )
-// string, renvoie le chemin parent d'un chemin représentant un fichier ou un dossier, qui correspond à levels niveau(x) plus haut que le dossier courant.
-// levels = nombre de dossiers parents
-
-realpath ( string $path )
-// string, retourne le chemin canonique absolu, résout tous les liens symboliques, et remplace toutes les références /./, /../ et / de path puis retourne le chemin canonique absolu ainsi trouvé.
-
-file_exists ( string $filename )
-// bool, vérifie si un fichier ou un dossier existe.
-
-/* CONTANTES MAGIQUES */
-
-__FILE__
-// Le chemin complet et le nom du fichier courant avec les liens symboliques résolus. Si utilisé pour une inclusion, le nom du fichier inclus est retourné.
-__DIR__
-// Le dossier du fichier. Si utilisé dans une inclusion, le dossier du fichier inclus sera retourné. C'est l'équivalent de dirname(__FILE__). Ce nom de dossier ne contiendra pas de slash final, sauf si c'est le dossier racine.
+filter_var(mixed $variable [,int $filter = FILTER_DEFAULT [,mixed $options]])
+// mixed, filtre variable avec un filtre spécifique (false si échec)
+// FILTER_VALIDATE_EMAIL, FILTER_VALIDATE_FLOAT ...
+// cf. http://php.net/manual/fr/filter.filters.php
 
 
-// ternaire (if/else)
-<?php $cssPath =
-  // est-ce que template vaut la chaine de caractère index ?
-  $template === 'index' ? 'css/style.css' :
-// condition if        |     = ça        | sinon
-  '../css/style.css' ?>
-<link href="<?= $cssPath ?>"
-
-/* VARIABLES SUPERGLOBALES */
-// générées automatiquement par PHP
+/******************************************************************************/
+/************** STOCKAGES, SESSIONS, INFOS SERVEUR ****************************/
+/******************************************************************************/
 
 $_SERVER
 // tableau contenant informations comme en-têtes, dossiers et chemins du script
@@ -724,15 +826,7 @@ $_SERVER
 // index ++ : SERVER_ADDR,SERVER_NAME,DOCUMENT_ROOT,HTTP_REFER,HTTP_USER_AGENT,
 // REMOTE_ADDR,REMOTE_HOST,REMOTE_PORT,SCRIPT_FILENAME,SERVER_PORT,REQUEST_URI
 
-$_SESSION
-$_COOKIE
-
-/* LES SESSIONS */
-
-/*
-* utilise variable superglobale $_SESSION
-* session générée maintenue jusqu'à deconnexion ou timeout
-*/
+/** SESSIONS **/
 
 $_SESSION
 // tableau associatif valeurs stockées dans sessions
@@ -751,20 +845,12 @@ session_destroy()
 // bool, détruit données associées à session courante
 // ne détruit pas variables globales associées à la session
 
-session_name ([string $nouveauNomSession])
+session_name([string $nouveauNomSession])
 // string, retourne nom session courante
 // $name fourni, modifie nom session et retourne ancien nom session
 
 session_status()
 // int, affiche état session courante (0: désactivée, 1: aucune, 2: active)
-
-password_verify(string $passwordUtilisateur,string $passwordHaché)
-// bool, vérifie que le hachage fourni correspond bien au mot de passe fourni
-
-password_hash(string $password,int $algo[,array $options])
-// string, crée clé de hachage pour mot de passe
-// $algo : PASSWORD_DEFAULT / PASSWORD_BCRYPT / PASSWORD_ARGON2I
-
 
 /* Destruction d'une session avec $_SESSION (pas le cookie) */
   session_start(); // session_name("autrenom")
@@ -772,33 +858,14 @@ password_hash(string $password,int $algo[,array $options])
   session_destroy();
 
 
-/* LES COOKIES */
+/** COOKIES **/
+
+$_COOKIE
+// tableau associatif variables, passé au script courant, via des cookies HTTP
+
+$_COOKIE['pseudo']
+// affichage contenu pseudo
+
 setcookie('pseudo', 'M@teo21', time() + 365*24*3600, null, null, false, true)
 // créé/modifie cookie avec option httpOnly (contre XSS) qui expire dans un an
 // appeler avant tout code html
-
-$_COOKIE['pseudo']
-// affichage contenu pseudo avec variable superglobale
-
-/* CREER ESPACE UTILISATEUR */
-
-/* 1.créer les tables dans la database, pages login, signin, logout
-* dans la base de donnée :
-* table membres :
-** id (int, primary, auto_increment) ;
-** pseudo (varchar 255) ;
-** pass (varchar 255) ; [doit être haché !]
-** email (varchar 255) ;
-** date_inscription (date)
-** id_group [pour relier à la table groupes]
-* table groupes : membres, administrateur, modérateurs
-* 2. à l'inscription et à la connexion, et comparaison
-* 3. inscription : hachage du mot de passe, vérifications à effectuer :
-** pseudo libre ? les deux mots de passe identiques ? adresse mail valide ?
-/
-
-
-
-A AJOUTER : mixed filter_var ( mixed $variable [, int $filter = FILTER_DEFAULT [, mixed $options ]] )
-Les règles de bonne pratique PHP :
-https://www.php-fig.org/psr/

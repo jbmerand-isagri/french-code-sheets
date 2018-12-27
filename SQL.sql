@@ -3,19 +3,26 @@
 --------------------------------------------------------------------------------
 
 -- SQL : Structured Query Language (langage de requête structurée)
--- langage informatique normalisé pour exploiter BD relationnelles
+-- langage informatique normalisé pour exploiter bdd relationnelles
 -- pour opérations d'algèbre relationnelle (intersection,sélection,jointure...)
 -- langage interprété par un SGBD (système gestion base de données)
 
-.: SYNTAXE :.
+-- bdd contient des tables (tableaux) où colonnes = champs, lignes = entrées
 
-instructions se terminent par ;
+-- INFOS :
+
+-- instructions se terminent par ;
+-- nom de la table, des champs en minuscule
+-- utiliser underscore lorsque plusieurs mots
+-- indique systématiquement un id (unique)
+-- éviter utiliser mots clés réservés
+
 
 --------------------------------------------------------------------------------
----------- LES TYPES -----------------------------------------------------------
+---------- LES PRINCIPAUX TYPES ------------------------------------------------
 --------------------------------------------------------------------------------
 
-/* TYPE NUMERIQUE
+-- TYPE NUMERIC
 
 TINYINT   :   1 octet   -128 minimum          127 maximum
 SMALLINT  :   2         -32768                32767
@@ -23,35 +30,64 @@ MEDIUMINT :   3         -8388608              8388607
 INT       :   4         -2147483648           2147483647
 BIGINT    :   8         -9223372036854775808  9223372036854775807
 
-UNSIGNED
--- attibut pour avoir toujours une valeur positive (min = 0)
+INT : nombre entier
 
-ZEROFILL
+-- TYPE STRING
 
-INT(x)
--- attribut pour  préciser nombre chiffres minimum à l'affichage d'une colonne
--- de type INT(ou dérivés) (mais peut toujours y stocker même nombre)
+VARCHAR : texte court (doit spécifier entre 1 et 255 caractères)
 
-*/
+TEXT : très long texte possible
 
-VARCHAR(100)
--- Type de l'information : indique pas plus de 100 caractères
--- 120-150 pour pays
--- mettre taille la plus précise possible pour un accès rapide
-INT
-TINYINT (1 octet, -> 127 caractères)
-SMALL INT
-BOOL
-DATE
-TIME
-DATETIME
-BLOB
+-- TYPE TIME ET DATE
 
-TEXT : contenu d'un article... (que pour grandes portions, gourmand en performance)
+DATE      -- stocke date format AAAA-MM-JJ (Année-Mois-Jour)
+TIME      -- stocke moment format HH:MM:SS (Heures:Minutes:Secondes)
+DATETIME  --  stocke date et moment journée format AAAA-MM-JJ HH:MM:SS
+TIMESTAMP -- stocke nombre secondes passées depuis 1 janvier 1970 à 00h00min00s
+YEAR      -- stocke année, soit format AA, soit format AAAA
 
-nom de la table, des champs en minuscule
-utiliser underscore lorsque plusieurs mots
-indique systématiquement un id (unique)
+-- TYPE SPATIAL
+
+
+--------------------------------------------------------------------------------
+---------- BASE DE DONNEES RELATIONNELLES --------------------------------------
+--------------------------------------------------------------------------------
+
+-- info organisée dans tableaux deux dimensions appelés 'relations' ou 'tables'
+-- entité : un objet de gestion et ses données (personne, entreprise...)
+--- prote des attributs ou propriétés (nom, prenom...)
+-- BD = une ou plusieurs relations (font lien entre données)
+-- lignes des relations appelées 'nuplets' ou 'enregistrements'
+-- colonnes appelées 'attributs' ou 'champs'
+-- presque tous les SGBDR utilisent langage SQL pour interroger les BD
+
+-- pour chaque association, définir des cardinalités
+-- (définit nombre liaisons possibles entre deux entités) :
+--- 1-1 : une personne travaille dans une entreprise
+--- 1-N : une entreprise emploie N personnes
+--- N-N
+--- 0-1
+
+---------- METHODE MERISE ------------------------------------------------------
+-- pour conceptualiser et construire la BD
+-- ensemble d'étapes à suivre
+-- MCD : modèle conceptuel des données (schéma)
+-- MPD : modèle physique de données :
+-- PRK : primary key (numéro unique pour identifier)
+-- FRK : foreign key (pour établir relation avec autre table qui a ce numéro en PRK)
+
+
+--------------------------------------------------------------------------------
+---------- LES SGBD ------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- Système de Gestion de Base de Données (SGBD)
+-- logiciel pour stocker informations dans base de données
+-- pour lire, écrire, modifier, trier, transformer, imprimer données contenues
+-- plus connus : MySQL, PostgreSQL, SQLite, Oracle Database...
+-- SGBDR (relationnels), SGBDO (objets), SGBD NoSQL (Not Only SQL), SGBDH (hiérarchiques)
+
+
 
 .: INFORMATIONS :.
 
@@ -161,7 +197,7 @@ SELECT prenom, nom FROM client WHERE ville = 'Marseille'
 
 SELECT * FROM client WHERE age < 30
 
-/* La liste des bureaux (adresse et ville) triés par pays décroissant puis par état */
+/* liste bureaux (adresse et ville) triés par pays décroissant puis par état */
 SELECT addressLine1, addressLine2, city, country, state FROM offices ORDER BY country DESC, state
 
 WHERE productScale IN ('1:10', '1:18')	/* équivalent à WHERE productScale = '1:10' OR productScale = '1:18' */
@@ -176,15 +212,20 @@ SELECT *
 FROM table
 WHERE condition
 GROUP BY expression
-HAVING condition
+HAVING condition -- agit sur les données une fois ont été regroupées
 { UNION | INTERSECT | EXCEPT }
 ORDER BY expression
-LIMIT count
+LIMIT count -- affiche le nombre d'entrées
+LIMIT x, y -- affiche de la xième à la yième entrée
 OFFSET start
 
 (MSRP - buyPrice) AS margin
 -- détermine un alias temporaire pour ce calcul
 
+
+-- résultat avec 2 chiffres de décimal (2ème argument)
+SELECT ROUND(nom_colonne, 2)
+FROM `table`
 
 GROUP BY
 -- permet de filtrer les données sur une ou plusieurs colonnes
@@ -202,21 +243,21 @@ GROUP BY customerNumber
 HAVING totalCredit > 20000
 ORDER BY totalCredit DESC
 
+
 --------------------------------------------------------------------------------
 ---------- FONCTIONS D'AGREGATION ----------------------------------------------
 --------------------------------------------------------------------------------
 
--- AVG()    calculer la moyenne sur un ensemble d’enregistrement
--- COUNT()  compter nombre enregistrements table ou colonne distincte
--- MAX()    récupérer la valeur maximum d’une colonne sur un ensemble de ligne. Cela s’applique à la fois pour des données numériques ou alphanumérique
---MIN()     récupérer la valeur minimum de la même manière que MAX()
---SUM()     calculer la somme sur un ensemble d’enregistrement
+-- font des opérations sur plusieurs entrées pour retourner une seule valeur
 
+-- SYNTAXE
+SELECT AVG(prix) AS prix_moyen FROM jeux_video WHERE possesseur='Patrick'
 
-Pour obtenir le résultat avec 2 chiffres de décimal il convient de spécifier le nombre de décimal souhaité comme 2ème argument.
-
-SELECT ROUND(nom_colonne, 2)
-FROM `table`
+AVG()    -- calculer moyenne sur un ensemble d’enregistrements
+COUNT()  -- compter nombre enregistrements table ou colonne distincte
+MAX()    -- récupérer valeur maximum colonne sur un ensemble de lignes
+MIN()    -- récupérer valeur minimum même manière que MAX()
+SUM()    -- calculer somme sur un ensemble d’enregistrements
 
 INNER JOIN maTableCléPrimaire ON maTable.autreTable
 -- joint les deux tables en utilisant clé primaire et étrangère
@@ -238,53 +279,27 @@ ORDER BY contactLastName, contactFirstName
 
 
 --------------------------------------------------------------------------------
----------- BASE DE DONNEES RELATIONNELLES --------------------------------------
+---------- FONCTIONS SCALAIRES -------------------------------------------------
 --------------------------------------------------------------------------------
 
--- info organisée dans tableaux deux dimensions appelés 'relations' ou 'tables'
--- entité : un objet de gestion et ses données (personne, entreprise...)
---- prote des attributs ou propriétés (nom, prenom...)
--- BD = une ou plusieurs relations (font lien entre données)
--- lignes des relations appelées 'nuplets' ou 'enregistrements'
--- colonnes appelées 'attributs' ou 'champs'
--- presque tous les SGBDR utilisent langage SQL pour interroger les BD
+-- agissent sur chaque entrée récupérée
 
--- pour chaque association, définir des cardinalités (définit nombre liaisons possibles entre deux entité) :
---- 1-1 : une personne travaille dans une entreprise
---- 1-N : une entreprise emploie N personnes
---- N-N
---- 0-1
+-- SYNTAXE
+SELECT UPPER(nom) AS nom_maj FROM table
 
----------- METHODE MERISE ------------------------------------------------------
--- pour conceptualiser et construire la BD
--- ensemble d'étapes à suivre
--- MCD : modèle conceptuel des données (schéma)
--- MPD : modèle physique de données :
--- PRK : primary key (numéro unique pour identifier)
--- FRK : foreign key (pour établir une relation avec une autre table qui a ce numéro en PRK)
-
---------------------------------------------------------------------------------
----------- LES SGBD ------------------------------------------------------------
---------------------------------------------------------------------------------
-
--- Système de Gestion de Base de Données (SGBD)
--- logiciel pour stocker informations dans base de données
--- pour lire, écrire, modifier, trier, transformer, imprimer données contenues
--- plus connus : MySQL, PostgreSQL, SQLite, Oracle Database...
--- SGBDR (relationnels), SGBDO (objets), SGBD NoSQL (Not Only SQL), SGBDH (hiérarchiques)
+UPPER()   -- convertir en majuscules
+LOWER()   -- convertir en minuscules
+LENGTH()  -- compter le nombre de caractères
+ROUND()   -- arrondir un nombre décimal
 
 
 --------------------------------------------------------------------------------
----------- phpMyAdmin ----------------------------------------------------------
+---------- FONCTIONS GESTION DATES ---------------------------------------------
 --------------------------------------------------------------------------------
 
--- de base : root pour s'authentifier, rien pour mdp
--- 1. coller code dans onglet SQL
--- 2. appuyer sur CTRL + ENTREE
--- 3. apparait à gauche
--- 4. tester si requête fonctionne dans BD avant de l'utiliser en PHP
-
--- voir schéma MCD : logo phpMyAdmin > nomBD > en haut à droite 'concepteur'
-
-
-FONCTIONS : NOW()
+NOW()                   -- obtenir date et heure actuelles
+CURDATE() CURTIME()     -- date (AAAA-MM-JJ) et heure (HH:MM:SS)
+DAY() MONTH() YEAR()    -- extraire jour, mois ou année (ex : DAY(date))
+HOUR() MINUTE() SECOND) -- extraire heures, minutes, secondes
+DATE_FORMAT(date, '%d/%m/%Y %Hh%imin%ss')  -- formater une date
+DATE_ADD(date, INTERVAL 15 DAY) DATE_SUB() -- ajouter, soustraire des dates

@@ -28,7 +28,7 @@ fonction qui est propriété d'un objet. Deux sortes :
 /*
 - condition: test qui vérifie si expression vérifiée ('true' / 1 ou 'false' / 0)
 -- utilise trois concepts : boléens, opérateurs comparaison, opérateurs logiques
-- utiliser la syntaxe littérale de préférence ( var objet = [];)
+- utiliser la syntaxe littérale de préférence (var objet = [];)
 - diviser: appelle scripts JS d'autres fichiers (externalisés)
 - organiser son document: part1 'variables' part2 'functions' part3 'programs'
 */
@@ -39,8 +39,9 @@ fonction qui est propriété d'un objet. Deux sortes :
 /******************************************************************************/
 
 // variable définie par trois paramètres: type, nom, valeur/contenu
-// types: 'string', 'number', 'boolean' (état 'true'/'false'),
-// 'undefined' (non déclarée, sans valeur, valeur 'undefined' affectée)
+// types: 'string' ("text"), 'number' (3), 'boolean' (état true/false),
+// 'undefined' (valeur non assignée/valeur 'undefined' affectée), 'null',
+// 'symbol' (ES6), ' object'
 // noms en camelCase
 
 var maVariable = maValeur
@@ -62,9 +63,115 @@ this
 // prend la valeur de l'objet global dans lequel il est (objet, fonction)
 // utilise en général var self = this pour être sûr de garder le bon this
 
+
 /******************************************************************************/
-/************** OBJETS ********************************************************/
+/************** OPERATEURS ****************************************************/
 /******************************************************************************/
+
+/*---------- opérateurs basiques ---------------------------------------------*/
+
++ // addition (/concaténation)
+- // soustraction
+/ // division
+* // multiplication
+= // égal (/affectation)
+% // modulo : reste entier d'une division
+** // exponentation (puissance)
+
+maVariable++ // incrémentation après de +1
+++maVariable // incrémentation avant de +1
+
+maVariable-- // décrémentation après de -1
+--maVariable // décrémentation avant de -1
+
++= // x += y correspond à x = x + y
+-= // x -= y correspond à x = x-y
+
+/*---------- opérateurs de comparaison faibles (effectuent conversions) ------*/
+
+== // équivalence
+>= // supérieur ou égal
+!= // différent
+
+/*---------- opérateurs de comparaison stricts, typés ------------------------*/
+
+=== // équivalence en valeur et en type
+<== // inférieur ou égal en valeur ou en type
+!== // différent en valeur ou en type
+
+? // opérateur ternaire
+
+/*---------- opérateurs logiques ---------------------------------------------*/
+
+&& // et
+|| // ou
+! // n'est pas
+
+""
+/******************************************************************************/
+/************** DATA STRCUTURE : TABLEAU (ARRAY) ******************************/
+/******************************************************************************/
+
+// objet global Array pour créer tableaux
+// tableau permet stocker liste (texte, nombre, boléen, tableau, fonction)
+
+let variable = ["fruits", "légumes", 5]
+// déclare tableau
+
+let variable = new Array("fruits", "légumes", 5)
+// déclare tableau
+
+let tableau1 = [
+	['lol', 'lol2'],
+	['ananas', 'fraise']
+]
+// déclarer tableau contenant autres tableaux
+
+tableau[indice]
+// récupère valeur tableau
+
+tableau1[1][2]
+// accéder à index 2 du tableau qui est à index 1 de tableau1 ('kiwi')
+
+tableau.indexOf('élément') // ('élément', 2) cherche dès index 2
+// renvoie premier indice correspondant élément donné dans tableau / -1
+
+nouveauTableau = ancienTableau.concat(valeur1[, valeur2[, ...])
+// array, fusionner tableaux en les concaténant ou valeurs à ancienTableau
+
+tableau.push('élément')
+// ajouter un élément à la fin du tableau
+
+tableau.unshift('élément')
+// ajouter un élément au début du tableau
+
+tableau.pop()
+// supprimer le dernier élément du tableau
+
+tableau.shift()
+// supprimer le premier élément du tableau
+
+tableau.splice(pos, 1);
+// supprimer un élément en utilisant son index (pos)
+// 1 est remplaçable pour supprimer les suivants
+
+tableau.sort([,fonctionComparaison])
+// tableau trié, trie éléments tableau dans celui-ci
+
+array1.forEach(callbackfn[,thisArg])
+// exécute action spécifiée pour chaque élément tableau
+// callbackfn: nom de la fonction acceptant jusqu'à trois arguments
+// thisArg:objet auquel this peut faire référence dans callbackfn
+
+tableau.join('-')
+// crée, renvoie chaîne caractères en concaténant éléments ('-' pour séparateur)
+
+
+/******************************************************************************/
+/************** DATA STRUCTURE : OBJETS ***************************************/
+/******************************************************************************/
+
+// collection de propriétés
 
 var person = {firstName:"John", lastName:"Doe"} // objet 'court'
 //ou
@@ -72,7 +179,11 @@ var maVoiture = new Object();
 	maVoiture.fabricant = "Ford";
 	maVoiture.modèle = "Mustang";
 	maVoiture.année = 1969;
-// construire son objet
+	maVoiture.fonction() {
+		// code;
+	}
+// déclarer objet, lui attribuer propriétés et valeurs
+// une fonction en propriété = une méthode
 
 nomObjet.nomPropriete
 // accéder à la propriété d'un objet
@@ -86,7 +197,7 @@ this
 
 // noms classes en PascalCase / code classe dans fichier séparé portant son nom
 
-let Disk = function() { // création de l'objet (nom avec majuscule convention)
+let Disk = function() { // création de l'objet
 	this.color = 'black';
 	thois.radius = 10;
 }
@@ -94,7 +205,7 @@ Disk.prototype.setRadius = function(radius) { // création méthode cet objet
 	this.radius = radius;
 }
 
-/*---------- créer un blueprint ----------------------------------------------*/
+/*---------- CREER UN PATRON/MODELE ------------------------------------------*/
 
 function Person(name, eyeColor, age) {
 	this.name = name;
@@ -105,7 +216,7 @@ function Person(name, eyeColor, age) {
 	}
 }
 let person01 = new Person("Daniel", "Blue", 27);
-// instancie objet à partir blueprint
+// instancie objet à partir patron
 
 /*---------- CREER UNE CLASSE ------------------------------------------------*/
 
@@ -128,7 +239,7 @@ crayon.color // pour appeler méthode de la classe (output = blue)
 Object.getPrototypeOf(obj)
 // renvoie prototype d'un objet donné
 
-var objet = Object.create(proto[, objetPropriétés])
+var objet = Object.create(proto [,objetPropriétés])
 // crée un nouvel objet avec un prototype donné et des propriétés données
 // objet.proto permet d'accéder au prototype
 
@@ -150,92 +261,6 @@ var marc = new Eleve('marc')
 // (héritent des méthodes d'Eleve et peuvent avoir leurs propres propriétés)
 // utilise méthodes avec prototype pour agir dans les instances
 
-/******************************************************************************/
-/************** TABLEAUX ******************************************************/
-/******************************************************************************/
-
-// objet global Array pour créer tableaux
-// tableau permet stocker liste valeurs (texte, nombre, boléen, tableau)
-
-var maVariable = ["fruits", "légumes", 5]
-// déclare tableau
-
-var maVariable = new Array("fruits", "légumes", 5)
-// déclare tableau
-
-monTableau[indice]
-// récupère valeur tableau
-
-var tableau1 = [
-                ['lol', 'lol2']
-                ['ananas', 'fraise', 'kiwi']
-                ]
-// déclarer tableau contenant autres tableaux
-
-tableau1[1][2]
-// accéder à index 2 du tableau qui est à index 1 de tableau1 ('kiwi')
-
-monTableau.push('élément')
-// ajouter un élément à la fin du tableau
-
-monTableau.unshift('élément')
-// ajouter un élément au début du tableau
-
-monTableau.pop()
-// supprimer le dernier élément du tableau
-
-monTableau.shift()
-// supprimer le premier élément du tableau
-
-array1.forEach(callbackfn[,thisArg])
-// exécute action spécifiée pour chaque élément tableau
-// callbackfn: nom de la fonction acceptant jusqu'à trois arguments
-// thisArg:objet auquel this peut faire référence dans callbackfn
-
-tableau.join('-')
-// crée,renvoie chaîne caractères en concaténant éléments ('-' pour séparateur)
-
-var pos = monTableau.indexOf('élément'); // ('élément', 2) cherche dès index 2
-// renvoie premier indice correspondant élément donné dans tableau / -1
-
-var removedItem = monTableau.splice(pos, 1);
-// supprimer un élément en utilisant son index (pos)
-// 1 est remplaçable pour supprimer les suivants
-
-
-/******************************************************************************/
-/************** OPERATEURS ****************************************************/
-/******************************************************************************/
-
-/*---------- opérateurs basiques ---------------------------------------------*/
-
-+ // addition (/concaténation)
-- // soustraction
-/ // division
-* // multiplication
-= // égal (/affectation)
-% // modulo : reste entier d'une division
-
-maVariable++ // incrémentation après de +1
-++maVariable // incrémentation avant de +1
-
-maVariable-- // décrémentation après de -1
---maVariable // décrémentation avant de -1
-
-/*---------- opérateurs de comparaison faibles (effectuent conversions) ------*/
-
-== // équivalence
->= // supérieur ou égal
-!= // différent
-
-/*---------- opérateurs de comparaison stricts, typés ------------------------*/
-
-=== // équivalence en valeur et en type
-<== // inférieur ou égal en valeur ou en type
-!== // différent en valeur ou en type
-
-? // opérateur ternaire
-
 
 /******************************************************************************/
 /************** FONCTIONS *****************************************************/
@@ -248,21 +273,21 @@ maVariable-- // décrémentation après de -1
 // convention : getNom (récupérer quelque chose) setNom (définir propriété)
 // isNom (vérifier booléen)
 
-function maFonction(arg1,arg2,arg3) {
-  if (typeof texte == 'string') {
+function maFonction(param1,param2,param3) {
+  if(typeof texte == 'string') {
       return "texte";
   }
   else {
-      return false; // renvoie valeur 'false' en sortie
+      return false; // stoppe fonction, renvoie valeur 'false' en sortie
   }
 }
 // déclarer fonction (avec hoisting: sera définie tout en haut de la page)
-// if arg2 === undefined pour définir valeur par défaut si argument manquant
+// if param2 === undefined pour définir valeur par défaut si argument manquant
 
-var maFonction = function (arg1) {
+var maFonction = function(arg1) {
   // mon code
 }
-// déclaration sans hoisting
+// déclaration sans hoisting, fonction anonyme
 
 maFonction(arg1,arg2,arg3)
 // exécute fonction avec choix arguments
@@ -302,15 +327,36 @@ parseFloat("élément")
 // retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
 
 typeof(maVariable)
-// afficher le type de la variable
+// affiche le type de la variable
 
 element.length
-// retourner le nombre de la longueur (d'une chaine, d'un tableau...)
+// retourne le nombre de la longueur (d'une chaine, d'un tableau...)
 
+Object.values(obj)
+// renvoie tableau contenant valeurs propriétés propres énumérables d'un objet
+
+/*----------- METHODES DE L'OBJET MATH ---------------------------------------*/
+
+Math.round(5.95); // output: 6
+// retourne la valeur d'un nombre arrondi à l'entier le plus proche
+
+Math.ceil(.95); // output: 1
+// retourne le plus petit entier supérieur ou égal au nombre donné
+
+Math.floor(-5.05); // output: -6
+// renvoie le plus grand entier qui est inférieur ou égal au nombre
+
+Math.random()
+// renvoie nombre flottant pseudo-aléatoire dans intervalle [0, 1[
+
+
+/******************************************************************************/
+/************** STRUCTURES DE CONTROLE (if, switch, while...) *****************/
+/******************************************************************************/
 
 /*----------- IF - ELSE ------------------------------------------------------*/
 
-if (condition) {
+if(condition) {
   // instruction si condition vérifiée
 } else {
   // instruction sinon
@@ -319,7 +365,7 @@ if (condition) {
 /*----------- BOUCLES --------------------------------------------------------*/
 
 var expr = 'Papayas';
-switch (expr) {
+switch(expr) {
   case 'Oranges':
     console.log('Oranges are $0.59 a pound.');
     break;
@@ -339,10 +385,10 @@ for ([expressionInitiale]; [condition]; [expressionIncrémentALaFinDuCycle]) {
 do {
   // instruction
 }
-while (condition);
+while(condition);
 // do...while: comme while, mais exécute au moins une fois
 
-while (condition) {
+while(condition) {
   // instruction
 }
 // while permet exécuter instruction tant que condition vérifiée
@@ -351,22 +397,6 @@ break // arrête la boucle
 continue // ne termine pas la boucle complètement:
 // dans boucle while: repart à la phase de la condition
 // dans boucle for: repart à l'expression de mise à jour de la boucle
-
-
-/*----------- L'OBJET MATH ---------------------------------------------------*/
-
-Math.round(5.95); // output: 6
-// retourne la valeur d'un nombre arrondi à l'entier le plus proche
-
-Math.ceil(.95); // output: 1
-// retourne le plus petit entier supérieur ou égal au nombre donné
-
-Math.floor(-5.05); // output: -6
-// renvoie le plus grand entier qui est inférieur ou égal au nombre
-
-Math.random()
-// renvoie nombre flottant pseudo-aléatoire dans intervalle [0, 1[
-
 
 
 /******************************************************************************/
@@ -378,7 +408,7 @@ Math.random()
 // définit façon dont structure manipulable par programmes (style et contenu)
 // lors lecture fichier HTML, navigateur web construit sa structure dans mémoire
 // représente document comme ensemble nœuds,objets possédant propriétés,méthodes
-// nœud peut avoir gestionnaire événement (exécuté lorsque événement déclanché)
+// nœud peut avoir gestionnaire événement (exécuté lorsque événement déclenché)
 
 /*---------- API SELECTORS ---------------------------------------------------*/
 
@@ -430,6 +460,10 @@ element.getAttribute('')
 
 element.removeAttribute('')
 // supprime attribut
+
+element.dataset.nomEnCamelCase;
+// tableau associatif, qui associe à chaque nom d'attribut de données sur mesure
+// (data-*) la valeur qu'il contient
 
 Node.cloneNode()
 // une copie de noeud avant de l'ajouter à son nouveau parent
@@ -552,10 +586,10 @@ window.prompt("texteAffiché", "texteParDéfaut")
 window.confirm('message')
 // crée boite dialogue avec boutons ok, annuler (ok = true, annuler = false)
 
-setInterval(nomFonction, entierMilliseconds[, param1, param2])
+setInterval(nomFonction, entierMilliseconds [,param1, param2])
 // lance fonction intervalle régulier défini par delai (! sans () pour fonction)
 
-setTimeout(nomFonction, entierMilliseconds[, param1, param2])
+setTimeout(nomFonction, entierMilliseconds [,param1, param2])
 // lance fonction ou évalue expression après temps spécifié
 
 clearInterval(varContenantSetInterval)
@@ -582,7 +616,7 @@ try {
   // instruction qui s'excécute qu'il y ait ou non exception
 }]
 
-throw new Error(['message'[, fileName[, lineNumber]]])
+throw new Error(['message' [,fileName [,lineNumber]]])
 // renvoie une erreur
 
 
@@ -622,7 +656,7 @@ storage.key(cléN);
  * appelle une page et récupère quelque chose en retour
  * emploie objet non standard XMLHttpRequest
  * communication asynchrone langage côté client avec langage côté serveur
- * assurer suivi dans partie network inspecteur ,navigateur
+ * assurer suivi dans partie network inspecteur, navigateur
 */
 
  var xhr = null;
@@ -877,7 +911,3 @@ function getRandomInteger(min, max) {
 
 // numObj.toFixed([nbChiffres])
 // permet de formater un nombre en notation à point-fixe (nombre arrondi si nécessaire)
-
-// element.value
-
-// .dataset
