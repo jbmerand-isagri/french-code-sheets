@@ -35,7 +35,6 @@ INT : nombre entier
 -- TYPE STRING
 
 VARCHAR : texte court (doit spécifier entre 1 et 255 caractères)
-
 TEXT : très long texte possible
 
 -- TYPE TIME ET DATE
@@ -73,9 +72,8 @@ YEAR      -- stocke année, soit format AA, soit format AAAA
 -- ensemble d'étapes à suivre
 -- MCD : modèle conceptuel des données (schéma)
 -- MPD : modèle physique de données :
--- PRK : primary key (numéro unique pour identifier)
--- FRK : foreign key (pour établir relation avec autre table qui a ce numéro en PRK)
-
+--- PRK : primary key (numéro unique pour identifier)
+--- FRK : foreign key (= PRK autre table en relation)
 
 --------------------------------------------------------------------------------
 ---------- LES SGBD ------------------------------------------------------------
@@ -87,48 +85,12 @@ YEAR      -- stocke année, soit format AA, soit format AAAA
 -- plus connus : MySQL, PostgreSQL, SQLite, Oracle Database...
 -- SGBDR (relationnels), SGBDO (objets), SGBD NoSQL (Not Only SQL), SGBDH (hiérarchiques)
 
-
-
-.: INFORMATIONS :.
-
-Commence par vérifier que la BD n'existe pas déjà :
-CREATE DATABASE IF NOT EXISTS `classicmodels`
-
-Montre qu'on veut utiliser cette BD :
-USE `classicmodels`;
-
-Fait supprimer une table si elle existe déjà :
-DROP TABLE IF EXISTS `customers`;
-
-
-*/
-
-DATEDIFF(date1, date2)
-
-NOT NULL
--- pour indiquer que l'information ne peut pas être null, doit être identifiée
-
-DEFAULT NULL
--- indique par défaut mise à null (si pas remplie, pas embêté)
-
-SELECT nom_du_champ FROM nom_du_tableau
--- requête SQL va sélectionner (SELECT) le champ “nom_du_champ” provenant (FROM) du tableau appelé “nom_du_tableau”
-
-PRIMARY KEY (`customerNumber`)
--- clé de référence pour identifier le client distinctement (est unique)
-
-KEY `salesRepEmployeeNumber` (`salesRepEmployeeNumber`)
--- permet de faire référence dans une autre table
-
-CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`salesRepEmployeeNumber`) REFERENCES `employees` (`employeeNumber`)
--- pour faire jointure : pour établir des relations (références)
-
-
 --------------------------------------------------------------------------------
 ---------- CREER ---------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-CREATE TABLE utilisateur
+-- créer des tables
+CREATE TABLE `utilisateur`
 (
   id INT PRIMARY KEY NOT NULL,
   nom VARCHAR(100),
@@ -141,37 +103,20 @@ CREATE TABLE utilisateur
   nombre_achat INT
 )
 
---------------------------------------------------------------------------------
----------- MODIFIER ------------------------------------------------------------
---------------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `classicmodels`
 
--- Quand une table est créée, peut la modifier.
--- A la fin, puis exécute l'entièreté du script pour ne pas exploser la base de données.
-
-ALTER TABLE utilisateur
-ADD adresse_rue VARCHAR(255) -- ajout du champs adresse_rue sur la table
-DROP nombre_achat -- suppression du champs
-MODIFY code_postal INT -- modification du type du champs
-CHANGE code_postal cp INT -- modification du nom du champs en 'cp'
-
-DROP TABLE utilisateur -- supprimer la table (très dangereux)
-
-AUTOINCREMENT
-
-LMD : langage de manipulation des données
-INSERT INTO client (prenom, nom, ville, age) -- insertion 4 enregistrements dans table 'client'
-VALUES -- inquie que les valeurs suivantes sont données
+-- insérer des entrées
+INSERT INTO client (prenom, nom, ville, age) -- insertion 4 enregistrements
+VALUES
 ('Rébecca', 'Armand', 'Saint-Didier-des-Bois', 24),
 ('Rébecca', 'Armand', 'Saint-Didier-des-Bois', 24);
 
-UPDATE client -- mise à jour de plusieurs champs d'une table
-SET rue = '49 Rue Ameline',
-  ville = 'Saint-Eustache-la-Forêt',
-  code_postal = '76210'
-WHERE id = 2 -- sur l'enregistrement qui a l'identifiant 2
+--------------------------------------------------------------------------------
+---------- SUPPRIMER -----------------------------------------------------------
+--------------------------------------------------------------------------------
 
-UPDATE produit -- mise à jour toutes les lignes de la table 'produit'
-SET prix = 120
+DROP TABLE utilisateur -- supprimer la table
+DROP TABLE IF EXISTS `customers`; -- fait supprimer table si existe déjà
 
 DELETE FROM utilisateur -- suppression d'une ligne dans la table
 WHERE id = 1; -- optionnel, spécifie ligne à supprimer
@@ -182,36 +127,39 @@ WHERE date_inscription > '2012-04-10';
 DELETE FROM utilisateur; -- suppression de tous les utilisateurs de la table
 
 --------------------------------------------------------------------------------
+---------- MODIFIER ------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- quand une table est créée, peut la modifier à la fin, puis exécute
+-- l'entièreté du script pour ne pas exploser la bdd
+
+ALTER TABLE utilisateur
+ADD adresse_rue VARCHAR(255) -- ajout du champs adresse_rue sur la table
+DROP nombre_achat -- suppression du champs
+MODIFY code_postal INT -- modification du type du champs
+CHANGE code_postal cp INT -- modification du nom du champs en 'cp'
+
+UPDATE client -- mise à jour de plusieurs champs d'une table
+SET rue = '49 Rue Ameline',
+  ville = 'Saint-Eustache-la-Forêt',
+  code_postal = '76210'
+WHERE id = 2 -- sur l'enregistrement qui a l'identifiant 2
+
+UPDATE produit -- mise à jour toutes les lignes de la table 'produit'
+SET prix = 120
+
+(MSRP - buyPrice) AS margin
+-- détermine un alias temporaire pour ce calcul
+
+--------------------------------------------------------------------------------
 ---------- SELECTIONNER --------------------------------------------------------
 --------------------------------------------------------------------------------
 
-SELECT ville FROM client
-
-SELECT prenom, nom FROM client
-
-SELECT * FROM client -- ensemble des possibilités (toutes les colonnes)
-
-SELECT ville FROM client WHERE id = 220
-
-SELECT prenom, nom FROM client WHERE ville = 'Marseille'
-
-SELECT * FROM client WHERE age < 30
-
-/* liste bureaux (adresse et ville) triés par pays décroissant puis par état */
-SELECT addressLine1, addressLine2, city, country, state FROM offices ORDER BY country DESC, state
-
-WHERE productScale IN ('1:10', '1:18')	/* équivalent à WHERE productScale = '1:10' OR productScale = '1:18' */
-
-WHERE buyPrice BETWEEN 60 AND 90	/* équivalent à WHERE buyPrice >= 60 AND buyPrice <= 90 */
-
-WHERE productName LIKE '196%'
--- qui ont un nom qui comme par 196 (%196 pour 196 à la fin)
-
--- Les possibilités
+-- les possibilités
 SELECT *
 FROM table
 WHERE condition
-GROUP BY expression
+GROUP BY expression -- permet filtrer les données sur une ou plusieurs colonnes
 HAVING condition -- agit sur les données une fois ont été regroupées
 { UNION | INTERSECT | EXCEPT }
 ORDER BY expression
@@ -219,23 +167,37 @@ LIMIT count -- affiche le nombre d'entrées
 LIMIT x, y -- affiche de la xième à la yième entrée
 OFFSET start
 
-(MSRP - buyPrice) AS margin
--- détermine un alias temporaire pour ce calcul
+-- exemples
 
+SELECT prenom, nom FROM client
+
+SELECT * FROM client -- ensemble des possibilités (toutes les colonnes)
+
+SELECT prenom, nom FROM client WHERE ville = 'Marseille'
+
+SELECT * FROM client WHERE age < 30
+
+SELECT addressLine1, addressLine2, city, country, state FROM offices
+ORDER BY country DESC, state
+-- liste bureaux (adresse et ville) triés par pays décroissant puis par état
+
+WHERE productScale IN ('1:10', '1:18')
+-- équivalent à WHERE productScale = '1:10' OR productScale = '1:18'
+
+WHERE buyPrice BETWEEN 60 AND 90
+-- équivalent à WHERE buyPrice >= 60 AND buyPrice <= 90
+
+WHERE productName LIKE '196%'
+-- qui ont un nom qui commence par 196 (%196 pour 196 à la fin)
 
 -- résultat avec 2 chiffres de décimal (2ème argument)
-SELECT ROUND(nom_colonne, 2)
-FROM `table`
-
-GROUP BY
--- permet de filtrer les données sur une ou plusieurs colonnes
+SELECT ROUND(nom_colonne, 2) FROM `table`
 
 SELECT productVendor, AVG(MSRP) AS averagePrice
 FROM products
 GROUP BY productVendor
 ORDER BY averagePrice DESC
 
-/* Le crédit des clients qui ont payé plus de 20000$ durant l'année 2004 trié par crédit décroissant */
 SELECT customerNumber, SUM(amount) AS totalCredit
 FROM payments
 WHERE paymentDate BETWEEN '2004-01-01' AND '2004-12-31'
@@ -243,6 +205,59 @@ GROUP BY customerNumber
 HAVING totalCredit > 20000
 ORDER BY totalCredit DESC
 
+--------------------------------------------------------------------------------
+---------- JOINTURES -----------------------------------------------------------
+--------------------------------------------------------------------------------
+
+--------------- internes -------------------------------------------------------
+-- sélectionnent données qui ont correspondance entre les 2 tables
+--- WHERE (ancienne syntaxe)
+--- JOIN (nouvelle syntaxe)
+
+-- commande INNER JOIN (= EQUIJOIN) = type de jointure très commun pour lier
+-- plusieurs tables entre-elles. Retourne les enregistrements lorsque au moins
+-- une ligne dans chaque colonne qui correspond à la condition.
+
+INNER JOIN maTableCléPrimaire ON maTable.autreTable
+-- joint les deux tables en utilisant clé primaire et étrangère
+
+SELECT *
+FROM table1
+INNER JOIN table2 ON table1.id = table2.fk_id
+-- sélectionne enregistrements des tables table1 et table2 lorsque données de
+-- colonne “id” de table1 est égal aux données de la colonne fk_id de table2
+-- tables appelées doivent systématiquement avoir un alias
+
+-- exemple
+SELECT customerName, contactLastName, contactFirstName, country, em.lastName
+-- préfixe em pour indiquer provient de table employees
+-- préfixe également quand une colonne est présente dans deux tables
+FROM customers
+INNER JOIN employees em ON employees.employeeNumber = customers.salesRepEmployeeNumber
+WHERE country IN ('France', 'USA')
+ORDER BY contactLastName, contactFirstName
+-- sélectionne clients français ou américains (noms, infos sur contact et pays)
+-- et nom de leur commercial dédié
+
+--------------- externes -------------------------------------------------------
+-- sélectionnent toutes données, même si certaines pas correspondance
+--- LEFT JOIN pour récupérer toute la table "de gauche"
+--- RIGHT JOIN pour récupérer toutes données table "de droite"
+
+SELECT j.nom nom_jeu, p.prenom prenom_proprietaire
+FROM proprietaires p
+LEFT JOIN jeux_video j
+ON j.ID_proprietaire = p.ID
+-- proprietaires = table de gauche
+-- jeux_video = table de droite
+-- récupère tout contenu table de gauche (tous les propriétaires), même si n'ont
+-- pas d'équivalence dans la table jeux_video
+
+SELECT j.nom nom_jeu, p.prenom prenom_proprietaire
+FROM proprietaires p
+RIGHT JOIN jeux_video j
+ON j.ID_proprietaire = p.ID
+-- récupère tous les jeux, même si n'ont pas de propriétaires associés
 
 --------------------------------------------------------------------------------
 ---------- FONCTIONS D'AGREGATION ----------------------------------------------
@@ -258,25 +273,6 @@ COUNT()  -- compter nombre enregistrements table ou colonne distincte
 MAX()    -- récupérer valeur maximum colonne sur un ensemble de lignes
 MIN()    -- récupérer valeur minimum même manière que MAX()
 SUM()    -- calculer somme sur un ensemble d’enregistrements
-
-INNER JOIN maTableCléPrimaire ON maTable.autreTable
--- joint les deux tables en utilisant clé primaire et étrangère
--- commande INNER JOIN, aussi appelée EQUIJOIN, est un type de jointures très communes pour lier plusieurs tables entre-elles. Cette commande retourne les enregistrements lorsqu’il y a au moins une ligne dans chaque colonne qui correspond à la condition.
-
-SELECT *
-FROM table1
-INNER JOIN table2 ON table1.id = table2.fk_id
-La syntaxe ci-dessus stipule qu’il faut sélectionner les enregistrements des tables table1 et table2 lorsque les données de la colonne “id” de table1 est égal aux données de la colonne fk_id de table2.
--- tables appelées doivent systématiquement avoir un alias
-
-
-/* La liste des clients français ou américains (nom du client, nom, prénom du contact et pays) et de leur commercial dédié (nom et prénom) triés par nom et prénom du contact */
-SELECT customerName, contactLastName, contactFirstName, country, em.lastName, em.firstName --em pour indiquer provient d'une autre table, préfixe également quand une colonne est présente dans deux tables
-FROM customers
-INNER JOIN employees em ON employees.employeeNumber = customers.salesRepEmployeeNumber
-WHERE country IN ('France', 'USA')
-ORDER BY contactLastName, contactFirstName
-
 
 --------------------------------------------------------------------------------
 ---------- FONCTIONS SCALAIRES -------------------------------------------------
@@ -303,3 +299,32 @@ DAY() MONTH() YEAR()    -- extraire jour, mois ou année (ex : DAY(date))
 HOUR() MINUTE() SECOND) -- extraire heures, minutes, secondes
 DATE_FORMAT(date, '%d/%m/%Y %Hh%imin%ss')  -- formater une date
 DATE_ADD(date, INTERVAL 15 DAY) DATE_SUB() -- ajouter, soustraire des dates
+
+--------------------------------------------------------------------------------
+---------- DIVERS --------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+DATEDIFF(date1, date2)
+
+AUTOINCREMENT
+
+USE `classicmodels`; -- montre veut utiliser cette bdd
+
+NOT NULL
+-- pour indiquer que l'information ne peut pas être null, doit être identifiée
+
+DEFAULT NULL
+-- indique par défaut mise à null (si pas remplie, pas embêté)
+
+SELECT nom_du_champ FROM nom_du_tableau
+-- requête SQL va sélectionner (SELECT) le champ “nom_du_champ” provenant (FROM)
+-- du tableau appelé “nom_du_tableau”
+
+PRIMARY KEY (`customerNumber`)
+-- clé de référence pour identifier le client distinctement (est unique)
+
+KEY `salesRepEmployeeNumber` (`salesRepEmployeeNumber`)
+-- permet de faire référence dans une autre table
+
+CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`salesRepEmployeeNumber`) REFERENCES `employees` (`employeeNumber`)
+-- pour faire jointure : pour établir des relations (références)
