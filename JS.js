@@ -33,31 +33,86 @@ fonction qui est propriété d'un objet. Deux sortes :
 - organiser son document: part1 'variables' part2 'functions' part3 'programs'
 */
 
+/******************************************************************************/
+/************** ECMAScript 5 & 6 (ES5, ES6) ***********************************/
+/******************************************************************************/
+// BABEL permet rendre code compatible pour tous navigateurs (babeljs.io)
+
+/** LET **/
+let // portée (scope) = plus proche enclosing block (parent englobant) (for...)
+let { wizardLevel } = obj; // déclaration lisible possible
+
+/** CONST **/
+const // variable non réassignable, mais peut changer les propriétés des objets
+const { player, experience } = obj; // déclaration lisible possible
+const name = 'john snow';
+const obj = { // déclaration dynamique d'objet
+	[name]: 'hello',
+	[1 + 2]: 'hihi'
+}
+const a = 3;
+const b = {};
+const obj = { a, b }; // pas besoin de spécifier valeurs, déjà pris en compte
+
+/** TEMPLATE STRINGS **/
+`Hello ${name} you seem to be ${age-10}.` // utilisation variables name et age
+
+/** ARGUMENTS PAR DEFAUT **/
+function greet(name='', age=30, pet='cat') { // arg utilisés si non précisés
+	return `Hello ${name} you seem to be ${age-10}. What a lovely ${pet} here!`
+}
+
+/** SYMBOL **/
+let sym1 = Symbol('foo');
+let sym2 = Symbol('foo');
+sym2 === sym1 // false, car symbol crée type unique
+
+/** FONCTIONS FLECHEES **/
+const add = (a, b) => a + b; // function add(a, b) { return a + b; }
+// pour la CURRYFICATION (currying, transformation fonction plusieurs arguments
+// en une fonction à un argument qui retourne une fonction sur reste arguments):
+const curriedMultiply = (a) => (b) => a * b;
+// permet de créer fonctions manière souple :
+const multiplyBy5 = curriedMultiply(5);
+multiplyBy5(3); // retournera 15
+// pour la COMPOSITION
+const compose = (f, g) => (a) => f(g(a));
+const sum = (num) => num + 1;
+compose(sum, sum)(5); // retourne 7 (5+1 = 6 + 1 = 7)
+
+/** forEach() **/
 
 /******************************************************************************/
 /************** VARIABLES *****************************************************/
 /******************************************************************************/
 
-// variable définie par trois paramètres: type, nom, valeur/contenu
-// types: 'string' ("text"), 'number' (3), 'boolean' (état true/false),
-// 'undefined' (valeur non assignée/valeur 'undefined' affectée), 'null',
-// 'symbol' (ES6), ' object'
-// noms en camelCase
+// définies par trois paramètres: type, nom (camelCase), valeur/contenu.
+// Types primitifs (définis par le langage):
+'string' // "text"
+'number' // 3
+'boolean' // état true ou false
+'undefined' // valeur non assignée ou valeur undefined affectée)
+'null' // (réellement vide)
+'symbol' // ES6
+'object'
+
+// Types de référence : créés par le programmeur (lors de la création d'objets)
+const a = [];
+const b = [];
+a === b; // retourne: false
 
 var maVariable = maValeur
 // peut être réassignée, fait du hoisting : se charge tout en haut du code au
-// lancement mais assigne la valeur à l'endroit où est déclarée
+// lancement (avec undefined) mais assigne la valeur à l'endroit où est déclarée
 
 var var1, var2, var3
 // déclarer plusieurs variables
 
-let maVariable
-// déclarer variable locale (peut pas être re-déclarée,
-// pas accessible avant qu'elle apparaisse)
+let maVariable // variable locale: s'initialise quand déclaration évaluée
+// (=> non redéclarable, non accessible avant)
 
 const MA_CONSTANTE
-// déclarer constante (peut pas être réassignée,
-// pas accessible avant qu'elle apparaisse dans le code)
+// constante: s'initialise quand déclaration évaluée (cf. let)
 
 this
 // prend la valeur de l'objet global dans lequel il est (objet, fonction)
@@ -78,34 +133,70 @@ this
 % // modulo : reste entier d'une division
 ** // exponentation (puissance)
 
-maVariable++ // incrémentation après de +1
+maVariable++ // incrémentation après de +1 (renvoie d'abord sa valeur)
 ++maVariable // incrémentation avant de +1
 
 maVariable-- // décrémentation après de -1
 --maVariable // décrémentation avant de -1
 
-+= // x += y correspond à x = x + y
++= // affectation après addition (x += y correspond à x = x + y)
 -= // x -= y correspond à x = x-y
 
 /*---------- opérateurs de comparaison faibles (effectuent conversions) ------*/
 
-== // équivalence
->= // supérieur ou égal
-!= // différent
+== // égalité
+>= // supériorité ou égalité
+!= // inégalité
 
 /*---------- opérateurs de comparaison stricts, typés ------------------------*/
 
-=== // équivalence en valeur et en type
-<== // inférieur ou égal en valeur ou en type
-!== // différent en valeur ou en type
+=== // égalité en valeur et en type
+<== // infériorité ou égalité en valeur ou en type
+!== // inégalité en valeur ou en type
 
 ? // opérateur ternaire
 
 /*---------- opérateurs logiques ---------------------------------------------*/
-
+// renvoient true, false, ou autre (ex: let t = false || "chat"; t renvoie chat)
 && // et
 || // ou
 ! // n'est pas
+
+/*---------- opérateurs relationnels -----------------------------------------*/
+
+propriété in objet // renvoie true si propriété indiquée fait partie objet donné
+objet instanceof type // renvoie true si objet est du type spécifié
+
+
+/*---------- opérateurs divers -----------------------------------------------*/
+
+delete monObjet; // supprime objet, propriété d'un objet, élément d'un tableau
+// si supprime a[3], longueur tableau non modifiée et a[3] renvoie undefined
+typeof opérande // type of (opérande), renvoie string indiquant type opérande
+void expression // void (expression), expression évaluée sans retourner valeur
+... // op de décomposition (développe expression où arguments/éléments attendus)
+let parts = ['shoulders', 'knees'];
+let lyrics = ['head', ...parts, 'and', 'toes'];
+
+
+/******************************************************************************/
+/************** EXPRESSIONS ***************************************************/
+/******************************************************************************/
+
+// = unité de code valide qui est résolue en une valeur
+// deux types d'un point de vue conceptuel :
+// - avec effet de bord (ex : affectent une valeur à une variable)
+// - sans effet de bord (évaluées et résolues en une valeur)
+
+/** expressions primaires **/
+this // fait référence à l'objet courant
+() // opérateur de groupement, pour contrôler la précédence de l'évaluation
+
+/** expressions vers la gauche **/
+new // créé instance objet défini par utilisateur ou objet dont type natif
+let nomObjet = new typeObjet([param1, param2, ...]);
+super([arguments]) // invoque le constructeur parent
+super.functionParent([arguments]);
 
 ""
 /******************************************************************************/
@@ -158,14 +249,43 @@ tableau.splice(pos, 1);
 tableau.sort([,fonctionComparaison])
 // tableau trié, trie éléments tableau dans celui-ci
 
-array1.forEach(callbackfn[,thisArg])
-// exécute action spécifiée pour chaque élément tableau
-// callbackfn: nom de la fonction acceptant jusqu'à trois arguments
-// thisArg:objet auquel this peut faire référence dans callbackfn
-
 tableau.join('-')
 // crée, renvoie chaîne caractères en concaténant éléments ('-' pour séparateur)
 
+/*---------- FONCTIONS AVANCEES ----------------------------------------------*/
+
+/** FOREACH **/
+array1.forEach(callbackfn[,thisArg])
+// exécute action spécifiée pour chaque élément tableau
+// callbackfn: nom de la fonction acceptant jusqu'à trois arguments
+// thisArg: objet auquel this peut faire référence dans callbackfn
+
+/** MAP **/
+var nouveauTableau = arr.map(callback [, thisArg])
+// crée nouveau tableau avec résultats de l'appel d'une fonction fournie sur
+// chaque élément du tableau appelant
+var array1 = [1, 4, 9, 16];
+const map1 = array1.map(x => x * 2);
+console.log(map1); // retourne: Array [2, 8, 18, 32]
+
+/** FILTER **/
+var nouveauTableau = arr.filter(callback);
+// crée et retourne nouveau tableau contenant tous éléments tableau d'origine
+// remplissant condition déterminée par fonction callback
+var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction'];
+const result = words.filter(word => word.length > 6);
+console.log(result); // retourne: Array ["exuberant", "destruction"]
+
+/** REDUCE **/
+arr.reduce(callback [, valeurInitiale]);
+// applique fonction qui traite chaque valeur d'une liste (de la gauche vers la
+// droite) pour réduire à une seule valeur (utilise un accumulateur (2e arg))
+var sum = [1, 2, 3, 4, 5].reduce(function(memo, val) {
+  return memo + val;
+});
+const total = array.reduce((acc, user) => {
+	return acc + user.score
+}, 0);
 
 /******************************************************************************/
 /************** DATA STRUCTURE : OBJETS ***************************************/
@@ -196,6 +316,7 @@ this
 /******************************************************************************/
 
 // noms classes en PascalCase / code classe dans fichier séparé portant son nom
+// instanciation = copie d'un même objet
 
 let Disk = function() { // création de l'objet
 	this.color = 'black';
@@ -219,19 +340,30 @@ let person01 = new Person("Daniel", "Blue", 27);
 // instancie objet à partir patron
 
 /*---------- CREER UNE CLASSE ------------------------------------------------*/
+// technique à favoriser
 
-class Pen {
+class Pen { // délaration avec initialisation (cf. let)
 	constructor(color, size) {
 		this.color = color;
 		this.size = size;
 	}
-	nomFonction(slate) {
-		// code de ma fonction
+	nomFonction() {
+		console.log(`Mon crayon est ${this.color} et mesure ${this.size} cm.`)
 	}
 }
-let crayon = new Pen('blue', 3)
-crayon.color // pour appeler méthode de la classe (output = blue)
 
+class MagicalPen extends Pen {
+	constructor(color, size) {
+		super(name, type) // super donne accès à name et type
+	}
+	nomAutreFonction() {
+		// code
+	}
+}
+
+let crayon = new Pen('blue', 3);
+crayon.color; // pour appeler méthode de la classe (retourne 'blue')
+crayon.nomFonction();
 
 /*---------- PROTOTYPES (DETOURNEMENT) -------------------------------------- */
 // objets héritent propriétés et méthodes d'un prototype
@@ -266,28 +398,32 @@ var marc = new Eleve('marc')
 /************** FONCTIONS *****************************************************/
 /******************************************************************************/
 
-// c'est un objet (nouveau type de variable)
-// a accès au contexte extérieur (closure si l'utilise)
+// = objet qui a accès au contexte extérieur (scope parents)
+// = une closure (fermeture) et crée ainsi une nouvelle portée (scope)
 // fonction callback placée en paramètre quand déclare fonction à intérieur
-// n'a pour portée que intérieur fonction
-// convention : getNom (récupérer quelque chose) setNom (définir propriété)
-// isNom (vérifier booléen)
+// convention: getNom (récupérer qqch) setNom (définir qqch) isNom (bool, vérif)
+
+/* Eviter les SIDE EFFECTS (effets de bord, changement d'état d'application
+ * observable en dehors fonction appelée autre que sa valeur de retour).
+ * Inclus : modification toute variable externe ou de propriété d'un objet.
+ * Faut créer des FONCTIONS PURES :
+ * - valeur de retour toujours même pour mêmes arguments (fonction déterministe)
+ * 	(pas variations avec variables statiques locales, variables non locales...)
+ * - leur évaluation n'a pas d'effets de bord */
 
 function maFonction(param1,param2,param3) {
   if(typeof texte == 'string') {
       return "texte";
   }
-  else {
-      return false; // stoppe fonction, renvoie valeur 'false' en sortie
-  }
+  return false; // stoppe fonction, renvoie valeur 'false' en sortie
 }
-// déclarer fonction (avec hoisting: sera définie tout en haut de la page)
+// "fonction declaration", déclaration avec hoisting (cf. var)
 // if param2 === undefined pour définir valeur par défaut si argument manquant
 
-var maFonction = function(arg1) {
+var maFonction = function(param1) {
   // mon code
-}
-// déclaration sans hoisting, fonction anonyme
+}; // ; car expression
+// "fonction expression", déclaration sans hoisting, fonction anonyme
 
 maFonction(arg1,arg2,arg3)
 // exécute fonction avec choix arguments
@@ -303,10 +439,13 @@ var maVariable = {
 ([param][,param]) => { instructions }
 // fonction fléchée (n'a pas de nom) (remplace function())
 
-/** fonctions diverses **/
+/** fonctions et méthodes diverses **/
 
 console.log("élémentAffiché")
 // affiche l'information dans la console
+
+console.error("élementAffiché");
+// affiche l'information comme une erreur
 
 fonction.bind(thisArg[,arg1[, arg2[, ...]]])
 // crée nouvelle fonction: lorsque appelée, a pour contexte this valeur passée
@@ -325,9 +464,6 @@ parseInt("élément")
 
 parseFloat("élément")
 // retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
-
-typeof(maVariable)
-// affiche le type de la variable
 
 element.length
 // retourne le nombre de la longueur (d'une chaine, d'un tableau...)
@@ -362,36 +498,47 @@ if(condition) {
   // instruction sinon
 }
 
+/*----------- STRUCTURE TERNAIRE ---------------------------------------------*/
+
+condition ? expr1 : expr2
+let answer = isUserValid() ? "Tu peux entrer" : "Accès refusé"
+
 /*----------- BOUCLES --------------------------------------------------------*/
 
 var expr = 'Papayas';
 switch(expr) {
   case 'Oranges':
-    console.log('Oranges are $0.59 a pound.');
+    console.log('texte 1');
     break;
   case 'Papayas':
-    console.log('Mangoes and papayas are $2.79 a pound.');
+    console.log('texte 3');
     break;
   default:
-    console.log('Sorry, we are out of ' + expr + '.');
+    console.log(expr);
 }
 // switch: évalue expression, exécute instructions correspondantes selon cas
 
-for ([expressionInitiale]; [condition]; [expressionIncrémentALaFinDuCycle]) {
+for([expressionInitiale]; [condition]; [expressionIncrémentALaFinDuCycle]) {
   // instruction
 }
 // for: répète instructions jusqu'à condition donnée plus vérifiée
+
+var items = ["item1", "item2", "item3"];
+var copie = [];
+items.forEach(function(item) {
+  copie.push(item);
+});
+
+while(condition) {
+  // instruction
+}
+// while permet exécuter instruction tant que condition vérifiée
 
 do {
   // instruction
 }
 while(condition);
 // do...while: comme while, mais exécute au moins une fois
-
-while(condition) {
-  // instruction
-}
-// while permet exécuter instruction tant que condition vérifiée
 
 break // arrête la boucle
 continue // ne termine pas la boucle complètement:
@@ -404,13 +551,15 @@ continue // ne termine pas la boucle complètement:
 /******************************************************************************/
 
 // interface de programmation pour documents HTML, XML et SVG
-// représentation structurée document sous forme arbre dont racine = html
+// représentation structurée document sous forme arbre dont racine 'root' = html
 // définit façon dont structure manipulable par programmes (style et contenu)
 // lors lecture fichier HTML, navigateur web construit sa structure dans mémoire
 // représente document comme ensemble nœuds,objets possédant propriétés,méthodes
 // nœud peut avoir gestionnaire événement (exécuté lorsque événement déclenché)
+// code doit minimaliser au maximum les interactions avec le DOM
 
 /*---------- API SELECTORS ---------------------------------------------------*/
+// stocker dans des variables pour moins solliciter mémoire
 
 document.querySelector('sélecteursCSS');
 // retourne premier élément document correspondant sélecteurs spécifiés / null
@@ -418,7 +567,7 @@ document.querySelector('sélecteursCSS');
 document.querySelector("div.panneau-utilisateur input[name='identifiant']");
 // premier élément input name="identifiant" dans div class="panneau-utilisateur"
 
-document.querySelectorAll(selecteurs);
+document.querySelectorAll("h1, li");
 // renvoie NodeList (collections nœuds (~= Array)) statique de liste éléments
 
 document.getElementById('monId');
@@ -430,43 +579,62 @@ document.getElementsByClassName('maClasse');
 document.createElement('nomDuTag'[, options]);
 // crée élément HTML du type spécifié
 
-element.getElementsByTagName('tagName')
-// retourne liste live éléments portant nom balise donné
+HTMLElement.getElementsByTagName('tagName')
+// retourne liste live éléments enfants portant nom balise donné
 
-element.getElementsByTagNameNS()
+HTMLElement.getElementsByTagNameNS()
 // argument non converti en minuscule (pour .svg ...)
 
-/*----------CREER, INSERER ET MODIFIER DES ELEMENTS --------------------------*/
+/*---------- RECUPERER, CREER, INSERER, MODIFIER -----------------------------*/
+
+Element.innerHTML = htmlString
+// récupère ou définit syntaxe HTML décrivant les descendants de l'élément
+// créé vulnérabilité attaques XSS
+
+Node.innerText = 'contenu' // attention, pas partout défini sur IE
+// représente contenu textuel « visuellement rendu » d’un nœud
+
+Node.textContent = 'texte'
+// représente le contenu textuel d'un nœud et de ses descendants
+// récupère aussi contenu <script> et <style>
 
 document.write(`Bonjour ${maVariable}<br>`)
 // écrire directement dans le HTML
 
-document.createTextNode(données);
+document.createElement('nomBaliseHTML'[, options]));
+// crée élément HTML du type spécifié
+
+document.createTextNode(données)
 // crée nouveau nœud de texte (donnees = chaîne contenant données à placer)
 
-element.appendChild(enfant);
+HTMLElement.appendChild(enfant)
 // ajoute nœud à fin liste des enfants d'un nœud parent spécifié
 // si enfant donné référence à nœud existant, le déplace
 
-parentNode.insertBefore(newNode, referenceNode);
+parentNode.insertBefore(newNode, referenceNode)
 // insère nœud juste avant noeud de référence en tant qu'enfant nœud parent
 // si enfant donné référence à noeud existant, le déplace
 
-Element.setAttribute('name', 'value')
+HTMLElement.setAttribute('nom', 'valeur')
 // ajoute nouvel attribut ou change valeur attribut existant pour élément
 
-element.getAttribute('')
+HTMLElement.getAttribute('nomAttribut')
 // obtient valeur actuelle attribut
 
-element.removeAttribute('')
+HTMLElement.removeAttribute('nomAttribut')
 // supprime attribut
 
-element.dataset.nomEnCamelCase;
+HTMLElement.dataset.nomEnCamelCase
 // tableau associatif, qui associe à chaque nom d'attribut de données sur mesure
 // (data-*) la valeur qu'il contient
 
 Node.cloneNode()
 // une copie de noeud avant de l'ajouter à son nouveau parent
+
+/*---------- MODIFIER LE STYLE CSS -------------------------------------------*/
+
+HTMLElement.style.nomAttribut = 'valeur'
+// renvoie un objet représentant l'attribut style de l'élément (camel case))
 
 /*---------- API CLASSLIST : manipuler les classes des éléments --------------*/
 
@@ -493,36 +661,9 @@ p.classList.toString()
 
 p.classList.replace('ancienneClasse', 'nouvelleClasse')
 
-/*---------- AGIR SUR ELEMENTS DU DOM ----------------------------------------*/
-
-p.style.fontSize = 'valeur'
-// modifier le style CSS de p (utiliser le camel case)
-
-p.innerHTML = "<strong>Salut</strong> les gens !"
-// modifier le contenu html
-
-p.innerText = 'contenu' // attention, pas partout défini sur IE
-// modifier le noeud texte d'un contenu HTML
-
-p.textContent = 'texte'
-// représente le contenu textuel d'un nœud et de ses descendants
-
-/*---------- AJOUTER IMAGE, TEXTE, AMELIORER STYLE ---------------------------*/
-
-var imgElement = document.createElement('img');
-imgElement.setAttribute('src', 'img/dragon_wins.jpg');
-document.body.appendChild(imgElement);
-imgElement.style.width = "100%";
-
-var viTxtDragon = document.createElement('p');
-viTxtDragon.style.color = 'white';
-viTxtDragon.style.fontWeight = 'bold';
-viTxtDragon.innerText = "Le Dragon a gagné !"
-document.body.appendChild(viTxtDragon);
-
 /*---------- AUTRE -----------------------------------------------------------*/
 
-element.getBoundingClientRect();
+HTMLElement.getBoundingClientRect();
 // renvoie taille élément, position par rapport zone affichage (viewport)
 // object DOMRect, propriétés : left, top, right, bottom, width, height
 
@@ -535,6 +676,22 @@ element.getBoundingClientRect();
 // (racine -> enfants) et exécute gestionnaires rencontrés (addEL() à true)
 // 2. phase bouillennement événement (event bubbling): quand arrivé au bout,
 // navigateur repart dans autre sens (addEventListener() à false)
+
+this // cas événement: vaut élément HTML où a cliqué avant fonction callback
+
+/*---------- EVEMENTS COMMUNS ------------------------------------------------*/
+
+// mouse events (MouseEvent):
+"mousedown, mouseup, click, dblclick, mousemove, mouseover, mousewheel"
+"mouseout, contextmenu"
+// touch events (TouchEvent):
+"touchstart, touchmove, touchend, touchcancel"
+// keyboard events (KeyboardEvent):
+"keydown, keypress, keyup"
+// form, input events:
+"focus, blur, change, submit, input"
+// window events:
+"scroll, resize, hashchange, load, unload"
 
 cible.addEventListener('click', fnCallBack)
 // met en place fonction à appeler chaque fois événement spécifié remis à cible
@@ -551,9 +708,6 @@ object.addEventListener("keydown", maFonction, true);
 
 function maFonction(e) { var x = e.keyCode; switch (x) {case 39: code break; }
 // exécuter instruction en fonction touche appuyée
-
-this
-// pour événement: vaut élément HTML où a cliqué avant fonction callback
 
 event.preventDefault() // par ex: pour annuler effet d'un input submit
 //  indique à agent utilisateur que si événement pas traité explicitement
@@ -586,16 +740,16 @@ window.prompt("texteAffiché", "texteParDéfaut")
 window.confirm('message')
 // crée boite dialogue avec boutons ok, annuler (ok = true, annuler = false)
 
-setInterval(nomFonction, entierMilliseconds [,param1, param2])
+window.setInterval(nomFonction, entierMilliseconds [,param1, param2])
 // lance fonction intervalle régulier défini par delai (! sans () pour fonction)
 
-setTimeout(nomFonction, entierMilliseconds [,param1, param2])
+window.setTimeout(nomFonction, entierMilliseconds [,param1, param2])
 // lance fonction ou évalue expression après temps spécifié
 
-clearInterval(varContenantSetInterval)
+window.clearInterval(varContenantSetInterval)
 // arrête exécution traitement à intervalle régulier
 
-clearTimeout(IDdeTimeout)
+window.clearTimeout(IDdeTimeout)
 // supprime délai spécifié par appel antérieur à setTimeout()
 
 
