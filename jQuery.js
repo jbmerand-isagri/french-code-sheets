@@ -2,15 +2,17 @@
 /************** DEFINITION ****************************************************/
 /******************************************************************************/
 
-/* framework (bibliothèque) Javascript sous licence libre
+/* bibliothèque Javascript sous licence libre
 * permet faciliter fonctionnalités communes JS, gagner du temps
 * avantage très bonne compatibilité
 * fonctionnalités :
   ** manipulation DOM (HTML/CSS)
   ** gestion évènements (clic, survol, soumettre formulaire ...)
   ** AJAX
-  ** effet animation
+  ** effets d'animation
 * s'utilise par fichier javascript (<100Ko lorsque minifié et compressé)
+* défaut: langage très impératif, implique manque de clarté pour gros sites
+* (!= react qui est déclaratif et permet manipulations plus claires)
 */
 
 

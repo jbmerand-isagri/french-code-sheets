@@ -635,6 +635,11 @@ header('Location: mapage.php');
 // void, permet spécifier en-tête HTTP(= redirection) string lors envoi fichiers
 // doit impérativement être utilisée avant tout code HTML
 
+header("Content-type: image/png");
+$image = imagecreatefromjpeg("sonNom.jpg");
+imagepng($image);
+// envoie image png et non page HTML
+
 fopen(string $filename, string $mode)
 // [bool $use_include_path = FALSE] [resource $context]]
 // resource, crée ressource nommée, spécifiée par filename, sous forme d'un flux

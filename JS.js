@@ -4,19 +4,24 @@
 
 /*
 - langage de script léger, orienté objet interprété
-- compilé à la volée (JIT, just-in-time compilation)
+- compilé à la volée (JIT, just-in-time), single-threaded (un pile exécution)
 - utilise concept de prototype (objet à partir duquel crée de nouveaux objets)
 - typage faible (peut affecter valeurs correspondant pas type variable déclaré)
 - typage dynamique (laisse ordinateur réaliser opération typage « à la volée »)
 - paradigmes programmation applicables: fonctionnelle,impérative,orientée objet
 - standard = ECMAScript
 
+# PROGRAMMATION SYNCHRONISEE / DESYNCHRONISEE
+- synchronisée de base (une seule pile d'exécution, exécution selon principe
+LIFO : Last In, First Out)
+- desynchronisation possible avec APIs Web (DOM, AJAX), fonctions callback
+avec timer (setTimeout)...
+
 # OBJET
 - possède plusieurs propriétés qui lui sont associées
 - propriété peut être vue comme variable attachée à l'objet
 
-# METHODE
-fonction qui est propriété d'un objet. Deux sortes :
+# METHODE : fonction qui est propriété d'un objet. Deux sortes :
 - méthode d'instance : fournit interface pour actions dans contexte objet
 - méthode statique : exécutable sans nécessiter instanciation
 */
@@ -31,12 +36,80 @@ fonction qui est propriété d'un objet. Deux sortes :
 - utiliser la syntaxe littérale de préférence (var objet = [];)
 - diviser: appelle scripts JS d'autres fichiers (externalisés)
 - organiser son document: part1 'variables' part2 'functions' part3 'programs'
+- BABEL permet rendre code récent compatible pour tous navigateurs (babeljs.io)
 */
+
+/******************************************************************************/
+/************** ECMAScript 7 & 8 (ES7, ES8) ***********************************/
+/******************************************************************************/
+
+/** nouvelles méthodes sur objets intéressantes à combiner avec boucles **/
+Object.values(obj)
+// renvoie tableau contenant valeurs propriétés propres énumérables objet
+Object.entries(obj)
+// renvoie tableau propriétés propres objet sous forme paires [clé, valeur]
+const object = { 0: 'a', 1: 'b', 2: 'c' };
+console.log(Object.entries(object)[2]); // retourne: Array ["2", "c"]
+Object.keys(obj);
+// renvoie tableau contenant noms des propriétés propres à l'objet
+
+const array = (a,b,c,); // laisser virgule fin valide
+
+// compléter chaîne courante avec chaîne de caractères
+str.padStart(longueurCible [, chaîneComplémentaire])
+str.padEnd(longueurCible [, chaîneComplémentaire])
+
+x**2; // x puissance 2
+
+str.includes(stringRecherché[, positionDeCommencement])
+'Helloooo'.includes('o'); // retourne true
+const pets = ['cats', 'dog', 'bat'];
+pets.includes('dog'); // retourne true
 
 /******************************************************************************/
 /************** ECMAScript 5 & 6 (ES5, ES6) ***********************************/
 /******************************************************************************/
-// BABEL permet rendre code compatible pour tous navigateurs (babeljs.io)
+
+/** MODULES **/
+// création module JavaScript pour exporter fonctions/objets/valeurs primitives
+export { maFonction }; // export nommé d'une fonction précédemment déclarée
+export const add = (a, b) => a + b; // export nommé d'une constante
+export default function maFonction() {}; // export par défaut (un seul possible)
+export default class {};
+export * from xxx;
+export { variable1 as nom1, variable2 as nom2, nomN };
+export let nom1 = xxx, nom2 = xxx;
+// importer liens exportés par autre module (interprétés en mode strict)
+import exportParDefaut from "nom-module";
+import * as nom from "nom-module";
+import { export } from "nom-module";
+import { export as alias } from "nom-module";
+
+/** DESTRUCTURING **/
+// assigner variables d'un objet/tableau (repose sur leur structure)
+// peut destructurer tableau/objet retourné par une fonction
+// OBJET
+var monObjet = { foo: 'a', bar: 'b'}; // soit un objet
+var foo = monObjet.foo; // méthode ES5
+foo; // 'a'
+const { foo, bar } = monObjet; // méthode ES6
+foo; // 'a'
+bar; // 'b'
+// TABLEAU
+const [first, second, , fourth] = [1, 2, 3, 4]; // on ignore un item ici
+first; // 1
+second; // 2
+fourth; // 4
+
+/** FOR OF (pour itérer => pour tableaux et string) **/
+for(item of monTableau) { // peut itérer sur string
+	console.log(item);
+}
+
+/** FOR IN (pour énumérer => pour objets) **/
+for(item in monObjet) {
+	console.log(item); // retourne les propriétés (pas valeurs)
+}
 
 /** LET **/
 let // portée (scope) = plus proche enclosing block (parent englobant) (for...)
@@ -252,6 +325,12 @@ tableau.sort([,fonctionComparaison])
 tableau.join('-')
 // crée, renvoie chaîne caractères en concaténant éléments ('-' pour séparateur)
 
+tableau.reverse();
+// transpose éléments tableau : premier -> dernier, dernier -> premier...
+
+str.split([séparateur[,qtéMax]]);
+// divise string à partir d'un séparateur pour fournir tableau de sous-chaînes
+
 /*---------- FONCTIONS AVANCEES ----------------------------------------------*/
 
 /** FOREACH **/
@@ -279,12 +358,12 @@ console.log(result); // retourne: Array ["exuberant", "destruction"]
 /** REDUCE **/
 arr.reduce(callback [, valeurInitiale]);
 // applique fonction qui traite chaque valeur d'une liste (de la gauche vers la
-// droite) pour réduire à une seule valeur (utilise un accumulateur (2e arg))
-var sum = [1, 2, 3, 4, 5].reduce(function(memo, val) {
-  return memo + val;
+// droite) pour réduire à une seule valeur (utilise un accumulateur (acc))
+let sum = [1, 2, 3, 4, 5].reduce(function(acc, val) {
+  return acc + val;
 });
 const total = array.reduce((acc, user) => {
-	return acc + user.score
+	return acc + user.score;
 }, 0);
 
 /******************************************************************************/
@@ -292,6 +371,7 @@ const total = array.reduce((acc, user) => {
 /******************************************************************************/
 
 // collection de propriétés
+this // dans un objet, représente l'objet
 
 var person = {firstName:"John", lastName:"Doe"} // objet 'court'
 //ou
@@ -308,8 +388,6 @@ var maVoiture = new Object();
 nomObjet.nomPropriete
 // accéder à la propriété d'un objet
 
-this
-// dans un objet, représente l'objet
 
 /******************************************************************************/
 /************** CLASSES ET FONCTION CONSTRUCTOR *******************************/
@@ -354,7 +432,7 @@ class Pen { // délaration avec initialisation (cf. let)
 
 class MagicalPen extends Pen {
 	constructor(color, size) {
-		super(name, type) // super donne accès à name et type
+		super(color, size) // super donne accès à name et type
 	}
 	nomAutreFonction() {
 		// code
@@ -439,7 +517,10 @@ var maVariable = {
 ([param][,param]) => { instructions }
 // fonction fléchée (n'a pas de nom) (remplace function())
 
-/** fonctions et méthodes diverses **/
+/** instructions, fonctions et méthodes diverses **/
+
+debugger;
+// fait appel à outil de débogage (exécution interrompue, vision pas à pas)
 
 console.log("élémentAffiché")
 // affiche l'information dans la console
@@ -447,7 +528,7 @@ console.log("élémentAffiché")
 console.error("élementAffiché");
 // affiche l'information comme une erreur
 
-fonction.bind(thisArg[,arg1[, arg2[, ...]]])
+fonction.bind(thisArg[,arg1[, argN]])
 // crée nouvelle fonction: lorsque appelée, a pour contexte this valeur passée
 // en paramètre (car callback crée un nouveau contexte)
 // s'utilise essentiellement avec callback (quand callback fait appel à "this")
@@ -459,14 +540,20 @@ isFinite(valeurTestée)
 isNaN(valeurTestée)
 // retourne true si la valeur est bien NaN
 
-parseInt("élément")
-// retourne premier nombre entier dans chaine de caractères / NaN
+parseInt("string", base)
+// analyse string et retourne un integer de la base spécifiée / NaN
 
-parseFloat("élément")
+parseFloat("string")
 // retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
 
 element.length
 // retourne le nombre de la longueur (d'une chaine, d'un tableau...)
+
+str.charCodeAt(indice)
+// retourne entier (entre 0-65535) qui correspond code UTF-16 caractère position donnée
+
+String.fromCharCode(num1, numN)
+// renvoie chaîne de caractères créée à partir de points de code UTF-16
 
 Object.values(obj)
 // renvoie tableau contenant valeurs propriétés propres énumérables d'un objet
@@ -1059,9 +1146,6 @@ function getRandomInteger(min, max) {
 //
 // window.location.assign(link);
 //
-// import xxxx from 'urlFichier';
-// import * as Préfixe from 'url';
-// export
 
 // numObj.toFixed([nbChiffres])
 // permet de formater un nombre en notation à point-fixe (nombre arrondi si nécessaire)

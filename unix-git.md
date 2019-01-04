@@ -103,6 +103,16 @@
 
 (`git commit -am "message"`  //  faire commit sur fichiers déjà indexés)
 
+### Maintenir un fork à jour
+
+1. Se placer dans le répertoire du fork, puis : `git remote -v`  // voir le remote configuré pour le repository du fork
+
+2. `git remote add upstream https://github.com/...`  // url du repository original comme pour un git clone
+
+3. `git remote -v`  // doit voir à présent l'url du fork comme `origin` et l'url du repository original comme `upstream`
+
+`git pull upstream master` // synchroniser le fork avec l'upstream repository
+
 ### Lire et modifier des commits
 
 `git log`  // afficher historique des commits
