@@ -74,20 +74,22 @@ pets.includes('dog'); // retourne true
 // création module JavaScript pour exporter fonctions/objets/valeurs primitives
 export { maFonction }; // export nommé d'une fonction précédemment déclarée
 export const add = (a, b) => a + b; // export nommé d'une constante
-export default function maFonction() {}; // export par défaut (un seul possible)
-export default class {};
+export default function maFonction() {...}; // un seul possible
+export default class {...};
 export * from xxx;
 export { variable1 as nom1, variable2 as nom2, nomN };
 export let nom1 = xxx, nom2 = xxx;
 // importer liens exportés par autre module (interprétés en mode strict)
-import exportParDefaut from "nom-module";
+import exportParDefaut from "nom-module"; // n'importe quel nom utilisable
 import * as nom from "nom-module";
-import { export } from "nom-module";
+import { export } from "nom-module"; // import d'un export nommé (accolades)
 import { export as alias } from "nom-module";
 
-/** DESTRUCTURING **/
+/** DESTRUCTURATION **/
 // assigner variables d'un objet/tableau (repose sur leur structure)
 // peut destructurer tableau/objet retourné par une fonction
+// permet rapidement chercher plusieurs propriétés d'un objet
+// ou plusieurs cellules de n’importe quel objet itérable
 // OBJET
 var monObjet = { foo: 'a', bar: 'b'}; // soit un objet
 var foo = monObjet.foo; // méthode ES5
@@ -100,9 +102,10 @@ const [first, second, , fourth] = [1, 2, 3, 4]; // on ignore un item ici
 first; // 1
 second; // 2
 fourth; // 4
+const [firstName, lastName] = fullName.split(' ')
 
 /** FOR OF (pour itérer => pour tableaux et string) **/
-for(item of monTableau) { // peut itérer sur string
+for(item of monTableau) {
 	console.log(item);
 }
 
@@ -141,6 +144,9 @@ let sym2 = Symbol('foo');
 sym2 === sym1 // false, car symbol crée type unique
 
 /** FONCTIONS FLECHEES **/
+() => { instructions }
+(param1, param2, …, param2) => expression // retourne implicitement résultat
+// ne redéfinissent aucun identifiant lors de leur invocation (pas même this)
 const add = (a, b) => a + b; // function add(a, b) { return a + b; }
 // pour la CURRYFICATION (currying, transformation fonction plusieurs arguments
 // en une fonction à un argument qui retourne une fonction sur reste arguments):
@@ -328,8 +334,12 @@ tableau.join('-')
 tableau.reverse();
 // transpose éléments tableau : premier -> dernier, dernier -> premier...
 
-str.split([séparateur[,qtéMax]]);
+str.split([séparateur[,qtéMax]])
 // divise string à partir d'un séparateur pour fournir tableau de sous-chaînes
+
+tableau.slice([début[,fin]])
+// renvoie tableau contenant copie superficielle (shallow copy) portion tableau
+// tableau original non modifié
 
 /*---------- FONCTIONS AVANCEES ----------------------------------------------*/
 
@@ -421,7 +431,7 @@ let person01 = new Person("Daniel", "Blue", 27);
 // technique à favoriser
 
 class Pen { // délaration avec initialisation (cf. let)
-	constructor(color, size) {
+	constructor(color, size) { // "méthode concise" : pas de "nom: function"...
 		this.color = color;
 		this.size = size;
 	}
@@ -432,7 +442,7 @@ class Pen { // délaration avec initialisation (cf. let)
 
 class MagicalPen extends Pen {
 	constructor(color, size) {
-		super(color, size) // super donne accès à name et type
+		super(color, size) // apelle constructeur hérité,obligatoire,avant les this
 	}
 	nomAutreFonction() {
 		// code
@@ -546,8 +556,27 @@ parseInt("string", base)
 parseFloat("string")
 // retourne premier nombre décimal (avec un .) dans chaine de caractères / NaN
 
+obj.toString()
+// renvoie chaine caractères représentant l'objet (ex: [object Object])
+
+numObj.toString([base])
+// renvoie chaîne caractères représentant objet Number
+// surcharge méthode toString de Object
+
+numObj.toFixed([nbChiffres])
+// formate nombre en notation à point-fixe (arrondi si nécessaire)
+
 element.length
 // retourne le nombre de la longueur (d'une chaine, d'un tableau...)
+
+str.replace(regexp|souschn, nouvSouschn|fonction)
+// renvoie nouvelle chaîne de caractères avec une partie remplacée
+// chaine originale non modifiée
+str.replace(/[aeiouy]/gi, ''); // remplace toutes les voyelles par ""
+
+str.slice(indiceDebut[, indiceFin])
+// extrait section chaine de caractères, la retourne comme nouvelle string
+// chaine courante non modifiée
 
 str.charCodeAt(indice)
 // retourne entier (entre 0-65535) qui correspond code UTF-16 caractère position donnée
@@ -1124,28 +1153,28 @@ context.getImageData(sx, sy, sw, sh);
 
 
 /******************************************************************************/
-/************** SCRIPTS UTILES ************************************************/
+/************** EXPRESSIONS RATIONNELLES **************************************/
 /******************************************************************************/
 
-/**
- * renvoie nombre entier aléatoire entre deux nombres inclus
- * @Integer
- * @param {float} min - valeur minimale
- * @param {float} max - valeur maximale
- */
-function getRandomInteger(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// motifs utilisés pour correspondre à certaines combinaisons de caractères
+// au sein de chaînes de caractères, des objets en js
+// avec méthodes : exec,test de RegExp, match,replace,search,split de String
 
+// créer une expression rationnelle
+var re = /ab+c/; // utilisation d'un littéral d'expression régulière, expression
+var re = new RegExp("ab+c"); // appel du constructeur de l'objet RegExp
 
-///////// A AJOUTER ///////////////
+// les motifs simples (pour une simple égalité)
+/des/ // observe les caractères 'des' ensemble et dans cet ordre précis
 
-// window.location.replace(...) is better than using window.location.href, because replace() does not keep the originating page in the session history, meaning the user won't get stuck in a never-ending back-button fiasco.
-// window.location.href = link;
-// or
-//
-// window.location.assign(link);
-//
+// caractères spéciaux
+// cf. documentation
 
-// numObj.toFixed([nbChiffres])
-// permet de formater un nombre en notation à point-fixe (nombre arrondi si nécessaire)
+// effectuer des recherches avancées en utilisant les marqueurs (flags)
+var re = /motif/marqueurs;
+var re = new RegExp("motif", "marqueurs");
+g // recherche globale
+i // recherche ne respectant pas la casse
+m // recherche sur plusieurs lignes
+u // unicode
+y // effectue une recherche qui "adhère"

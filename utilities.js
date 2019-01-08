@@ -55,7 +55,17 @@ function saveToLocalStorage(key, data) {
     window.localStorage.setItem(key, JSON.stringify(data));
 }
 
-export {selectListenEventManyElements,isInPage,isElementInViewport,loadFromLocalStorage,saveToLocalStorage}
+/**
+ * renvoie nombre entier aléatoire entre deux nombres inclus
+ * @Integer
+ * @param {float} min - valeur minimale
+ * @param {float} max - valeur maximale
+ */
+function getRandomInteger(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export {selectListenEventManyElements,isInPage,isElementInViewport,loadFromLocalStorage,saveToLocalStorage,getRandomInteger}
 
 
 
