@@ -43,6 +43,20 @@ avec timer (setTimeout)...
 /************** ECMAScript 7 & 8 (ES7, ES8) ***********************************/
 /******************************************************************************/
 
+/** ASYNC AWAIT **/
+async function playerStart() {
+  const firstMove = await movePlayer(100, 'Left'); // pause
+  await movePlayer(400, 'Left'); // pause
+  await movePlayer(10, 'Right'); // pause
+  await movePlayer(330, 'Left'); // pause
+}
+
+async function fecthUsers() {
+  const resp = await fetch('https://jsonplaceholder.typicode.com/users')
+  const data = await resp.json();
+  console.log(data);
+}
+
 /** nouvelles méthodes sur objets intéressantes à combiner avec boucles **/
 Object.values(obj)
 // renvoie tableau contenant valeurs propriétés propres énumérables objet
@@ -159,7 +173,32 @@ const compose = (f, g) => (a) => f(g(a));
 const sum = (num) => num + 1;
 compose(sum, sum)(5); // retourne 7 (5+1 = 6 + 1 = 7)
 
-/** forEach() **/
+/** forEach(), fetch **/
+
+/** PROMESSES **/
+// très bien pour programmation asynchrone
+
+const promise = new Promise((resolve, reject) => {
+  if(true) {
+    resolve('Stuff Worked');
+  } else {
+    reject('Error, it broke');
+  }
+})
+
+promise.then(result => console.log(result));
+
+promise // chaining promises, output : Stuff Worked!
+  .then(result => result + '!')
+  .then(result2 => {
+    console.log(result2);
+  })
+  .catch(() => console.log('error!')) // catch erreurs avant
+
+Promise.all([promise, promise2, promise3]) // attend toutes promesses résolues
+  .then(values => {
+    console.log(values);
+  })
 
 /******************************************************************************/
 /************** VARIABLES *****************************************************/
@@ -245,7 +284,6 @@ maVariable-- // décrémentation après de -1
 
 propriété in objet // renvoie true si propriété indiquée fait partie objet donné
 objet instanceof type // renvoie true si objet est du type spécifié
-
 
 /*---------- opérateurs divers -----------------------------------------------*/
 
@@ -408,7 +446,7 @@ nomObjet.nomPropriete
 
 let Disk = function() { // création de l'objet
 	this.color = 'black';
-	thois.radius = 10;
+	this.radius = 10;
 }
 Disk.prototype.setRadius = function(radius) { // création méthode cet objet
 	this.radius = radius;
@@ -579,7 +617,15 @@ str.slice(indiceDebut[, indiceFin])
 // chaine courante non modifiée
 
 str.charCodeAt(indice)
-// retourne entier (entre 0-65535) qui correspond code UTF-16 caractère position donnée
+// retourne entier (entre 0-65535) = code UTF-16 caractère position donnée
+
+str.search(regexp)
+// recherche dans chaine caractères grâce à expression rationnelle
+// renvoie entier qui correspond à indice la première correspondance, sinon -1
+
+str.match(regexp)
+// retourne tableau correspondances entre chaîne courante/expression rationnelle
+// sinon null
 
 String.fromCharCode(num1, numN)
 // renvoie chaîne de caractères créée à partir de points de code UTF-16
@@ -769,9 +815,6 @@ p.classList.contains('')
 p.classList.length
 // retourne le nombre de classes
 
-p.classList.contains('')
-// retourne true si une classe est présente et false sinon
-
 p.classList.toString()
 // retourne la chaîne de texte complète
 
@@ -894,7 +937,7 @@ throw new Error(['message' [,fileName [,lineNumber]]])
 /************** METHODES DE L'INTERFACE STORAGE *******************************/
 /******************************************************************************/
 
-monStockage = window.localStorage // ou window.sessionStorage
+monStockage = window.localStorage; // ou window.sessionStorage
 // propriété, accède à objet local Storage (sans expiration, !=sessionStorage)
 
 storage.setItem('clé', valeur);
@@ -929,6 +972,34 @@ storage.key(cléN);
  * assurer suivi dans partie network inspecteur, navigateur
 */
 
+// ES6
+// https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch
+fetch('/my/url')
+  .then(resp => resp.json())
+  .then(console.log)
+
+fetch('flowers.jpg').then(function (response) {
+    if (response.ok) {
+      response.blob().then(function (myBlob) {
+        var objectURL = URL.createObjectURL(myBlob);
+        myImage.src = objectURL;
+      });
+    } else {
+      console.log('Mauvaise réponse du réseau');
+    }
+  })
+  .catch(function (error) {
+    console.log('Problème avec l\'opération fetch: ' + error.message);
+  });
+
+// détecter la fonctionnalité sur le navigateur
+if (self.fetch) {
+  // exécuter ma requête fetch ici
+} else {
+  // faire quelque chose avec XMLHttpRequest?
+}
+
+// ancienne technique
  var xhr = null;
 
  if(window.XMLHttpRequest || window.ActiveXObject){
@@ -1155,6 +1226,7 @@ context.getImageData(sx, sy, sw, sh);
 /******************************************************************************/
 /************** EXPRESSIONS RATIONNELLES **************************************/
 /******************************************************************************/
+// https://www.regextester.com/
 
 // motifs utilisés pour correspondre à certaines combinaisons de caractères
 // au sein de chaînes de caractères, des objets en js
@@ -1178,3 +1250,59 @@ i // recherche ne respectant pas la casse
 m // recherche sur plusieurs lignes
 u // unicode
 y // effectue une recherche qui "adhère"
+
+// quelques motifs utiles
+/.*\S.*/
+/ // délimiteur
+.* // 0 ou plus de n'importe quoi sauf une nouvelle ligne
+\S // tout sauf un espace blanc
+
+var regex = /[A-Z]/g;
+var found = paragraph.match(regex);
+// recherche correspondance entre toutes les majuscules de A à Z
+
+// TODO: traduire
+// Character classes
+.	// any character except newline
+\w \d \s	// word, digit, whitespace
+\W \D \S	// not word, digit, whitespace
+[abc]	// any of a, b, or c
+[^abc] //	not a, b, or c
+[a-g]	// character between a & g
+// Anchors
+^abc$	// start / end of the string
+\b // word boundary
+// Escaped characters
+\. \* \\	// escaped special characters
+\t \n \r //	tab, linefeed, carriage return
+\u00A9 //	unicode escaped ©
+// Groups & Lookaround
+(abc)	// capture group
+\1	// backreference to group #1
+(?:abc)	// non-capturing group
+(?=abc)	// positive lookahead
+(?!abc)	// negative lookahead
+// Quantifiers & Alternation
+a* a+ a?	// 0 or more, 1 or more, 0 or 1
+a{5} a{2,} // exactly five, two or more
+a{1,3} // between one & three
+a+? a{2,}? // match as few as possible
+ab|cd	// match ab or cd
+
+
+// FIXME:
+function duplicateEncode(word){
+  let newWord = "";
+  for(letter of word) {
+    console.log(letter);
+    console.log(word);
+    var letterInWord = word.match(new RegExp('\\b' + letter + '\\b'));
+    console.log(letterInWord);
+    if(letterInWord.length < 2) {
+      newWord += "(";
+    } else {
+      newWord += ")";
+    }
+  }
+  return newWord;
+}

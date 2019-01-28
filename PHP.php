@@ -15,7 +15,7 @@ Client ne reçoit que résultat du script, sans accès code.
 
 .: INFORMATIONS :.
 
-- installer MAMP (inclut serveur Apache et Mysql) pour PC puisse interpréter PHP
+- installer MAMP (inclut serveur Apache et Mysql) pour Mac puisse interpréter
 - ~80% des sites dans le monde faits avec (Wordpress...)
 - permet consulter bases de données, faire sites dynamiques :
 -> formulaire se soumet en post ou via méthode ajax (pas besoin rafraichir page)
@@ -355,7 +355,7 @@ class MyClass
 {
     public $public = 'Public'; // utilisable par tout le programme
     protected $protected = 'Protected'; // accès limité classe + celles héritent
-    private $private = 'Private'; // accès réservé à classe qui l'a défini
+    private $private = 'Private'; // accès réservé à classe qui l'a définie
 
     function printHello() // encapsulation
     {
@@ -372,7 +372,7 @@ echo $obj->private; // erreur fatale
 $obj->printHello(); // affiche Public, Protected et Private
 
 
-// avec extension (MyClass2 hérite méthodes et membres de MyClass)
+// avec extension (MyClass2 hérite méthodes et attributs de MyClass)
 class MyClass2 extends MyClass
 {
     // on peut redéclarer les éléments publics ou protégés, mais pas ceux privés

@@ -54,7 +54,7 @@ YEAR      -- stocke année, soit format AA, soit format AAAA
 
 -- info organisée dans tableaux deux dimensions appelés 'relations' ou 'tables'
 -- entité : un objet de gestion et ses données (personne, entreprise...)
---- prote des attributs ou propriétés (nom, prenom...)
+--- porte des attributs ou propriétés (nom, prenom...)
 -- BD = une ou plusieurs relations (font lien entre données)
 -- lignes des relations appelées 'nuplets' ou 'enregistrements'
 -- colonnes appelées 'attributs' ou 'champs'

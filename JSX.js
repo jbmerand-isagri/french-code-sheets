@@ -94,6 +94,31 @@ render () {
 }
 
 /******************************************************************************/
+/************** EVENEMENTS ****************************************************/
+/******************************************************************************/
+
+onChange
+onClick
+
+class App extends Component {
+  constructor() { // pour définir un état
+    super(); // pour être capable de l'utiliser
+    this.state = {
+      input: '',
+    }
+  }
+
+  onInputChange = (event) => { // à chaque fois voit un event sur la page, propriété de App, nécessite trigger (déclencheur)
+    console.log(event.target.value);
+  }
+
+// dans le render()
+<ImageLinkForm onInputChange={this.onInputChange} /> {/* passe le prop onInoutChange */}
+
+// dans fonction pure ImageLinkForm.js
+<input className='f4 pa2 w-70 center' type='tex' onChange={onInputChange} />
+
+/******************************************************************************/
 /************** TABLEAUX ******************************************************/
 /******************************************************************************/
 
@@ -117,3 +142,59 @@ ReactDOM.render(
   <Demo cssClass="brittle" title="Not so good" />,
   document.getElementById('root')
 )
+
+/******************************************************************************/
+/************** Style Inline **************************************************/
+/******************************************************************************/
+
+// sont spécifiés avec un objet dont la clé est la version camelcase du nom
+// du style et dont la valeur est la valeur du style
+
+var divStyle = {
+  color: 'white',
+  backgroundImage: 'url(' + imgUrl + ')',
+  WebkitTransition: 'all', // note the capital 'W' here
+  msTransition: 'all' // 'ms' is the only lowercase vendor prefix
+};
+
+ReactDOM.render(<div style = {divStyle}> Hello World! </div>, mountNode);
+
+ReactDOM.render(<nav style={{display: 'flex', justifyContent: 'flex-end'}}></nav>);
+
+
+/******************************************************************************/
+/************** Initialiseur de champ pour garantir le this *******************/
+/******************************************************************************/
+
+// utilise fait que fonctions fléchées n'ont pas de contexte d'invocation et pas
+// leur propre this, mais celui le plus proche dans les portées englobantes
+
+class LoginScreen extends Component {
+  logIn = (event) => {
+    // …
+  }
+
+  // …
+}
+
+// correspond à :
+
+class LoginScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.logIn = (event) => {
+      // …
+    }
+  }
+
+  // …
+}
+
+
+
+A VOIR
+
+this.setState({imageUrl: this.state.input})
+
+setState(updater, callback) // pour être sûr que React a fini de mettre à jour les changements d'état avant de lancer une fonction
+// setState() est un appel asynchrone. React rassemble plusieurs appels vers setState en un seul appel, puis re-render le composant une seule fois, plutôt que de re-render pour chaque changement d'état.
