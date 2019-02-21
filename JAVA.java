@@ -44,9 +44,10 @@
 
 */
 
-
 // classe de base
-package com.jbmerand;
+package fr.jbmerand;
+
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 public class Main {
 
@@ -55,7 +56,147 @@ public class Main {
     }
 }
 
-// écrire texte
+/******************************************************************************/
+/************** IntelliJ ******************************************************/
+/******************************************************************************/
+
+/*
+- ALT+ENTREE sur objet/outil : ajout ligne pour importer en haut fichier
+
+/******************************************************************************/
+/************** VARIABLES *****************************************************/
+/******************************************************************************/
+
+// noms en camelCase
+
+/* types primitifs */
+
+int age = 28; // type Integer (peut : x + - %)
+double age2 = 28.5; // décimal (peut : x + - / %)
+boolean a = true;
+
+/* types complexes (objets) */
+// faut voir comme objet de la vie réel, représente concepts
+// possède fonctionnalités et des composants
+
+String varText = new String("mon texte");
+String varText2 = "autre texte"; // raccourci syntaxique de String
+
+/******************************************************************************/
+/************** CLASSES *******************************************************/
+/******************************************************************************/
+
+public class Main {
+    public static void Main(String[] args) {
+        Order order = new Order();
+        order.runMenu();
+    }
+}
+
+
+/******************************************************************************/
+/************** FONCTIONS *****************************************************/
+/******************************************************************************/
+
+/**
+ * Display a selected menu.
+ * @param nbMenu The selected menu.
+ */
+public void displaySelectedMenu(int nbMenu) {
+    nbMenu = nbMenu + 5;
+}
+
+/******************************************************************************/
+/************** CONDITIONS ****************************************************/
+/******************************************************************************/
+// variable de type booléen créée
+
+if (number == 50) {
+    System.out.println("Le nombre est 50");
+} else if (number == 51) {
+    System.out.println("Le nombre est 51");
+} else {
+    System.out.println("Le nombre n'est ni 50, ni 51");
+}
+
+switch (maVariable) {
+	case valeur1 :
+		code;
+		break;
+	case valeur2 :
+		code;
+		break;
+	default :
+		code;
+		break;
+}
+
+
+/******************************************************************************/
+/************** BOUCLES *******************************************************/
+/******************************************************************************/
+
+while (counter < 5) {
+    // code;
+    counter = counter + 1;
+}
+
+for (int counter = 0; counter < 5; counter = counter + 1) {
+    // code;
+}
+
+do {
+    // code;
+    i++;
+} while (i < 5);
+
+/******************************************************************************/
+/************** OPERATEURS ****************************************************/
+/******************************************************************************/
+
++ // concaténation
+==
+!=
+>
+<
+>=
+<=
+&& // ET
+|| // OU
+
+/******************************************************************************/
+/************** STRING ********************************************************/
+/******************************************************************************/
+
+varText.length(); // obtenir longueur de la chaine de caractères
+varText.contains("hello"); // bool, test si mot contenu dans variable
+
+/******************************************************************************/
+/************** TESTS *********************************************************/
+/******************************************************************************/
+
+/*
+TDD (Test Driven Development) : pense au test avant le développement du code.
+- permet tests meilleure qualité
+- quatre étapes :
+-- rédiger en amont tous les tests couvrant tous les scénarios
+-- exécuter les tests et vérifier qu'aucun ne fonctionne
+-- écrire le code de la fonction
+-- exécuter à nouveau les tests pour vérifier tout fonctionne
+*/
+
+// format Given_ParamètresDuTest_When_ContexteOùEst_Then_RésultatAttendu
+@Test
+public void Given_Nothing_When_DisplayMenuSelection_Then_ShouldDisplayText() {
+    order.displayAvailableMenu();
+    assertEquals(false, outContent.toString().isEmpty());
+}
+
+assertEquals();
+toString();
+replace();
+split();
+
 System.out.println("Hello World !");
 // out : permet d'accéder à sortie standard
 // println : afficher une ligne de texte
