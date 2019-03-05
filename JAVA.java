@@ -75,8 +75,6 @@
 /************** VARIABLES *****************************************************/
 /******************************************************************************/
 
-// noms en camelCase
-
 /*************** TYPES PRIMITIFS **********************************************/
 // moins lourds, meilleure performances
 
@@ -120,20 +118,6 @@ String s1 = new String("Texte");
 String s2 = "Autre texte";
 // utilise "" pour créer directement un string
 
-/******************************************************************************/
-/************** OBJETS ********************************************************/
-/******************************************************************************/
-
-// = variable d'un type d'une classe
-// constructeur : passe valeur à création objet, même nom que classe
-
-public class Personne {
-    private Age age;
-
-    public Personne(Age age) { // constructeur (pas besoin javadoc)
-        this.age = age;
-    }
-}
 
 /******************************************************************************/
 /************** CLASSES *******************************************************/
@@ -220,6 +204,192 @@ public abstract class MaClasse { // ininstanciable
 - classes anonymes : héritage dans le code, comportement de base changé, sans
 réellement créer une nouvelle classe avec un nom.
 Mock?
+
+
+/******************************************************************************/
+/************** CLASS OBJECT (OBJETS) *****************************************/
+/******************************************************************************/
+
+// java.lang.Object // JDK 1.0
+
+public class Object {}
+// classe origine dans la hiérarchie : chaque classe l'a pour superclasse
+// tous objets, incluant tableaux, implémentent méthodes cette classe
+
+// = variable d'un type d'une classe
+// constructeur : passe valeur à création objet, même nom que classe
+
+public class Personne {
+    private Age age;
+
+    public Personne(Age age) { // constructeur (pas besoin javadoc)
+        this.age = age;
+    }
+}
+
+clone()
+// protected Object; crée et retourne une copie de l'objet
+
+equals(Object obj)
+// boolean; indique si d'autres objets sont "égaux" à celui-ci
+
+finalize()
+// protected void; Called by the garbage collector on an object when garbage collection determines that there are no more references to the object.
+
+getClass()
+// Class<?>; retourne la classe d'exécution de l'Objet
+
+hashCode()
+// int; retourne une valeur hashée pour l'objet
+
+notify()
+// void; wakes up a single thread that is waiting on this object's monitor
+
+notifyAll()
+// void; wakes up all threads that are waiting on this object's monitor
+
+toString()
+// String; retourne une représentation string de l'objet
+
+wait()
+// void; Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object.
+
+wait(long timeout)
+// void; Causes the current thread to wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.
+
+wait(long timeout, int nanos)
+// void; Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object, or some other thread interrupts the current thread, or a certain amount of real time has elapsed.
+
+
+/******************************************************************************/
+/************** CLASS STRING **************************************************/
+/******************************************************************************/
+
+// java.lang.Object > java.lang.String // JDK 1.0
+
+public final class String
+extends Object
+implements Serializable, Comparable<String>, CharSequence {}
+
+// classe qui représente les chaines de caractères
+// tous littéraux de chaine implémentés en tant qu'instances cette classe
+// chaines sont constantes = valeurs non modifiables après création
+// tampons de chaine supportent chaines mutables
+// objets String sont immuables (=> peuvent être partagés)
+
+charAt(int index)
+// char; retourne le caractère à l'index spécifié
+
+codePointAt(int index)
+// int; Returns the character (Unicode code point) at the specified index.
+
+codePointBefore(int index)
+// int; Returns the character (Unicode code point) before the specified index.
+
+codePointCount(int beginIndex, int endIndex)
+// int; Returns the number of Unicode code points in the specified text range of this String.
+
+compareTo(String anotherString)
+// int; compare lexicographiquement deux chaines
+
+compareToIgnoreCase(String str)
+// +ignore les différences de casse
+
+concat(String str)
+// String; concatène chaine spécifiée à fin de la chaine
+
+contains(CharSequence s)
+// boolean; true si string contient séquence caractères spécifiée
+
+contentEquals(CharSequence cs)
+// boolean; compare à la CharSequence spécifiée
+
+contentEquals(StringBuffer sb)
+// boolean; compare au StringBuffer spécifié
+
+copyValueOf(char[] data[int offset, int count])
+// static String; retourne chaine représentant séquence crc dans tableau
+
+endsWith(String suffix)
+// boolean; teste si chaine finit par suffixe spécifié
+
+equals(Object anObject)
+// boolean; compare à l'objet spécifié
+
+equalsIgnoreCase(String anotherString)
+// boolean; compare à la chaine, ignorant la casse
+
+format(Locale 1, String format, Object... args)
+// static String; Returns a formatted string using the specified locale, format string, and arguments.
+
+format(String format, Object... args)
+// static String; Returns a formatted string using the specified format string and arguments.
+
+getBytes([Charset charset] [String charsetName])
+// byte[]; encode en une séquence d'octets avec jeu de crc par défaut/défini
+// stocke résultat dans un nouveau tableau d'octets
+
+getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)
+// void; copie les crc du string dans le tableau de crc
+
+indexOf(int ch [String str] [String str, int fromIndex])
+// int; retourne index dans string première occurence crc/string
+
+intern() // String; retourne expression canonique
+
+isEmpty()
+// boolean; true si length() est 0
+
+lastIndexOf(int ch [int ch, int fromIndex] [String str])
+// int; retourne index dans string dernière occurence crc/string
+
+length()
+// int; retourne longueur chaine crc
+
+matches(String regex)
+// boolean; indique si chaine correspond à expression régulière
+
+offsetByCodePoints(int index, int codePointOffset) // int
+regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)
+
+replace(char oldChar, char newChar[,CharSequence targ, CharSequence replac])
+// String; retourne nouvelle chaine résultant remplacement occurences/séquence
+
+replaceAll(String regex, String replacement)
+// String; remplace chaque sous-chaine correspondante à l'expression régulière
+
+replaceFirst(String regex, String replacement)
+// String; remplace première sous-chaine correspondante
+
+split(String regex [, int limit])
+// String[]; divise chaine autour expression régulère correspondante
+
+startsWith(String prefix [, int toffset])
+// boolean; teste si chaine (sous-chaine dès index) commence par préfixe
+
+subSequence(int beginIndex, int endIndex)
+// CharSequence; retourne nouvelle séquence crc qui est une partie séquence
+
+substring(int beginIndex [, int endIndex])
+// String; retourne nouvelle chaune qui est sous-chaine de la chaine
+
+toCharArray()
+// char[]; convertit chaine en un nouveau tableau de crc
+
+toLowerCase([Locale locale])
+// String; convertit tous crc en minuscule, suivant règles locales / définies
+
+toUpperCase([Locale locale])
+// String; convertit tous crc en majuscule, suivant règles locales / définies
+
+trim()
+// String; retourne copie chaine, sans espaces début et fin
+
+valueOf(boolean b [char c] [char[] data] [double d] [float f] [int i] [...])
+// static String; retourne représentation string de l'argument
+
+valueOf(char[] data, int offset, int count)
+// static String; retourne représentation string du sous-tableau
 
 
 /******************************************************************************/
@@ -472,14 +642,12 @@ lines.get(2.).split();
 // A AJOUTER //
 List<String>
 assertEquals();
-toString();
 replace();
 split();
 .length
 isEmpty();
 trim();
 contains()
-charAt()
 
 Integer.valueOf()
 
