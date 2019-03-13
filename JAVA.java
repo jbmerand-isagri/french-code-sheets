@@ -14,6 +14,18 @@
 -- JShell (dès Java 9) : outil pour tester code dans terminal
 - .jar : extension d'un programme (dossier archive contenant classes et config)
 - langage orienté objet au typage fort
+
+BLOCS regroupent INSTRUCTIONS (statements) qui regroupent EXPRESSIONS
+- expression : composée de variables, opérateurs, invocations de méthodes
+..donne une valeur unique
+- instruction : unité d'exécution complète, comme une phrase, se termine avec ;
+- bloc : groupe de 0 ou plusieurs instructions entre accolades {}
+
+4 TYPES DE VISIBILITE pour classes, méthodes :
+- public : toutes les autres classes peuvent y accéder
+- private : accessible uniquement dans classe
+- rien : accessible uniquement dans le package
+- protected : accessible dans classe et ses enfants
 */
 
 /******************************************************************************/
@@ -21,13 +33,6 @@
 /******************************************************************************/
 
 /* 
-
-4 types de visibilité pour classes, méthodes :
-- public : toutes les autres classes peuvent y accéder
-- private : accessible uniquement dans classe
-- rien : accessible uniquement dans le package
-- protected : accessible dans classe et ses enfants
-
 - IDE répandu : IntelliJ
 - un fichier = une partie logique de l'appli, contient classe portant même nom
 - fichiers séparés dans des packages (sous-dossiers)
@@ -80,13 +85,14 @@ OBJET
 Consiste en un état et un comportement associé, comme les objets du quotidien.
 Objet stocke son état dans des champs (variables) et expose son comportement
 par des méthodes (fonctions).
-Méthodes fonctionnent sur l'état interne d'un objet et servent de mécanisme principal pour communication entre objets.
+Méthodes fonctionnent sur l'état interne d'un objet et servent de mécanisme 
+principal pour communication entre objets.
 Encapsulation : cacher état interne et exiger que toute les interactions soient
 effectuées par des méthodes d'un objet.
 Intérêts :
 - modularité : code source peut être écrit et maintenu indépendamment
 - informations cachées : détails implémentation interne cachés de l'extérieur
-- réutilisation : pour implémenter, tester, déboguer objets complexes, spécifiques
+- réutilisation : implémenter, tester, déboguer objets complexes, spécifiques
 - pluggabilité et facilité de débogage
 
 CLASSE
@@ -167,10 +173,6 @@ double // nombre décimal, 64-bit => choix généralement par défaut / 0.0d
 char // un caractère, 16-bit / 'u\0000'
 boolean // deux valeurs possibles : true ou false / false
 
-int monNombre;
-monNombre = 5_2; // peut utiliser _ pour nombre entre chiffres
-// ou
-int monNombre = 5;
 double d = 4.5;
 float f = 4.5f; /* ou */ float f = (float) 4.5;
 boolean b = false;
@@ -202,6 +204,210 @@ String s1 = new String("Texte");
 
 String s2 = "Autre texte";
 // utilise "" pour créer directement un string
+
+
+/******************************************************************************/
+/************** OPERATEURS ****************************************************/
+/******************************************************************************/
+
+// PREFIXES, INFIXE ou POSTFIXES : place avant, entre, après ses opérandes
+expr++ expr-- // appliqué après l'opérande (évalue valeur d'origine)
+++expr --expr // appliqué avant l'opérande (évalue valeur incré/décrémentée)
+
+// UNAIRES : besoin que d'un opérande, prioritaires sur binaires/tertiaires
++ // unaire positif, indique valeur positive
+- // unaire négatif, négation d'une expression
+++ // incrémentation, par 1
+-- // décrémentation, par 1
+! // de complément logique, inverse valeur d'un booléen
+
+// AFFECTATION
+= // affecte valeur à droite à opérande à gauche
++= -= *= /= %= &= ^= |= <<= >>= >>>=
+
+// ARITHMETIQUES
++ // addition, concaténation pour String
+- * /
+% // reste de la division
+
+// D'EGALITE ET RELATIONNELS
+== // égale à
+!= // non égale à
+> // plus grand que
+>= // plus grand ou égale à
+< // plus petit que
+<= // plus petit ou égale à
+
+// CONDITIONNELS : second opérande n'est évaluée que si nécessaire
+&& // ET conditionnel
+|| // OU conditionnel
+? : // ternaire (utilise 3 opérandes), correspond à IF, THEN, ELSE
+// result = someCondition ? value1 : value2;
+// if someCondition est vraie, then affecte value1 à result, sinon value2
+
+// COMPARATEUR DE TYPE, RELATIONNEL
+instanceof // compare un objet à un type spécifié, renvoie booléen
+// Parent obj1 = new Parent();
+// System.out.println("obj1 instanceof Parent: "+ (obj1 instanceof Parent));
+
+// BITWISE, BIT SHIFT
+
+~ // complément, unaire, inverse un bit pattern (transforme les 0 en 1...)
+<< >> // de décalage gauche/droite signé
+& // bitwise ET
+^ // bitwise exclusif OU
+| // bitwise inclusif OU
+&& // logical ET
+|| // logical OU
+
+
+/******************************************************************************/
+/************** INSTRUCTIONS DE CONTROLE DU FLUX ******************************/
+/******************************************************************************/
+
+/* cassent flux d'exécution haut vers bas
+- instructions décisionnelles (if-then, if-then-else, switch)
+- instructions "boucles" (for, while, do-while)
+- instructions de "branches" (break, continue, return) */
+
+/************** IF-THEN-ELSE **************************************************/
+
+// exécute portion de code seulement si expression testée est true
+// si false, saute directement à fin de l'instruction if-then
+
+// IF-THEN
+void applyBrakes() {
+    // the "if" clause: bicycle must be moving
+    if (isMoving) { 
+        // the "then" clause: decrease current speed
+        currentSpeed--;
+    }
+}
+
+// IF-THEN-ELSE
+if (testscore >= 90) {
+    grade = 'A';
+} else if (testscore >= 80) {
+    grade = 'B';
+} else {
+    grade = 'C';
+}
+
+/************** SWITCH ********************************************************/
+
+// peut comporter certain nombre de chemins d'exécution possibles
+// depuis Java SE 7, peut utiliser objet String dans expression de l'instruction
+
+switch (month) {
+    case 1:  monthString = "January";
+             break;
+    case 2:  monthString = "February";
+             break;
+    case 3:  monthString = "March";
+             break;
+    // ...
+    default: monthString = "Invalid month";
+             break; // non nécessaire techniquement, mais recommandé
+}
+
+switch (month) { // switch avec plusieurs libellés de cas
+    case 1: case 3: case 5:
+    case 7: case 8: case 10:
+    case 12:
+        numDays = 31;
+        break;
+    case 4: case 6:
+    case 9: case 11:
+        numDays = 30;
+        break;
+    case 2:
+        if (((year % 4 == 0) && 
+             !(year % 100 == 0))
+             || (year % 400 == 0))
+            numDays = 29;
+        else
+            numDays = 28;
+        break;
+    default:
+        System.out.println("Invalid month.");
+        break;
+}
+
+switch (month.toLowerCase()) {
+    case "january": // compare comme si méthode String.equals utilisée
+        monthNumber = 1;
+        break;
+    case "february":
+        monthNumber = 2;
+        break;
+    // ...
+    default: 
+        monthNumber = 0;
+        break;
+}
+
+/************** WHILE, DO-WHILE ***********************************************/
+
+// exécute continuellement un bloc d'instructions tant que condition true
+
+while (expression) {
+    // instructions
+}
+
+do { // toujours exécuté au moins une fois
+    // instructions
+} while (expression);
+
+/************** FOR ***********************************************************/
+
+// manière compacte d'itérer sur une plage de valeurs
+// "boucle for" car boucle continuellement jusqu'à condition remplie
+
+for (initialisation; terminaison; incrémentation) {
+    // instructions
+}
+// initialisation : expression exécutée une fois au début de la boucle
+// déclarer variable dans expression initialisation, si pas nécessaire en dehors
+// i, j et k souvent utilisés pour contrôler boucles
+// terminaison : lorsque expression évaluée à false, termine la boucle
+// incrémentation : expression appelée après chaque itération de la boucle
+
+int[] numbers = 
+    {1,2,3,4,5,6,7,8,9,10};
+for (int item : numbers) { // for amélioré, itérer travers Collections/arrays
+    System.out.println("Count is: " + item);
+}
+
+/************** BOUCLES *******************************************************/
+
+while (condition) {
+    // code;
+}
+
+do { // se lance au moins une fois
+    // code;
+} while (condition);
+
+for (int i = 0; i < 4; i++) {
+    // à entrée boucle ; gate keeper (false fait quitter) ; à chaque exécution
+    // code;
+}
+
+break // stoppe et fait sortir de la boucle
+continue // stoppe l'itération actuelle et fait passer à la suivante
+
+/* pour foreach avec des tableaux */
+
+int[] arr = {1, 9, 9, 5};
+for (int i = 0; i < arr.length; i++) {
+    int el = arr[i];
+    System.out.println(el);
+}
+// ou version raccourcie
+int[] arr = {2, 0, 1, 3};
+for (int el : arr) {
+    System.out.println(el);
+}
 
 
 /******************************************************************************/
@@ -282,7 +488,6 @@ public abstract class MaClasse { // ininstanciable
     public abstract void maMéthode(); // surcharge obligatoire pour instancier
 }
 
-
 /* DIVERS
 - Writer : une classe capable d'écrire dans un fichier.
 - InnerClasses : classes créées dans d'autres.
@@ -319,7 +524,8 @@ equals(Object obj)
 // boolean; indique si d'autres objets sont "égaux" à celui-ci
 
 finalize()
-// protected void; Called by the garbage collector on an object when garbage collection determines that there are no more references to the object.
+// protected void; Called by the garbage collector on an object when garbage
+// collection determines that there are no more references to the object.
 
 getClass()
 // Class<?>; retourne la classe d'exécution de l'Objet
@@ -337,13 +543,19 @@ toString()
 // String; retourne une représentation string de l'objet
 
 wait()
-// void; Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object.
+// void; Causes the current thread to wait until another thread invokes the
+// notify() method or the notifyAll() method for this object.
 
 wait(long timeout)
-// void; Causes the current thread to wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.
+// void; Causes the current thread to wait until either another thread invokes
+// the notify() method or the notifyAll() method for this object, or a specified
+// amount of time has elapsed.
 
 wait(long timeout, int nanos)
-// void; Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object, or some other thread interrupts the current thread, or a certain amount of real time has elapsed.
+// void; Causes the current thread to wait until another thread invokes the 
+// notify() method or the notifyAll() method for this object, or some other 
+// thread interrupts the current thread, or a certain amount of real time has
+// elapsed.
 
 
 /******************************************************************************/
@@ -481,8 +693,7 @@ valueOf(char[] data, int offset, int count)
 /************** CLASS ARRAYS (TABLEAUX) ***************************************/
 /******************************************************************************/
 
-// java.lang.Object > java.util.Arrays // JDK 1.2
-
+// java.lang.Object > java.util.Arrays / JDK 1.2
 // basé sur 0, nécessite boucle pour afficher, taille non augmentable
 // aucune fonctionnalité livrée directement avec
 
@@ -770,9 +981,35 @@ toArray(T[] a)
 /************** INTERFACE SET<E>  *********************************************/
 /******************************************************************************/
 
-// FIXME:
+// java.util / 1.2
+// Superinterfaces : Collection<E>, Iterable<E>
+// = collection qui ne contient aucun élément en double (pas de paire d'éléments
+// e1 et e2 tels que e1.equals(e2)) et pas plus d'un élément null
+// attention aux objets mutables utilisés comme set d'éléments : comportement
+// d'un set pas spécifié si valeur objet modifiée de manière à affecter
+// comparaisons égales alors que objet est un élément dans le set
 
-https://docs.oracle.com/javase/8/docs/api/java/util/Set.html
+public interface Set<E>
+extends Collection<E> {}
+
+add(E e) // boolean
+addAll(Collection<? extends E> c) // boolean
+clear() // void
+contains(Object o) // boolean
+containsAll(Collection<?> c) // boolean
+equals(Object o) // boolean
+hashCode() // int
+isEmpty() // boolean
+iterator() // Iterator<E>
+remove(Object o) // boolean
+removeAll(Collection<?> c) // boolean
+retainAll(Collection<?> c) // boolean
+size() // int
+spliterator() // default Spliterator<E>
+toArray() // Object[]
+toArray(T[] a) // <T> T[]
+
+// héritées : forEach, parallelStream, removeIf, stream
 
 /******************************************************************************/
 /************** FONCTIONS *****************************************************/
@@ -850,63 +1087,6 @@ public class Taxi implements MoyenDeLocomotion { // classe à partir interface
         System.out.println("Je suis un taxi et je vais à " + adresse);
     }
 }
-
-/******************************************************************************/
-/************** BOUCLES *******************************************************/
-/******************************************************************************/
-
-while (condition) {
-    // code;
-}
-
-do { // se lance au moins une fois
-    // code;
-} while (condition);
-
-for (int i = 0; i < 4; i++) {
-    // à entrée boucle ; gate keeper (false fait quitter) ; à chaque exécution
-    // code;
-}
-
-break // stoppe et fait sortir de la boucle
-continue // stoppe l'itération actuelle et fait passer à la suivante
-
-/* pour foreach avec des tableaux */
-
-int[] arr = {1, 9, 9, 5};
-for (int i = 0; i < arr.length; i++) {
-    int el = arr[i];
-    System.out.println(el);
-}
-// ou version raccourcie
-int[] arr = {2, 0, 1, 3};
-for (int el : arr) {
-    System.out.println(el);
-}
-
-
-/******************************************************************************/
-/************** OPERATEURS ****************************************************/
-/******************************************************************************/
-
-+ // concaténation
-==
-!=
->
-<
->=
-<=
-&& // ET
-|| // OU
-
-+=
-
-/******************************************************************************/
-/************** STRING ********************************************************/
-/******************************************************************************/
-
-varText.length(); // obtenir longueur de la chaine de caractères
-varText.contains("hello"); // bool, teste si mot contenu dans variable
 
 
 /******************************************************************************/
