@@ -268,7 +268,7 @@ instanceof // compare un objet à un type spécifié, renvoie booléen
 /* cassent flux d'exécution haut vers bas
 - instructions décisionnelles (if-then, if-then-else, switch)
 - instructions "boucles" (for, while, do-while)
-- instructions de "branches" (break, continue, return) */
+- instructions de "branchement" (break, continue, return) */
 
 /************** IF-THEN-ELSE **************************************************/
 
@@ -378,37 +378,46 @@ for (int item : numbers) { // for amélioré, itérer travers Collections/arrays
     System.out.println("Count is: " + item);
 }
 
-/************** BOUCLES *******************************************************/
+/************** BREAK ***********************************************************/
 
-while (condition) {
-    // code;
+// deux formes existent : étiquetées (labeled) / non étiquetées (unlabeled)
+// non étiquetée : termine boucle for, while, do-while
+// non étiquetée : termine instruction switch, for, while, do-while intérieure
+// étiquetée : termine une instruction externe
+
+search:
+    for (i = 0; i < arrayOfInts.length; i++) {
+        for (j = 0; j < arrayOfInts[i].length;
+                j++) {
+            if (arrayOfInts[i][j] == searchfor) {
+                foundIt = true;
+                break search; // flux contrôle transféré à instruction suivante
+            }
+        }
+    }
+
+/************** CONTINUE ******************************************************/
+
+// fait passer/ignorer l'itération actuelle d'une boucle for, while, do-while
+// sans étiquette : passe à la fin du corps de la boucle la plus interne et 
+// évalue expression booléenne contrôlant la boucle
+// étiquetée : ignore itération actuelle boucle externe marquée avec étiquette
+
+for (int i = 0; i < max; i++) {
+    if (searchMe.charAt(i) != 'p')
+        continue;
+    numPs++;
 }
 
-do { // se lance au moins une fois
-    // code;
-} while (condition);
+/************** RETURN ********************************************************/
 
-for (int i = 0; i < 4; i++) {
-    // à entrée boucle ; gate keeper (false fait quitter) ; à chaque exécution
-    // code;
-}
+// quitte méthode actuelle, flux contrôle retourne à endroit où méthode appelée
+// soit renvoie une valeur (= type déclaré par méthode) ou non (void)
 
-break // stoppe et fait sortir de la boucle
-continue // stoppe l'itération actuelle et fait passer à la suivante
+return ++count;
 
-/* pour foreach avec des tableaux */
-
-int[] arr = {1, 9, 9, 5};
-for (int i = 0; i < arr.length; i++) {
-    int el = arr[i];
-    System.out.println(el);
-}
-// ou version raccourcie
-int[] arr = {2, 0, 1, 3};
-for (int el : arr) {
-    System.out.println(el);
-}
-
+// FIXME:
+// https://docs.oracle.com/javase/tutorial/java/javaOO/index.html
 
 /******************************************************************************/
 /************** CLASSES *******************************************************/
@@ -477,7 +486,7 @@ private Map<Product, Integer> products = new HashMap<Product, Integer>();
 
 /* surcharger fonctionnalités */
 @Override
-public void maMéthode() { // prendre signature identique
+public void maMéthode() { // signature identique (pas ajout param, chgt type)
     // code différent
 }
 
@@ -1090,11 +1099,12 @@ public class Taxi implements MoyenDeLocomotion { // classe à partir interface
 
 
 /******************************************************************************/
-/************** ERREURS *******************************************************/
+/************** ERREURS/EXCEPTIONS ********************************************/
 /******************************************************************************/
 
 // Quand exception intervient, Java donne son type. Pour certaines, Java oblige
 // à faire un catch, sinon code ne compile pas.
+// Dans tous les cas : Java interrompt programme si exception non catchée.
 
 try {
     // code susceptible générer exception
@@ -1102,6 +1112,10 @@ try {
     // code à excécuter si exception intervenue
 }
 
+throw new IllegalArgumentException("La donnée doit être inférieure à 5");
+// lance une exception
+
+// créer son type d'exception : hériter de Exception ou de RuntimeException
 
 /******************************************************************************/
 /************** TESTS *********************************************************/
@@ -1147,17 +1161,9 @@ Files.write(nom, String.format("texte").getBytes(), APPEND);
 lines.get(2.).split();
 
 // A AJOUTER //
-List<String>
 assertEquals();
-replace();
-split();
-.length
-isEmpty();
-trim();
-contains()
 // mot clé final
-
-Integer.valueOf()
+parseInt()
 
 un scanner sc.
 
@@ -1165,13 +1171,6 @@ this
 
 import
 import static
-
-/r /n;
-
 String.format("texte%n");
 
-// l'objet Math.
-
-System.out.println("Hello World !");
-// out : permet d'accéder à sortie standard
-// println : afficher une ligne de texte
+// l'objet Math
