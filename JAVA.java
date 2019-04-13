@@ -3,7 +3,7 @@
 /******************************************************************************/
 
 /*
-- créateurs : James Grosling, Patrick Naughton
+- créateurs : James Gosling, Patrick Naughton (langage Oak)
 - développé par Sun Microsystems (dès 1990), puis ORACLE (dès 2009)
 - langage le plus répandu dans entreprises (grosses applications)
 - outils riches, variés, matures, communauté ++
