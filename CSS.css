@@ -19,13 +19,13 @@ color: red = la déclaration (détermine les propriétés de l'élément)
 
 .: ETAPES A SUIVRE ET INFORMATIONS:.
 
-Sélecteur plus précis qu'un autre sera prioritaire. Dans l'ordre : plus global 
+Sélecteur plus précis qu'un autre sera prioritaire. Dans l'ordre : plus global
 au plus précis (sélecteur d'élément -> sélecteur de classe -> sélecteur d'ID)
-Propriétés sont interprétées dans l’ordre dans lequel elles sont déclarées. 
+Propriétés sont interprétées dans l’ordre dans lequel elles sont déclarées.
 Dernière valeur déclarée retenue sauf si première propriété contient !important.
 
-0. travailler sur un .scss et utiliser terminal pour minifiier .css sauvegardé 
-automatiquement : [dans répertoire où .scss situé] 
+0. travailler sur un .scss et utiliser terminal pour minifiier .css sauvegardé
+automatiquement : [dans répertoire où .scss situé]
 sass --watch style.scss:style.css --style compress
 1. mettre * { box-sizing: border-box; }
 2. mettre html { font-size: 62.5%; } -> pour passer en base 10 pour l'unité rem
@@ -121,6 +121,8 @@ p:not(.big, :first-child) {}
 [for*="lot"] {}
 /* sélectionner éléments dont valeur de leur attribut contient 'lot' */
 
+input[type="button"]
+
 /* ---------- PSEUDO-CLASSES ---------- */
 
 a:link {}
@@ -137,12 +139,12 @@ a:hover {}
 p {
 
 overflow: visible; /* hidden scroll auto */
-/* propriété raccourcie pour overflow-x et overflow-y. Définit comment rogner 
-contenu, afficher barres défilement, afficher contenu sortant du cadre dans 
+/* propriété raccourcie pour overflow-x et overflow-y. Définit comment rogner
+contenu, afficher barres défilement, afficher contenu sortant du cadre dans
 élément de type bloc. */
 
 clear:left; /* right both */
-/* indique si élément peut être situé à côté d'éléments flottants qui le 
+/* indique si élément peut être situé à côté d'éléments flottants qui le
 précèdent ou s'il doit être déplacé vers le bas pour être en dessous */
 
 
@@ -152,9 +154,9 @@ display: block; /* inline-block inline flex none list-item ... */
 /* display définit type de boîte utilisé pour le rendu d'un élément
 block =  génère une boîte de bloc, occupe toute la ligne
 inline = génère une ou plusieurs boîtes en ligne (prend dimension du contenu)
-flex = l'élément se comporte comme un élément de bloc et dispose son contenu 
+flex = l'élément se comporte comme un élément de bloc et dispose son contenu
 selon le modèle de boîte flexible
-inline-block = similaire à inline, mais avec la marge et le padding ajustable 
+inline-block = similaire à inline, mais avec la marge et le padding ajustable
 (il faut ajouter un commentaire HTML si espace vide) */
 
 float: left; /* right none */
@@ -181,7 +183,7 @@ top: 2px; /* positionner par rapport dernier parent avec relative
 left bottom right */
 /* à utiliser pour faire de la superposition seulement
 static = par défaut, positionné dans le flux
-relative = positionné dans flux normal (laisse un espace) puis décalé par 
+relative = positionné dans flux normal (laisse un espace) puis décalé par
 ..rapport à la position de référence (body par défaut)
 absolute = positionner par rapport au premier élément ancêtre ou au html,
 ..retiré du flux sans espace
@@ -196,7 +198,7 @@ baseline = aligne la ligne de base avec celle de son parent
 sub = aligne ligne de base sur ligne de base inférieure de élément parent
 super = aligne la ligne de base sur la ligne de base supérieure */
 
-line-height: 70px; 
+line-height: 70px;
 /* définir la hauteur des lignes */
 
 width: 20px; /* 90% */
@@ -211,19 +213,21 @@ z-index: 1;
 display: flex;
 
 flex: 1 1 100px; /* 1 2 [1 30px] */
-/* propriété raccourcie pour définir capacité élément modifier ses dimensions 
+/* propriété raccourcie pour définir capacité élément modifier ses dimensions
 ..pour remplir l'espace du conteneur: flex-shrink flex-grow flex-basis */
 
 flex-shrink: 2;
 /* indique facteur rétrécissement élément (++ = + rétrécissement) */
+/* 0 : définit taille fixe, pas de rétrécissement */
 
 flex-grow: 2;
 /* indique facteur grossissement élément (++ = + grossissement) */
+/* en fonction espace restant / contenu (flex-basis auto par défaut) */
 
 flex-basis: auto; /* 0 200px content max-content fill fit-content*/
 /* détermine base flexibilité utilisée comme taille initiale principale */
 
-justify-content: flex-start; /* center start end left right flex-end center 
+justify-content: flex-start; /* center start end left right flex-end center
 ..space-between space-around space-evenly stretch */
 /* [axe principal] aligne les éléments horizontalement */
 
@@ -248,7 +252,7 @@ flex-wrap: nowrap; /* wrap wrap-reverse */
 flex-flow: row wrap; /* [row-reverse nowrap] [column wrap-reverse] [column wrap]
 /* raccourci flex-direction + flex-wrap (deux propriétés séparées par espace) */
 
-align-content: baseline; /* [first baseline] [last baseline] center start 
+align-content: baseline; /* [first baseline] [last baseline] center start
 ..flex-start flex-end stretch... */
 /* [axe orthogonal au principal] définit répartition espace entre les lignes */
 
@@ -313,6 +317,9 @@ text-shadow: 2px 2px 2px black;
 
 text-transform: uppercase; /* capitalize lowercase none full-width */
 
+word-break: ;
+word-spacing: ;
+
 
 /* ---------- EFFETS, TRANSFORMATIONS ---------- */
 
@@ -320,13 +327,13 @@ animation: slidein 3s ease-in 1s infinite reverse both running;
 /* propriété raccourcie */
 
 animation-name: slide; /* bounce none */
-/* définit liste animations. Chaque nom indique une règle @ @keyframes qui 
+/* définit liste animations. Chaque nom indique une règle @ @keyframes qui
 ..définit les valeurs des propriétés pour la séquence*/
 
 animation-duration: 3s;
 /* durée pour parcourir un cycle */
 
-animation-timing-function: ease; /* ease-in ease-out linear ease-in-out 
+animation-timing-function: ease; /* ease-in ease-out linear ease-in-out
 ..steps(5,end) cubic-bezier(0.1,-0.6,0.2,0) */
 /* indique façon animation CSS se déroule au fur et à mesure de chaque cycle */
 
@@ -348,7 +355,7 @@ animation-play-state: paused; /* running */
 cursor: pointer; /* help wait crosshair not-allowed zoom-in grab */
 /* définir forme curseur */
 
-transform: rotate(0.5turn) translate(-100%, -100%); /* matrix(1,2,3,4,5,6) 
+transform: rotate(0.5turn) translate(-100%, -100%); /* matrix(1,2,3,4,5,6)
 ..translate(120px,50%) scale(2,0.5) skew(30deg,20deg) */
 /* scale pour zoomer, dans une div */
 
@@ -362,7 +369,7 @@ transition: margin-right 2s; /* all */
 transition-delay: 250ms;
 transition-duration: 2s;
 transition-property: background-color;
-transition-timing-function: linear; /* ease-in steps(6, end) 
+transition-timing-function: linear; /* ease-in steps(6, end)
 ..cubic-bezier(.29,1.01,1,-0.68) */
 
 
@@ -411,14 +418,15 @@ box-shadow: inset; /* [2px 2px 2px 2px red] */
 
 /* ---------- RESPONSIVE ---------- */
 
-@media screen and (min-width: 200px) and (max-width: 640px) {
+@media screen and (min-width: 200px) and (max-width: 640px) { /* and,only,not*/
   .bloc {
     display:block;
     clear:both;
   }
 }
-/* associer ensemble instructions imbriquées (délimité par accolades) avec une 
+/* associer ensemble instructions imbriquées (délimité par accolades) avec une
 ..condition définie par une requête média */
+/* screen (écran classique), handheld (périph mobile), print (impression)... */
 
 /* ---------- PSEUDO-CLASSES ---------- */
 
@@ -437,9 +445,10 @@ ici les liens s'affichent en rose lorsque le curseur survole la nav */
 
 a::after {
 	content: "aïe !";
-  	color: red;
+  color: red;
 }
 /* crée un pseudo-élément qui sera le dernier enfant de a. Type inline. */
+/* ajoute aïe ! en rouge */
 
 a::before {
 	content: "Hello";
@@ -470,11 +479,11 @@ input::placeholder {
 
 @import url;
 @import url liste-requetes-media;
-/* importer règles à partir autres feuilles de style. Règles @ doivent être 
+/* importer règles à partir autres feuilles de style. Règles @ doivent être
 ..utilisées avant toutes les autres à l'exception de @charset */
 
 @namespace;
-/* définit les espaces de noms XML utilisés dans une feuille de style CSS. 
+/* définit les espaces de noms XML utilisés dans une feuille de style CSS.
 Les espaces de noms définis sont alors utilisés pour restreindre les sélecteurs
 universels, de type, et d'attribut afin que ceux-ci ne sélectionnent que éléments
 contenus dans cet espace de nom */
